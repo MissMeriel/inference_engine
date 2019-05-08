@@ -27,20 +27,20 @@ public class Driver {
       for(String s : args){
          if(s.contains(".csv")){
             csv_file = s;
-            System.out.println("Parsed csv file");
+            //System.out.println("Parsed csv file");
             //break;
          } else if (s.contains(".config")) {
             config_file = s;
-            System.out.println("Parsed config file");
+            //System.out.println("Parsed config file");
          } else if (s.equals("-h")){
             print_help();
             System.exit(0);
          }
       }
-      System.out.println(csv_file);
+      //System.out.println(csv_file);
       try{
          int[] dims = get_csv_dimensions(csv_file);
-         System.out.println(dims[0]+" "+dims[1]);
+         //System.out.println(dims[0]+" "+dims[1]);
          csv_array = parse_csv_file(csv_file, dims);
          parse_config_file(config_file);
       }
@@ -68,10 +68,10 @@ public class Driver {
       boolean e = false;
       while ((thisLine = dis.readLine()) != null){
          if(thisLine.contains("GIVENS")){
-            System.out.println("parsing givens");
+            //System.out.println("parsing givens");
             g = true; e = false; continue;
          } else if(thisLine.contains("EVENTS")) {
-            System.out.println("parsing events");
+            //System.out.println("parsing events");
             e = true; g = false; continue;
          }
          
@@ -87,7 +87,7 @@ public class Driver {
       fis.close();
       dis.close();
       System.out.println("GIVENS:"+givens);
-      System.out.println("EVENTS:"+events);
+      System.out.println("EVENTS:"+events+"\n");
    }
    
    

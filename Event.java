@@ -22,7 +22,7 @@ public class Event{
    
    @Override
    public String toString(){
-      return this.type + " "+this.sample + "("+this.num_samples+")";
+      return this.sample + "("+this.num_samples+")";
    }
 
 }

@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
 
 public class Bin{
    //public T t;
@@ -9,7 +11,7 @@ public class Bin{
    
    public Bin/*<T>*/(String template){
       this.template = template;
-      
+      update();
    }
    
    public int update(){
@@ -43,11 +45,35 @@ public class Bin{
          return bin_events;
    }
    
+   public double get_event_probability(Event e){
+      return e.num_samples / (double) this.num_samples;
+      
+   }
+   
    @Override
    public String toString(){
       String str = this.type+" "+this.template+" ("+this.num_samples+")";
       for (Event e : bin_events){
-         str += "\n\t\t"+e.toString();
+         str += "\n\t\t"+e.toString() +" "+ String.format("%.00f%%",get_event_probability(e)*100);
+      }
+      return str;
+   }
+   
+    public String toString(String probability){
+      String str = this.type+" "+this.template+" ("+this.num_samples+") "+probability;
+      HashMap<String, String> event_groups = new HashMap<String,String>();
+      for (Event e : bin_events){
+         if(event_groups.get(e.type) == null){
+            event_groups.put(e.type, "\n\t\t"+e.type +" ");
+         }
+      }
+      for (Event e : bin_events){
+         String event_group_string = event_groups.get(e.type);
+         event_group_string += "\n\t\t\t"+e.toString() +" "+ String.format("%.00f%%",get_event_probability(e)*100);
+         event_groups.put(e.type, event_group_string);
+      }
+      for (String k : event_groups.keySet()){
+         str += event_groups.get(k);
       }
       return str;
    }

@@ -28,11 +28,20 @@ public class Given{
       return new_bin;
    }
    
+   public double get_bin_probability(Bin bin){
+      double total = 0.0;
+      for (Bin b : bins){
+         total += b.num_samples;
+      }
+      return bin.num_samples/total;
+   }
+   
    @Override
    public String toString(){
       String str = name + ":\n";
       for (Bin b : bins){
-         str += "\t"+b.toString()+"\n";
+         String prob = String.format("%.0f%%", get_bin_probability(b)*100);
+         str += "\t"+b.toString(prob)+" "+"\n";
       }
       return str;
    }
