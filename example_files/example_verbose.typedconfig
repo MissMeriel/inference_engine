@@ -1,0 +1,8 @@
+GIVENS
+Mode_H2M,STRING
+Trust_Human,INT
+Alarm_M2H,STRING
+GSR_Human,DOUBLE
+EVENTS
+PupilChange_Human,DOUBLE
+Trust_Human,INT

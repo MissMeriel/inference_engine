@@ -1,0 +1,101 @@
+GIVENS:[Mode_H2M, Trust_Human, Alarm_M2H]
+EVENTS:[PupilChange_Human, Trust_Human]
+
+Mode_H2M:
+	 autonomous (180) 100%
+		PupilChange_Human 
+			-0.4(21) 12%
+			-0.3(128) 71%
+			-0.2(28) 16%
+			-0.0(1) 1%
+			-0.1(2) 1%
+		Trust_Human 
+			3.0(42) 23%
+			5.0(85) 47%
+			4.0(38) 21%
+			2.0(9) 5%
+			1.0(6) 3% 
+ 
+
+
+Trust_Human:
+	 3.0 (42) 23%
+		PupilChange_Human 
+			-0.4(4) 10%
+			-0.3(35) 83%
+			-0.2(3) 7%
+		Trust_Human 
+			3.0(42) 100% 
+	 5.0 (85) 47%
+		PupilChange_Human 
+			-0.3(53) 62%
+			-0.4(15) 18%
+			-0.2(15) 18%
+			-0.1(2) 2%
+		Trust_Human 
+			5.0(85) 100% 
+	 4.0 (38) 21%
+		PupilChange_Human 
+			-0.2(5) 13%
+			-0.3(30) 79%
+			-0.0(1) 3%
+			-0.4(2) 5%
+		Trust_Human 
+			4.0(38) 100% 
+	 2.0 (9) 5%
+		PupilChange_Human 
+			-0.3(8) 89%
+			-0.2(1) 11%
+		Trust_Human 
+			2.0(9) 100% 
+	 1.0 (6) 3%
+		PupilChange_Human 
+			-0.2(4) 67%
+			-0.3(2) 33%
+		Trust_Human 
+			1.0(6) 100% 
+ 
+
+
+Alarm_M2H:
+	   (161) 89%
+		PupilChange_Human 
+			-0.4(20) 12%
+			-0.3(117) 73%
+			-0.2(22) 14%
+			-0.0(1) 1%
+			-0.1(1) 1%
+		Trust_Human 
+			3.0(37) 23%
+			5.0(80) 50%
+			4.0(38) 24%
+			2.0(6) 4% 
+	 cyclist alarm (7) 4%
+		PupilChange_Human 
+			-0.4(1) 14%
+			-0.3(6) 86%
+		Trust_Human 
+			3.0(4) 57%
+			2.0(3) 43% 
+	 truck alarm (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			5.0(1) 100% 
+	 obstacle alarm (3) 2%
+		PupilChange_Human 
+			-0.2(2) 67%
+			-0.1(1) 33%
+		Trust_Human 
+			5.0(3) 100% 
+	 pedestrian alarm (8) 4%
+		PupilChange_Human 
+			-0.2(4) 50%
+			-0.3(4) 50%
+		Trust_Human 
+			1.0(6) 75%
+			3.0(1) 13%
+			5.0(1) 13% 
+ 
+
+

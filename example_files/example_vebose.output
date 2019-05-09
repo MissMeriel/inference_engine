@@ -1,0 +1,895 @@
+GIVENS:[Mode_H2M, Trust_Human, Alarm_M2H, GSR_Human]
+EVENTS:[PupilChange_Human, Trust_Human]
+Mode_H2M:
+	 autonomous (148) 82%
+		PupilChange_Human 
+			-0.3(96) 65%
+			-0.4(23) 16%
+			-0.0(1) 1%
+			-0.2(21) 14%
+			-0.1(7) 5%
+		Trust_Human 
+			3.0(40) 27%
+			4.0(43) 29%
+			5.0(45) 30%
+			1.0(19) 13%
+			2.0(1) 1% 
+	 manual (32) 18%
+		PupilChange_Human 
+			-0.2(18) 56%
+			-0.3(12) 38%
+			-0.1(1) 3%
+			-0.0(1) 3%
+		Trust_Human 
+			0.0(32) 100% 
+ 
+
+
+Trust_Human:
+	 3.0 (40) 22%
+		PupilChange_Human 
+			-0.3(26) 65%
+			-0.4(3) 8%
+			-0.1(5) 13%
+			-0.2(6) 15%
+		Trust_Human 
+			3.0(40) 100% 
+	 4.0 (43) 24%
+		PupilChange_Human 
+			-0.3(26) 60%
+			-0.4(9) 21%
+			-0.2(8) 19%
+		Trust_Human 
+			4.0(43) 100% 
+	 5.0 (45) 25%
+		PupilChange_Human 
+			-0.4(11) 24%
+			-0.3(27) 60%
+			-0.0(1) 2%
+			-0.2(5) 11%
+			-0.1(1) 2%
+		Trust_Human 
+			5.0(45) 100% 
+	 0.0 (32) 18%
+		PupilChange_Human 
+			-0.2(18) 56%
+			-0.3(12) 38%
+			-0.1(1) 3%
+			-0.0(1) 3%
+		Trust_Human 
+			0.0(32) 100% 
+	 1.0 (19) 11%
+		PupilChange_Human 
+			-0.3(16) 84%
+			-0.2(2) 11%
+			-0.1(1) 5%
+		Trust_Human 
+			1.0(19) 100% 
+	 2.0 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			2.0(1) 100% 
+ 
+
+
+Alarm_M2H:
+	   (180) 100%
+		PupilChange_Human 
+			-0.3(108) 60%
+			-0.4(23) 13%
+			-0.0(2) 1%
+			-0.2(39) 22%
+			-0.1(8) 4%
+		Trust_Human 
+			3.0(40) 22%
+			4.0(43) 24%
+			5.0(45) 25%
+			0.0(32) 18%
+			1.0(19) 11%
+			2.0(1) 1% 
+ 
+
+
+GSR_Human:
+	 307.436898576567 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			3.0(1) 100% 
+	 308.861228649968 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			3.0(1) 100% 
+	 310.298817761504 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			3.0(1) 100% 
+	 311.604138102954 (2) 1%
+		PupilChange_Human 
+			-0.3(1) 50%
+			-0.4(1) 50%
+		Trust_Human 
+			3.0(1) 50%
+			5.0(1) 50% 
+	 312.62700472066797 (2) 1%
+		PupilChange_Human 
+			-0.3(1) 50%
+			-0.4(1) 50%
+		Trust_Human 
+			3.0(1) 50%
+			5.0(1) 50% 
+	 313.80424890953 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			3.0(1) 100% 
+	 314.99039279302 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			3.0(1) 100% 
+	 315.885902012193 (1) 1%
+		PupilChange_Human 
+			-0.4(1) 100%
+		Trust_Human 
+			3.0(1) 100% 
+	 316.937119675456 (1) 1%
+		PupilChange_Human 
+			-0.4(1) 100%
+		Trust_Human 
+			3.0(1) 100% 
+	 318.755578222619 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			3.0(1) 100% 
+	 319.672655201074 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			3.0(1) 100% 
+	 320.595024365222 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			4.0(1) 100% 
+	 320.903664719851 (1) 1%
+		PupilChange_Human 
+			-0.4(1) 100%
+		Trust_Human 
+			5.0(1) 100% 
+	 318.908058806646 (1) 1%
+		PupilChange_Human 
+			-0.4(1) 100%
+		Trust_Human 
+			5.0(1) 100% 
+	 314.693016961954 (1) 1%
+		PupilChange_Human 
+			-0.4(1) 100%
+		Trust_Human 
+			5.0(1) 100% 
+	 309.722179205253 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			5.0(1) 100% 
+	 309.14767984666304 (1) 1%
+		PupilChange_Human 
+			-0.0(1) 100%
+		Trust_Human 
+			5.0(1) 100% 
+	 309.004387862308 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			5.0(1) 100% 
+	 309.291104787826 (3) 2%
+		PupilChange_Human 
+			-0.3(2) 67%
+			-0.2(1) 33%
+		Trust_Human 
+			5.0(3) 100% 
+	 308.718202025191 (1) 1%
+		PupilChange_Human 
+			-0.2(1) 100%
+		Trust_Human 
+			5.0(1) 100% 
+	 310.010230337601 (1) 1%
+		PupilChange_Human 
+			-0.4(1) 100%
+		Trust_Human 
+			5.0(1) 100% 
+	 311.313118734823 (1) 1%
+		PupilChange_Human 
+			-0.4(1) 100%
+		Trust_Human 
+			5.0(1) 100% 
+	 312.334072523972 (1) 1%
+		PupilChange_Human 
+			-0.4(1) 100%
+		Trust_Human 
+			5.0(1) 100% 
+	 314.099946603009 (1) 1%
+		PupilChange_Human 
+			-0.4(1) 100%
+		Trust_Human 
+			5.0(1) 100% 
+	 312.480469970627 (2) 1%
+		PupilChange_Human 
+			-0.3(2) 100%
+		Trust_Human 
+			5.0(2) 100% 
+	 306.166187006307 (1) 1%
+		PupilChange_Human 
+			-0.4(1) 100%
+		Trust_Human 
+			5.0(1) 100% 
+	 297.291672860243 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			5.0(1) 100% 
+	 292.594434853849 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			5.0(1) 100% 
+	 290.80757262919104 (2) 1%
+		PupilChange_Human 
+			-0.3(2) 100%
+		Trust_Human 
+			5.0(2) 100% 
+	 289.04240252044997 (2) 1%
+		PupilChange_Human 
+			-0.4(1) 50%
+			-0.3(1) 50%
+		Trust_Human 
+			5.0(2) 100% 
+	 287.05112380515 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			5.0(1) 100% 
+	 285.943040146403 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			5.0(1) 100% 
+	 292.20968967331004 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			5.0(1) 100% 
+	 291.188631995807 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			5.0(1) 100% 
+	 290.174685160467 (1) 1%
+		PupilChange_Human 
+			-0.2(1) 100%
+		Trust_Human 
+			0.0(1) 100% 
+	 301.731941343311 (1) 1%
+		PupilChange_Human 
+			-0.2(1) 100%
+		Trust_Human 
+			0.0(1) 100% 
+	 294.273438879407 (1) 1%
+		PupilChange_Human 
+			-0.2(1) 100%
+		Trust_Human 
+			0.0(1) 100% 
+	 273.95759136485697 (1) 1%
+		PupilChange_Human 
+			-0.2(1) 100%
+		Trust_Human 
+			0.0(1) 100% 
+	 253.055646936761 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			0.0(1) 100% 
+	 241.943288493177 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			0.0(1) 100% 
+	 244.24796052953 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			0.0(1) 100% 
+	 239.251620929732 (1) 1%
+		PupilChange_Human 
+			-0.2(1) 100%
+		Trust_Human 
+			0.0(1) 100% 
+	 235.698965281542 (1) 1%
+		PupilChange_Human 
+			-0.2(1) 100%
+		Trust_Human 
+			0.0(1) 100% 
+	 232.818029428199 (1) 1%
+		PupilChange_Human 
+			-0.2(1) 100%
+		Trust_Human 
+			0.0(1) 100% 
+	 225.341956418866 (1) 1%
+		PupilChange_Human 
+			-0.2(1) 100%
+		Trust_Human 
+			0.0(1) 100% 
+	 220.643396143153 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			0.0(1) 100% 
+	 208.481007380228 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			0.0(1) 100% 
+	 209.42408376963402 (1) 1%
+		PupilChange_Human 
+			-0.2(1) 100%
+		Trust_Human 
+			0.0(1) 100% 
+	 209.661187520966 (1) 1%
+		PupilChange_Human 
+			-0.1(1) 100%
+		Trust_Human 
+			3.0(1) 100% 
+	 207.77925531914903 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			3.0(1) 100% 
+	 210.37573105566503 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			3.0(1) 100% 
+	 215.016771308162 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			3.0(1) 100% 
+	 246.870911200533 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			3.0(1) 100% 
+	 246.77952717042598 (1) 1%
+		PupilChange_Human 
+			-0.4(1) 100%
+		Trust_Human 
+			3.0(1) 100% 
+	 249.3641214902 (1) 1%
+		PupilChange_Human 
+			-0.2(1) 100%
+		Trust_Human 
+			3.0(1) 100% 
+	 249.08461404339099 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			5.0(1) 100% 
+	 254.991457786164 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			5.0(1) 100% 
+	 254.116690384224 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			5.0(1) 100% 
+	 256.16722596511 (2) 1%
+		PupilChange_Human 
+			-0.3(2) 100%
+		Trust_Human 
+			5.0(2) 100% 
+	 256.858111579164 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			5.0(1) 100% 
+	 258.551593970577 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			5.0(1) 100% 
+	 258.752296426631 (1) 1%
+		PupilChange_Human 
+			-0.2(1) 100%
+		Trust_Human 
+			5.0(1) 100% 
+	 262.522314396724 (1) 1%
+		PupilChange_Human 
+			-0.2(1) 100%
+		Trust_Human 
+			5.0(1) 100% 
+	 259.558231889324 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			5.0(1) 100% 
+	 257.851580630189 (2) 1%
+		PupilChange_Human 
+			-0.3(2) 100%
+		Trust_Human 
+			5.0(2) 100% 
+	 257.951350375319 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			5.0(1) 100% 
+	 257.155347545452 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			5.0(1) 100% 
+	 257.05619248367697 (1) 1%
+		PupilChange_Human 
+			-0.2(1) 100%
+		Trust_Human 
+			5.0(1) 100% 
+	 253.247904373591 (1) 1%
+		PupilChange_Human 
+			-0.1(1) 100%
+		Trust_Human 
+			5.0(1) 100% 
+	 268.225953543265 (1) 1%
+		PupilChange_Human 
+			-0.1(1) 100%
+		Trust_Human 
+			0.0(1) 100% 
+	 250.300360432519 (1) 1%
+		PupilChange_Human 
+			-0.2(1) 100%
+		Trust_Human 
+			0.0(1) 100% 
+	 225.494396464248 (1) 1%
+		PupilChange_Human 
+			-0.2(1) 100%
+		Trust_Human 
+			0.0(1) 100% 
+	 199.928025910672 (1) 1%
+		PupilChange_Human 
+			-0.2(1) 100%
+		Trust_Human 
+			0.0(1) 100% 
+	 192.84915339221698 (1) 1%
+		PupilChange_Human 
+			-0.2(1) 100%
+		Trust_Human 
+			0.0(1) 100% 
+	 188.91449729852297 (2) 1%
+		PupilChange_Human 
+			-0.1(1) 50%
+			-0.3(1) 50%
+		Trust_Human 
+			3.0(1) 50%
+			2.0(1) 50% 
+	 189.494428863791 (3) 2%
+		PupilChange_Human 
+			-0.2(2) 67%
+			-0.3(1) 33%
+		Trust_Human 
+			3.0(2) 67%
+			1.0(1) 33% 
+	 188.146754468485 (1) 1%
+		PupilChange_Human 
+			-0.1(1) 100%
+		Trust_Human 
+			3.0(1) 100% 
+	 184.767746942094 (1) 1%
+		PupilChange_Human 
+			-0.1(1) 100%
+		Trust_Human 
+			3.0(1) 100% 
+	 182.401867795126 (1) 1%
+		PupilChange_Human 
+			-0.2(1) 100%
+		Trust_Human 
+			3.0(1) 100% 
+	 188.721974786744 (2) 1%
+		PupilChange_Human 
+			-0.1(1) 50%
+			-0.4(1) 50%
+		Trust_Human 
+			3.0(1) 50%
+			4.0(1) 50% 
+	 175.321715347663 (1) 1%
+		PupilChange_Human 
+			-0.2(1) 100%
+		Trust_Human 
+			0.0(1) 100% 
+	 176.323306414642 (1) 1%
+		PupilChange_Human 
+			-0.2(1) 100%
+		Trust_Human 
+			0.0(1) 100% 
+	 177.33640716439098 (2) 1%
+		PupilChange_Human 
+			-0.2(1) 50%
+			-0.3(1) 50%
+		Trust_Human 
+			0.0(1) 50%
+			1.0(1) 50% 
+	 178.36121713694598 (2) 1%
+		PupilChange_Human 
+			-0.3(2) 100%
+		Trust_Human 
+			0.0(1) 50%
+			1.0(1) 50% 
+	 173.514714047751 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			0.0(1) 100% 
+	 174.331438931697 (3) 2%
+		PupilChange_Human 
+			-0.3(3) 100%
+		Trust_Human 
+			0.0(1) 33%
+			1.0(1) 33%
+			4.0(1) 33% 
+	 175.988173594734 (2) 1%
+		PupilChange_Human 
+			-0.3(2) 100%
+		Trust_Human 
+			0.0(2) 100% 
+	 174.167479448237 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			0.0(1) 100% 
+	 178.705457664677 (2) 1%
+		PupilChange_Human 
+			-0.0(1) 50%
+			-0.3(1) 50%
+		Trust_Human 
+			0.0(1) 50%
+			1.0(1) 50% 
+	 183.304615610221 (1) 1%
+		PupilChange_Human 
+			-0.2(1) 100%
+		Trust_Human 
+			0.0(1) 100% 
+	 179.57190058899602 (1) 1%
+		PupilChange_Human 
+			-0.2(1) 100%
+		Trust_Human 
+			0.0(1) 100% 
+	 172.866823399253 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			0.0(1) 100% 
+	 173.19016279875302 (2) 1%
+		PupilChange_Human 
+			-0.2(2) 100%
+		Trust_Human 
+			3.0(2) 100% 
+	 172.70560602397202 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			3.0(1) 100% 
+	 169.698615259299 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			3.0(1) 100% 
+	 163.55369467796302 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			3.0(1) 100% 
+	 162.263906016746 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			3.0(1) 100% 
+	 163.69827134625498 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			3.0(1) 100% 
+	 165.749519326394 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			3.0(1) 100% 
+	 169.23337282111999 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			3.0(1) 100% 
+	 177.67669947763 (2) 1%
+		PupilChange_Human 
+			-0.3(2) 100%
+		Trust_Human 
+			1.0(2) 100% 
+	 179.746198367905 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			1.0(1) 100% 
+	 181.152856780551 (1) 1%
+		PupilChange_Human 
+			-0.2(1) 100%
+		Trust_Human 
+			1.0(1) 100% 
+	 182.222384197675 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			1.0(1) 100% 
+	 182.942446306392 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			1.0(1) 100% 
+	 184.216343674011 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			1.0(1) 100% 
+	 185.32246108228298 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			1.0(1) 100% 
+	 185.694124637896 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			1.0(1) 100% 
+	 186.441941979268 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			1.0(1) 100% 
+	 187.955792797534 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			1.0(1) 100% 
+	 189.30072312876203 (1) 1%
+		PupilChange_Human 
+			-0.1(1) 100%
+		Trust_Human 
+			1.0(1) 100% 
+	 188.529844274349 (2) 1%
+		PupilChange_Human 
+			-0.3(2) 100%
+		Trust_Human 
+			1.0(2) 100% 
+	 190.0779319521 (1) 1%
+		PupilChange_Human 
+			-0.2(1) 100%
+		Trust_Human 
+			3.0(1) 100% 
+	 191.05846388995 (2) 1%
+		PupilChange_Human 
+			-0.3(1) 50%
+			-0.4(1) 50%
+		Trust_Human 
+			3.0(1) 50%
+			4.0(1) 50% 
+	 191.85020336121602 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			3.0(1) 100% 
+	 192.049164586134 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			3.0(1) 100% 
+	 189.10741301059 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			3.0(1) 100% 
+	 189.68853143139 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			3.0(1) 100% 
+	 187.385226548739 (1) 1%
+		PupilChange_Human 
+			-0.4(1) 100%
+		Trust_Human 
+			4.0(1) 100% 
+	 179.920834832674 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			4.0(1) 100% 
+	 175.487856240348 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			4.0(1) 100% 
+	 174.003828084218 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			4.0(1) 100% 
+	 174.82517482517503 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			4.0(1) 100% 
+	 207.54638661740898 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			4.0(1) 100% 
+	 183.123351889833 (2) 1%
+		PupilChange_Human 
+			-0.3(1) 50%
+			-0.2(1) 50%
+		Trust_Human 
+			4.0(2) 100% 
+	 181.507968199804 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			4.0(1) 100% 
+	 181.86447459353298 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			4.0(1) 100% 
+	 184.399778720265 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			4.0(1) 100% 
+	 186.818113884322 (1) 1%
+		PupilChange_Human 
+			-0.4(1) 100%
+		Trust_Human 
+			4.0(1) 100% 
+	 187.57503001200502 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			4.0(1) 100% 
+	 187.765218370949 (1) 1%
+		PupilChange_Human 
+			-0.4(1) 100%
+		Trust_Human 
+			4.0(1) 100% 
+	 189.883032052256 (1) 1%
+		PupilChange_Human 
+			-0.4(1) 100%
+		Trust_Human 
+			4.0(1) 100% 
+	 193.05019305019297 (1) 1%
+		PupilChange_Human 
+			-0.4(1) 100%
+		Trust_Human 
+			4.0(1) 100% 
+	 193.25165230162702 (1) 1%
+		PupilChange_Human 
+			-0.4(1) 100%
+		Trust_Human 
+			4.0(1) 100% 
+	 241.33021212925598 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			4.0(1) 100% 
+	 233.63394233914298 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			4.0(1) 100% 
+	 219.867200211072 (1) 1%
+		PupilChange_Human 
+			-0.2(1) 100%
+		Trust_Human 
+			4.0(1) 100% 
+	 232.73675146042302 (1) 1%
+		PupilChange_Human 
+			-0.2(1) 100%
+		Trust_Human 
+			4.0(1) 100% 
+	 234.373168959617 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			4.0(1) 100% 
+	 257.652272493043 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			4.0(1) 100% 
+	 234.04404708966203 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			4.0(1) 100% 
+	 236.451338314575 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			4.0(1) 100% 
+	 239.681702698816 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			4.0(1) 100% 
+	 237.970586835467 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			4.0(1) 100% 
+	 236.535231922795 (1) 1%
+		PupilChange_Human 
+			-0.2(1) 100%
+		Trust_Human 
+			4.0(1) 100% 
+	 236.200014172001 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			4.0(1) 100% 
+	 233.06220430232798 (1) 1%
+		PupilChange_Human 
+			-0.2(1) 100%
+		Trust_Human 
+			4.0(1) 100% 
+	 230.086052183517 (2) 1%
+		PupilChange_Human 
+			-0.2(1) 50%
+			-0.3(1) 50%
+		Trust_Human 
+			4.0(2) 100% 
+	 229.610580455547 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			4.0(1) 100% 
+	 229.84807042544898 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			4.0(1) 100% 
+	 230.40412884198898 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			4.0(1) 100% 
+	 233.96191100088902 (1) 1%
+		PupilChange_Human 
+			-0.4(1) 100%
+		Trust_Human 
+			4.0(1) 100% 
+	 237.462006079027 (1) 1%
+		PupilChange_Human 
+			-0.3(1) 100%
+		Trust_Human 
+			4.0(1) 100% 
+	 237.800818034814 (1) 1%
+		PupilChange_Human 
+			-0.2(1) 100%
+		Trust_Human 
+			4.0(1) 100% 
+	 239.9404947573 (1) 1%
+		PupilChange_Human 
+			-0.2(1) 100%
+		Trust_Human 
+			4.0(1) 100% 
+ 
+
+
