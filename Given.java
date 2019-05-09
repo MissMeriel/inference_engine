@@ -36,6 +36,15 @@ public class Given{
       return bin.num_samples/total;
    }
    
+   /*public ArrayList<Bin> sort_bins(){
+      
+      return bins.sort(new Comparator<Bin>(){
+         public int compare(Bin a, Bin b){
+            return a.
+         }
+         });
+   }*/
+   
    @Override
    public String toString(){
       String str = name + ":\n";

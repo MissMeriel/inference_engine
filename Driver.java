@@ -25,6 +25,7 @@ public class Driver {
    static ArrayList<String> events = new ArrayList<String>();
    static ArrayList<String> vars_of_interest = new ArrayList<String>();
    static HashMap<String, RawType> types = null;
+   static HashMap<String, Double> priors = null;
    
    public static void main(String[] args) throws ClassNotFoundException {
       //Class<?> cls = Class.forName("Integer");
@@ -46,6 +47,9 @@ public class Driver {
          } else if (s.contains(".typedconfig")) {
             config_file = s;
             types = new HashMap<String, RawType>();
+         } else if (s.contains(".bayesianconfig")) {
+            config_file = s;
+            priors = new HashMap<String, Double>();
          } else if (s.equals("-h")){
             print_help();
             System.exit(0);
@@ -55,11 +59,12 @@ public class Driver {
          csv_array = parse_csv_file(csv_file, get_csv_dimensions(csv_file));
          if(types != null){
             parse_typed_config_file(config_file);
+         } else if (priors != null) {
+            parse_bayesian_config_file(config_file);
          } else {
             parse_config_file(config_file);
          }
-      }
-      catch(IOException e){
+      } catch(IOException e){
          e.printStackTrace();
       }
       build_inference_engine(csv_array, givens, events);

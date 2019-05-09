@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.Comparator;
 
 public class Bin{
    //public T t;
@@ -50,6 +51,15 @@ public class Bin{
       
    }
    
+   public ArrayList<Event> sort_events(){
+      bin_events.sort(new Comparator<Event>(){
+         public int compare(Event a, Event b){
+            return a.sample.compareTo(b.sample);
+         }
+         });
+      return bin_events;
+   }
+   
    @Override
    public String toString(){
       String str = this.type+" "+this.template+" ("+this.num_samples+")";
@@ -60,6 +70,7 @@ public class Bin{
    }
    
     public String toString(String probability){
+      sort_events();
       String str = this.type+" "+this.template+" ("+this.num_samples+") "+probability;
       HashMap<String, String> event_groups = new HashMap<String,String>();
       for (Event e : bin_events){

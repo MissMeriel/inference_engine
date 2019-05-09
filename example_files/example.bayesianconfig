@@ -1,0 +1,7 @@
+GIVENS
+Mode_H2M,manual=0.1,autonomous=0.9
+Trust_Human,0=0.1,1=0.2,2=0.2,3=0.2,4=0.2,5=0.1
+Alarm_M2H,=0.8,pedestrian alarm=0.1,obstacle alarm=0.05,cyclist alarm=0.04,truck alarm=0.01
+EVENTS
+PupilChange_Human,-0.0=0.2,-0.1=0.2,-0.2=0.2,-0.3=0.2,0.4=0.2
+Trust_Human,0=0.1,1=0.2,2=0.2,3=0.2,4=0.2,5=0.1
