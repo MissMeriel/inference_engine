@@ -1,41 +1,15 @@
+import java.util.HashMap;
 import java.util.ArrayList;
-import java.util.logging.Logger;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.ArrayUtils.*;
 
+public class TypedEngine extends BasicEngine {
 
-public class BasicEngine{
    
-   public static final Logger debugEngine = Logger.getLogger("BasicEngine");
+   public HashMap<String,RawType> types;
    
-   Object[][] csv_array;
-   ArrayList<String> givens_vars;
-   ArrayList<String> events_vars;
-   ArrayList<Given> givens = new ArrayList<Given>();
-   
-   public BasicEngine(Object[][] csv_array){
-      this.csv_array = csv_array;
-      build_types();
-   }
-   
-   public BasicEngine(Object[][] csv_array, ArrayList<String> givens, ArrayList<String> events){
-      this.csv_array = csv_array;
-      this.givens_vars = givens;
-      this.events_vars = events;
-      build_givens(givens_vars);
-   }
-
-   public void build_types(){
-      for(Object s : csv_array[0]) {
-         System.out.println(s.toString());
-      }
-   }
-   
-   public void build_givens(ArrayList<String> givens_vars){
-      for(String s : givens_vars) {
-         //System.out.println(s.toString());
-         givens.add(new Given(s.toString()));
-      }
+   public TypedEngine(Object[][] csv_array, ArrayList<String> givens,
+                      ArrayList<String> events, HashMap<String, RawType> types){
+      super(csv_array, givens, events);
+      this.types = types;
    }
    
    public void loop_through_trace(){
@@ -86,8 +60,5 @@ public class BasicEngine{
          System.out.println(givens.get(i)+" \n\n");
       }
    } // end loop_through_trace()
-   
-   public int get_var_index(String var){
-      return ArrayUtils.indexOf((Object[]) csv_array[0], (Object)var);
-   }
+
 }
