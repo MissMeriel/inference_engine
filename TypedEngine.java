@@ -1,9 +1,10 @@
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 public class TypedEngine extends BasicEngine {
 
-   
+   public static final Logger debugTypedEngine = Logger.getLogger("TypedEngine");
    public HashMap<String,RawType> types;
    
    public TypedEngine(Object[][] csv_array, ArrayList<String> givens,
@@ -13,11 +14,10 @@ public class TypedEngine extends BasicEngine {
    }
    
    public void loop_through_trace(){
-      //System.out.println("\nBegin looping through trace");
-      //System.out.println(csv_array[0].toString());
+      debugTypedEngine.info("\nBegin looping through trace");
+      debugTypedEngine.info("Trace length: "+csv_array.length);
+      debugTypedEngine.info("Variables: "+(csv_array[0].toString()));
       Object[] row;
-      //System.out.println(csv_array.length);
-      //for(Object[] row : csv_array){
       for (int i = 1; i < csv_array.length; i++) {
          row = csv_array[i];
          int given_count = 0;
@@ -28,7 +28,6 @@ public class TypedEngine extends BasicEngine {
             int event_index = get_var_index(e);
             //System.out.println(e+":"+row[event_index]);
             String event_value = (String) row[event_index];
-
             for (Given g: givens){
                // update givens values
                int given_index = get_var_index(g.name);

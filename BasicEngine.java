@@ -22,7 +22,6 @@ public class BasicEngine{
       this.csv_array = csv_array;
       this.givens_vars = givens;
       this.events_vars = events;
-      build_givens(givens_vars);
    }
 
    public void build_types(){
@@ -39,6 +38,7 @@ public class BasicEngine{
    }
    
    public void loop_through_trace(){
+      build_givens(givens_vars);
       //System.out.println("\nBegin looping through trace");
       //System.out.println(csv_array[0].toString());
       Object[] row;
@@ -92,10 +92,10 @@ public class BasicEngine{
    public int get_var_index(String var){
       return ArrayUtils.indexOf((Object[]) csv_array[0], (Object)var);
    }
-   
-   public ArrayList<Given> sort_givens(){
+
+   /*public ArrayList<Given> sort_givens(){
       //Comparator<Given> cmp = 
       return givens;
-   }
+   }*/
    
 }
