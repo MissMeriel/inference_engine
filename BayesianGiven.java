@@ -6,6 +6,7 @@ public class BayesianGiven extends Given {
 
    HashMap<String, HashMap<String, Double>> priors;
    public ArrayList<BayesianBin> bins = new ArrayList<BayesianBin>();
+   int trace_total;
    
    public BayesianGiven(String name, HashMap<String, HashMap<String, Double>> priors){
       super(name);
@@ -32,16 +33,21 @@ public class BayesianGiven extends Given {
       for (Bin b : bins){
          total += b.num_samples;
       }
-      return bin.num_samples/total;
+      return bin.instance_count/(double)bin.total;
+   }
+   
+   public void set_total(int i ){
+      trace_total = i;
    }
    
    @Override
    public String toString(){
-      String str = name + ":\n";
-      System.out.println(bins.size());
+      String str = "";
+      //System.out.println(bins.size());
       for (BayesianBin b : bins){
+         b.set_trace_total(trace_total);
          String prob = String.format("%.0f%%", get_bin_probability(b)*100);
-         str += "\t"+b.toString(prob)+" "+"\n";
+         str += b.toString(prob)+"\n";
       }
       return str;
    }

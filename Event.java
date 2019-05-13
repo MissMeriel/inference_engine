@@ -10,7 +10,7 @@ public class Event{
       update();
    }
    
-   public Event(String sample, String type){
+   public Event(String type, String sample){
       this.sample = sample;
       this.type = type;
       update();
