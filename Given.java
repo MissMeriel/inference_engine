@@ -49,7 +49,7 @@ public class Given{
    public String toString(){
       System.out.println("Given toString");
       String str = name + ":\n";
-      System.out.println(bins.size());
+      //System.out.println(bins.size());
       for (Bin b : bins){
          String prob = String.format("%.0f%%", get_bin_probability(b)*100);
          str += "\t"+b.toString(prob)+" "+"\n";

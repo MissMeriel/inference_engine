@@ -12,6 +12,7 @@ public class BayesianEngine extends BasicEngine {
    HashMap<String, HashMap<String, Double[]>> cumulative_probabilities = null;
    HashSet<String> vars_of_interest = new HashSet<String>();
    int trace_total;
+   public static boolean debug = false;
    
    public static final Logger debugBayesianEngine = Logger.getLogger("BayesianEngine");
    public BayesianEngine(Object[][] csv_array, ArrayList<String> givens,
@@ -22,11 +23,11 @@ public class BayesianEngine extends BasicEngine {
    }
    
    public void build_givens(){
-      out.println("\nBUILD GIVENS\npriors: " + priors);
+      if(debug)out.println("\nBUILD GIVENS\npriors: " + priors);
       for(String s : givens_vars) {
-         System.out.format("%s%n", s.toString());
+         if(debug){System.out.format("%s%n", s.toString());
          System.out.format("%s%n", priors.get(s));
-         out.println(priors.get(s));
+         out.println(priors.get(s));}
          this.givens.add(new BayesianGiven(s.toString(), priors));
       }
    }
@@ -34,8 +35,10 @@ public class BayesianEngine extends BasicEngine {
    public void build_vars_of_interest(){
       vars_of_interest.addAll(givens_vars);
       vars_of_interest.addAll(events_vars);
-      out.print("vars_of_interest:");
-      out.println(vars_of_interest);
+      if(debug) {
+         out.print("vars_of_interest:");
+         out.println(vars_of_interest);
+      }
    }
    
    public void initialize_cumulative_var_probabilities(){
@@ -54,67 +57,62 @@ public class BayesianEngine extends BasicEngine {
       initialize_cumulative_var_probabilities();
       build_vars_of_interest();
       for (int i = 1; i < csv_array.length; i++) {
-         out.println("\n\nLoop "+i);
+         //out.println("\n\nLoop "+i);
          trace_total = i;
          row = csv_array[i];
          int given_count = 0;
          BayesianBin b = null;
          boolean bin_updated = false;
-         // update P(A) for all vars
+         // update frequency count for all vars
          for (String s : vars_of_interest){
             int event_index = get_var_index(s);
             String event_val = (String) row[event_index];
             update_cumulative_probabilites(s, event_val, i);
          }
-         out.println("Updated cumulative probabilities:");
-         print_cumulative_probabilities();
+         /*out.print("Updated cumulative probabilities:");
+         print_cumulative_probabilities();*/
          
-         for (String e: events_vars){
-            //get only event vars
-            int event_index = get_var_index(e);
-            String event_val = (String) row[event_index];
-            for (BayesianGiven g: this.givens) {
-               // update givens values
-               int given_index = get_var_index(g.name);
-               String given_val = (String) row[given_index];
-               System.out.println("Given "+g.name+" index in csv:"+given_index);
-               //System.out.println(g.name+":"+given_val);
-               // check for existing bin
-               b = g.contains_bin(given_val);
-               if(b != null && !bin_updated){
-                  // add to existing bin
-                  b.update_count(i);
-                  //out.println("Updated "+b.template+" bin count to "+b.total);
-               } else if(b == null) {
-                  // create new bin to add to
-                  b = g.add_bin(g.name, given_val);
-                  //out.println("Updated "+b.template+" bin count to "+b.total);//+"for BayesianGiven "+g.name);
-               }
-               //update events in bins
-               for (String ev: events_vars){
-                  event_index = get_var_index(ev);
-                  event_val = (String) row[event_index];
-                  Event new_event = new Event(ev, event_val);
-                  Event bin_event = b.contains_event(new_event);
-                  if(bin_event != null){
-                     bin_event.update();
-                     //update bin probabilities: joint & reversed given
-                     // event_type, event_value, [b_count, b+a_count, a_count, total]
-                     b.update(ev, event_val);
-                  } else {
-                     //System.out.println("updating event in bin "+b.template);
-                     b.add_event(new Event(ev, event_val));
+         for (BayesianGiven g: this.givens) {
+            //out.println(g.name + " " + g.toString());
+            // get current givens value
+            int given_index = get_var_index(g.name);
+            String given_val = (String) row[given_index];
+            //out.println(g.name +": "+given_val);
+            // update bin frequency counts
+            b = g.contains_bin(given_val);
+            if(b != null && !bin_updated){
+               // add to existing bin
+               b.update_count(i);
+               //out.println("Updated "+b.template+" bin count to "+b.num_samples);
+            } else if(b == null) {
+               // create new bin
+               //out.println("bin null, creating new bin for "+given_val);
+               b = g.add_bin(g.name, given_val);
+               //out.println("Updated "+b.template+" bin count to "+b.num_samples);//+"for BayesianGiven "+g.name);
+            }
+            //update events in bins
+            ArrayList<BayesianBin> bins = g.get_bins();
+            for (BayesianBin bin : bins){
+               if(bin.template.equals(given_val)){
+                  for (String s : events_vars){
+                     int index = get_var_index(s);
+                     String event_val = (String) row[index];
+                     bin.update(s, event_val);
+                     //out.println("Updated bin "+bin.type+":"+bin.template+" with event "+s+":"+event_val);
                   }
                }
             }
-            bin_updated = true;
+            g.set_total(i);
          }
       }
       out.println("\nFINISHED TRACE");
-      print_cumulative_probabilities();
+      //out.println("cumulative_probabilities: ");
+      //print_cumulative_probabilities();
       //System.exit(0);
       for (int i = 0; i< givens.size(); i++){
          givens.get(i).set_total(trace_total);
+         givens.get(i).set_priors(priors);
+         givens.get(i).set_cumulative_probabilities(cumulative_probabilities);
          out.println(givens.get(i)+" \n\n");
       }
    } // end loop_through_trace()
@@ -156,7 +154,6 @@ public class BayesianEngine extends BasicEngine {
          str += " "+s+":{";
          HashMap<String, Double[]> hash = cumulative_probabilities.get(s);
          Set<String> keys2 = hash.keySet();
-         
          for (String s2 : keys2){
             str += s2+":[";
             Double[] d = hash.get(s2);
@@ -168,7 +165,7 @@ public class BayesianEngine extends BasicEngine {
          }
          str+="}";
       }
-      str += "}\n";
+      str += "}";
       out.println( str);
    }
    

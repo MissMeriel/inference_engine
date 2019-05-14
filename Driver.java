@@ -200,7 +200,7 @@ public class Driver {
       }
       Set<String> keys = priors.keySet();
       for(String str : keys){
-         out.format("%s : %s%n", str, priors.get(str));
+         if(BayesianEngine.debug) out.format("%s : %s%n", str, priors.get(str));
          HashMap<String, Double> blah = priors.get(str);
          Set<String> keys2 = blah.keySet();
          for (String str2 : keys2){
