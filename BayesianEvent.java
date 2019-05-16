@@ -82,7 +82,7 @@ public class BayesianEvent<T> extends TypedEvent{
             double pB = A_arr[0].doubleValue() / A_arr[1].doubleValue();
             Double pBA = val_map.get(key2) / (double) num_samples;
             double pAB = (pA * pBA) / pB;
-            str += String.format("\nP(%s=%s|%s=%s):%-20.2f", var_name, val.toString(), key1, key2, pAB);
+            str += String.format("\nP(%s=%s|%s=%s):%.2f", var_name, val.toString(), key1, key2, pAB);
          }
       }
       return str;
