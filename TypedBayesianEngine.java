@@ -71,13 +71,17 @@ public class TypedBayesianEngine extends BasicEngine {
             update_cumulative_probabilites(voi_name, event_val, i);
             out.print("Updated cumulative probabilities:");
             print_cumulative_probabilities();
-            /*if(debug)out.format("Get prior for %s:%s%n", voi_name, (String)event_val);*/
-            /*out.println("event_val == empty string:"+(event_val.equals("")));
-            out.println(event_val+"; isempty:"+event_val.isEmpty()+"; length:"+event_val.length());
-            //out.println(StringEscapeUtils.escapeJava(event_val.isEmpty()));
-            out.println(priors.get(voi_name));
-            out.println(priors.get(voi_name).get(""));
-            //Driver.print_priors();*/
+            if(debug){
+               out.format("Get prior for %s:%s%n", voi_name, (String)event_val);
+               out.println("event_val == empty string:"+(event_val.equals("")));
+               out.println("event_val == space:"+(event_val.equals(" ")));
+               out.println(event_val+"; isempty:"+event_val.isEmpty()+"; length:"+event_val.length());
+               //out.println(StringEscapeUtils.escapeJava(event_val.isEmpty()));
+               out.println(priors.get(voi_name));
+               out.println(priors.get(voi_name).get(""));
+               out.println(priors.get(voi_name).get(" "));
+               //Driver.print_priors();*/
+            }
             double prior = priors.get(voi_name).get(event_val);
             switch(type_enum){
                case INT:
@@ -123,7 +127,6 @@ public class TypedBayesianEngine extends BasicEngine {
       out.println("\nFINISHED TRACE");
       //out.println("cumulative_probabilities: ");
       //print_cumulative_probabilities();
-      //System.exit(0);
       for (int i = 0; i< givens.size(); i++){
          givens.get(i).set_total(trace_total);
          givens.get(i).set_priors(priors);
@@ -135,6 +138,8 @@ public class TypedBayesianEngine extends BasicEngine {
       for(BayesianEvent be : bayesian_events){
          out.println(be.toString());
       }
+      out.println("\n\nGENERATE BAYESIAN PROBABILITIES:");
+      generate_bayesian_probabilities();
    } // end loop_through_trace()
 
    public ArrayList<BayesianEvent> sort_bayesian_events(){
@@ -180,6 +185,36 @@ public class TypedBayesianEngine extends BasicEngine {
             cumulative_probability.put(k2, d);
          }
       }
+   }
+   
+   public String generate_bayesian_probabilities(){
+      //HashMap<String, HashMap<String >>
+      String str = "";
+      Iterator<BayesianEvent> iter = bayesian_events.iterator();
+      while(iter.hasNext()){
+         BayesianEvent be = iter.next();
+         switch(be.prior_attribution){
+            case PROB_A:
+               //Double[] A_arr = cumulative_probabilites.
+               /*HashMap<String, HashMap<String, Double[]>> cumulative_probabilities
+               Set<String< keys1 = cumulative_probabilities.keySet();
+               for(String key1 : keys1){
+                  HashMap<String, Double[]> val_map = cumulative_probabilities.get(key1);
+                  Set<String> keys2 = val_map.keySet();
+                  for(String key2 : keys2){
+                     
+                  }
+               }*/
+               //double pA = / (double) trace_total;
+               //double pB = / (double) trace_total;
+               String temp = be.generate_bayesian_probability(cumulative_probabilities);
+               out.println(temp);
+               str += temp;
+               break;
+         } // end switch
+         
+      } // end while
+      return str;
    }
    
    

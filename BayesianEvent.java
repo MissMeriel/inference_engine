@@ -1,13 +1,15 @@
 import java.util.HashMap;
 import java.util.TreeSet;
 import java.util.ArrayList;
+import java.util.Set;
 import static java.lang.System.out;
 
 public class BayesianEvent<T> extends TypedEvent{
    
-   Prior prior_attribution = Prior.PROB_A;
-   HashMap<String, HashMap<String, Double>> pBAs = null;   
+   Prior prior_attribution = Prior.PROB_A; //default is PROB_A
+   HashMap<String, HashMap<String, Double>> pBAs = null;
    double p_A;
+   double p_B;
    TreeSet<String> vars_of_interest = new TreeSet<String>();
    boolean debug = true;
    
@@ -65,6 +67,25 @@ public class BayesianEvent<T> extends TypedEvent{
          i++;
       }
       if(debug) out.println("Updated conditionals in "+var_name+"="+val+": "+pBAs);
+   }
+   
+   public String generate_bayesian_probability(HashMap<String, HashMap<String, Double[]>> cumulative_probabilities){
+      String str = "";
+      Set<String> keys1 = pBAs.keySet();
+      for(String key1 : keys1){
+         HashMap<String, Double> val_map = pBAs.get(key1);
+         Set<String> keys2 = val_map.keySet();
+         for(String key2 : keys2){
+            //Double[] A_arr = cumulative_probabilities.get(var_name).get(val.toString());
+            Double[] A_arr = cumulative_probabilities.get(key1).get(key2);
+            double pA = (double) num_samples / A_arr[1].doubleValue();
+            double pB = A_arr[0].doubleValue() / A_arr[1].doubleValue();
+            Double pBA = val_map.get(key2) / (double) num_samples;
+            double pAB = (pA * pBA) / pB;
+            str += String.format("\nP(%s=%s|%s=%s):%-20.2f", var_name, val.toString(), key1, key2, pAB);
+         }
+      }
+      return str;
    }
    
    @Override

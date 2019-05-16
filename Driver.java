@@ -194,7 +194,7 @@ public class Driver {
       Object[][] csv_array = new Object [dims[0]][dims[1]];
       int row_count = 0;
       while ((thisLine = dis.readLine()) != null){
-         String [] cols = thisLine.split(",");
+         String[] cols = thisLine.split(",");
          csv_array[row_count]= cols;
          row_count++;
       }

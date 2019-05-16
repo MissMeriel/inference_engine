@@ -1,6 +1,7 @@
 
 
 public class TypedEvent<T>{
+   //int trace_total;
    int num_samples = 0;
    T val = null;
    String var_name = null;
