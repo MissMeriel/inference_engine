@@ -17,8 +17,7 @@ import static java.lang.System.out;
  */
 public class Driver {
 
-   static String csv_file;
-   static String config_file;
+   static String csv_file, config_file, priors_file;
    static BasicEngine engine;
    static Object[][] csv_array;
    static ArrayList<String> givens = new ArrayList<String>();
@@ -42,6 +41,9 @@ public class Driver {
             types = new HashMap<String, RawType>();
          } else if (s.contains(".bayesianconfig")) {
             config_file = s;
+            types = new HashMap<String, RawType>();
+         } else if (s.contains(".priors")) {
+            priors_file = s;
             priors = new HashMap<String, HashMap<String, Double>>();
          } else if (s.equals("-h")){
             print_help();
@@ -50,14 +52,17 @@ public class Driver {
       }
       try{
          csv_array = parse_csv_file(csv_file, get_csv_dimensions(csv_file));
-         if(types != null){
+         out.println("Types null:"+(types == null));
+         out.println("config file:"+config_file);
+         if(types != null){ 
             parse_typed_config_file(config_file);
          } else if (priors != null) {
-            parse_bayesian_config_file(config_file);
+            parse_priors_file(config_file);
             //out.println("priors: " + priors);
          } else {
             parse_config_file(config_file);
          }
+         parse_priors_file(priors_file);
       } catch(IOException e){
          e.printStackTrace();
       }
@@ -67,12 +72,14 @@ public class Driver {
    
    public static void build_inference_engine(Object[][] csv_array,
                            ArrayList<String> givens, ArrayList<String> events, HashMap<String, HashMap<String, Double>> priors){
-      if(types != null){
+      if(priors != null && types != null){
+         print_types();
+         engine = new TypedBayesianEngine(csv_array, givens, events, priors, types);
+      } else if (types != null) {
          engine = new TypedEngine(csv_array, givens, events, types);
       } else if (priors != null) {
-         //out.println("priors: " + priors);
          engine = new BayesianEngine(csv_array, givens, events, priors);
-      }else {
+      } else {
          engine = new BasicEngine(csv_array, givens, events);
       }
       engine.loop_through_trace();
@@ -128,45 +135,36 @@ public class Driver {
          if (g && thisLine != "\n") {
             String[] splitLine = thisLine.split(",");
             givens.add(splitLine[0]);
+            if(BayesianEngine.debug) out.format("Added %s to givens%n",splitLine[0]);
             if(types.get(splitLine[0]) == null) types.put(splitLine[0], RawType.valueOf(splitLine[1]));
          } else if(e && thisLine != "\n") {
             String[] splitLine = thisLine.split(",");
             events.add(splitLine[0]);
+            if(BayesianEngine.debug) out.format("Added %s to events%n",splitLine[0]);
             if(types.get(splitLine[0]) == null) types.put(splitLine[0], RawType.valueOf(splitLine[1]));
          } else {
             vars_of_interest.add(thisLine);
          }
          //System.out.println(StringEscapeUtils.escapeJava(thisLine));
-         /*Set<String> keys = types.keySet();
-         for(String str : keys){
-            out.format("%s : %s%n", str, types.get(str));
-         }*/
       }
       fis.close();
       dis.close();
-      System.out.format("GIVENS:%s%n", givens);
-      System.out.format("EVENTS:%s%n", events);
+      if(BayesianEngine.debug){
+         out.format("GIVENS:%s%n", givens);
+         out.format("EVENTS:%s%n", events);
+      }
    }
    
-   
-   public static void parse_bayesian_config_file(String config_file) throws IOException {
+   public static void parse_priors_file(String config_file) throws IOException {
       FileInputStream fis = new FileInputStream(config_file);
       DataInputStream dis = new DataInputStream(fis);
       String thisLine;
       // rows x columns
       int row_count = 0;
-      boolean g = false;
-      boolean e = false;
       //HashMap<String, Double> val = new HashMap<String, Double>();
       while ((thisLine = dis.readLine()) != null){
-         if(thisLine.contains("GIVENS")){
-            g = true; e = false; continue;
-         } else if(thisLine.contains("EVENTS")) {
-            e = true; g = false; continue;
-         }
-         if (g && thisLine != "\n") {
+         if (thisLine != "\n") {
             String[] splitLine = thisLine.split(",");
-            givens.add(splitLine[0]);
             HashMap<String, Double>  val = new HashMap<String, Double>();
             for(int i = 1; i < splitLine.length; i++){
                String[] distSplit = splitLine[i].split("=");
@@ -180,37 +178,12 @@ public class Driver {
             /*if(types.get(splitLine[0]) == null) {
                types.put(splitLine[0], RawType.valueOf(splitLine[1]));
             }*/
-         } else if(e && thisLine != "\n") {
-            String[] splitLine = thisLine.split(",");
-            events.add(splitLine[0]);
-            HashMap<String, Double>  val = new HashMap<String, Double>();
-            for(int i = 1; i < splitLine.length; i++){
-               String[] distSplit = splitLine[i].split("=");
-               //out.format("key:%s value:%s%n", distSplit[0],distSplit[1]);
-               val.put(distSplit[0],  new Double(distSplit[1]));
-               //out.format("put %s into key %s%n", distSplit[1], distSplit[0]);
-            }
-            priors.put(splitLine[0], val);
-            /*if(types.get(splitLine[0]) == null) types.put(splitLine[0], RawType.valueOf(splitLine[1]));*/
-         } else {
-            vars_of_interest.add(thisLine);
-         }
+         } 
          //System.out.println(StringEscapeUtils.escapeJava(thisLine));
-
       }
-      Set<String> keys = priors.keySet();
-      for(String str : keys){
-         if(BayesianEngine.debug) out.format("%s : %s%n", str, priors.get(str));
-         HashMap<String, Double> blah = priors.get(str);
-         Set<String> keys2 = blah.keySet();
-         for (String str2 : keys2){
-            out.format("%-20s : %f%n", str2, blah.get(str2));
-         }
-      }
+      print_priors();
       fis.close();
-      dis.close();
-      System.out.format("GIVENS:%s%n", givens);
-      System.out.format("EVENTS:%s%n", events);      
+      dis.close();    
    }
    
    public static Object[][] parse_csv_file(String csv_file, int[] dims) throws IOException {
@@ -241,6 +214,60 @@ public class Driver {
          dims[1] = (thisLine.split(",").length);
       }
       return dims;
+   }
+   
+   public static String print_priors(){
+      String priors_string = "";
+      Set<String> keys = priors.keySet();
+      out.format("%nPRIORS:%n");
+      for(String str : keys){
+         out.format("%s : %s%n", str, priors.get(str));
+         priors_string += String.format("%s : %s%n", str, priors.get(str));
+         HashMap<String, Double> blah = priors.get(str);
+         Set<String> keys2 = blah.keySet();
+         for (String str2 : keys2){
+            out.format("%-20s : %f%n", str2, blah.get(str2));
+            priors_string += String.format("%-20s : %f%n", str2, blah.get(str2));
+         }
+      }
+      return priors_string;
+   }
+   
+   public static String priors_toString(){
+      String priors_string = String.format("%nPRIORS:%n");
+      Set<String> keys = priors.keySet();
+      for(String str : keys){
+         //if(BayesianEngine.debug) out.format("%s : %s%n", str, priors.get(str));
+         priors_string += String.format("%s : %s%n", str, priors.get(str));
+         HashMap<String, Double> blah = priors.get(str);
+         Set<String> keys2 = blah.keySet();
+         for (String str2 : keys2){
+            //out.format("%-20s : %f%n", str2, blah.get(str2));
+            priors_string += String.format("%-20s : %f%n", str2, blah.get(str2));
+         }
+      }
+      return priors_string;
+   }
+   
+   public static String print_types(){
+      String types_string = "";
+      Set<String> keys = types.keySet();
+      out.format("%nTYPES:%n");
+      for(String str : keys){
+         out.format("%-20s : %s%n", str, types.get(str));
+         types_string += String.format("%-20s : %s%n", str, types.get(str));
+      }
+      return types_string;
+   }
+   
+   public static String types_toString(){
+      String types_string = String.format("%nTYPES:%n");
+      Set<String> keys = types.keySet();
+      for(String str : keys){
+         types_string += String.format("%-20s : %s%n", str, types.get(str));
+         //types_string += String.format("%s : %s%n", str, types.get(str));
+      }
+      return types_string;
    }
    
    public static void print_help(){

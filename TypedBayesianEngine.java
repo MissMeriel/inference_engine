@@ -2,43 +2,58 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Iterator;
 import java.util.logging.Logger;
 import static java.lang.System.out;
+import org.apache.commons.lang3.StringEscapeUtils;
 
-public class BayesianEngine extends BasicEngine {
+public class TypedBayesianEngine extends BasicEngine {
    
    HashMap<String, HashMap<String, Double>> priors = null;
    ArrayList<BayesianGiven> givens = new ArrayList<BayesianGiven>();
+   ArrayList<BayesianEvent> bayesian_events = new ArrayList<BayesianEvent>();
    HashMap<String, HashMap<String, Double[]>> cumulative_probabilities = null;
    HashSet<String> vars_of_interest = new HashSet<String>();
+   HashMap<String, RawType> types = null;
    int trace_total;
    public static boolean debug = true;
    
    public static final Logger debugBayesianEngine = Logger.getLogger("BayesianEngine");
-   public BayesianEngine(Object[][] csv_array, ArrayList<String> givens,
-                      ArrayList<String> events, HashMap<String, HashMap<String, Double>> priors){
+   public TypedBayesianEngine(Object[][] csv_array, ArrayList<String> givens, ArrayList<String> events,
+                      HashMap<String, HashMap<String, Double>> priors, HashMap<String, RawType> types){
       super(csv_array, givens, events);
       this.priors = priors;
-      //out.println("constructor priors: " + priors);
+      this.types = types;
    }
    
-   public void build_givens(){
-      if(debug)out.println("\nBUILD GIVENS\npriors: " + priors);
+   /*public void build_bayesian_events(){
+      if(debug) out.println("\nBUILD bayesian_events\npriors: " + priors);
+      RawType type_enum;
       for(String s : givens_vars) {
-         if(debug){System.out.format("%s%n", s.toString());
-         System.out.format("%s%n", priors.get(s));
-         out.println(priors.get(s));}
-         this.givens.add(new BayesianGiven(s.toString(), priors));
+         if(debug){
+            System.out.format("%s%n", s.toString());
+            System.out.format("%s%n", priors.get(s));
+            type_enum = types.get(s);
+            out.println("RawType: "+type_enum);
+         }
+         switch(type_enum){
+            case INT:
+               this.bayesian_events.add(new BayesianEvent<Integer>(s.toString(), priors));
+               break;
+            case DOUBLE:
+               this.bayesian_events.add(new BayesianEvent<Double>(s.toString(), priors));
+               break;
+            case STRING:
+               this.bayesian_events.add(new BayesianEvent<String>(s.toString(), priors));
+               break;
+         }
       }
-   }
+   }*/
    
    public void build_vars_of_interest(){
       vars_of_interest.addAll(givens_vars);
       vars_of_interest.addAll(events_vars);
-      if(debug) {
-         out.print("vars_of_interest:");
-         out.println(vars_of_interest);
-      }
+      if(debug) out.format("vars_of_interest:%s%n",vars_of_interest);
    }
    
    public void initialize_cumulative_var_probabilities(){
@@ -53,24 +68,64 @@ public class BayesianEngine extends BasicEngine {
       //debugBayesianEngine.info("Length of trace: "+csv_array.length);
       //debugBayesianEngine.info("Trace variables: "+csv_array[0]));
       Object[] row;
-      build_givens();
+      //build_givens();
       initialize_cumulative_var_probabilities();
       build_vars_of_interest();
+      // iterate over csv rows
       for (int i = 1; i < csv_array.length; i++) {
-         //out.println("\n\nLoop "+i);
+         out.println("\n\nLoop "+i);
          trace_total = i;
          row = csv_array[i];
          int given_count = 0;
          BayesianBin b = null;
          boolean bin_updated = false;
-         // update frequency count for all vars
-         for (String s : vars_of_interest){
-            int event_index = get_var_index(s);
+
+         //update events in vars of interest
+         Iterator<String> iter = vars_of_interest.iterator();
+         while(iter.hasNext()){
+            String voi_name = iter.next();
+            RawType type_enum = types.get(voi_name);
+            int event_index = get_var_index(voi_name);
+            out.println("RawType: "+type_enum);
+            Iterator iter2 = vars_of_interest.iterator();
+            BayesianEvent be_test = null;
             String event_val = (String) row[event_index];
-            update_cumulative_probabilites(s, event_val, i);
+            // update frequency count for all vars
+            update_cumulative_probabilites(voi_name, event_val, i);
+            /*out.print("Updated cumulative probabilities:");
+            print_cumulative_probabilities();*/
+            if(debug)out.format("Get prior for %s:%s%n", voi_name, (String)event_val);
+            out.println("event_val == null:"+(event_val == null));
+            out.println(priors.get(voi_name));
+            out.println(priors.get(voi_name).get(""));
+            Driver.print_priors();
+            double prior = priors.get(voi_name).get(event_val);
+            switch(type_enum){
+               case INT:
+                  be_test = new BayesianEvent<Integer>(voi_name, Integer.parseInt(event_val), prior);
+                  break;
+               case DOUBLE:
+                  be_test = new BayesianEvent<Double>(voi_name, Double.parseDouble(event_val), prior);
+                  break;
+               case STRING:
+                  be_test = new BayesianEvent<String>(voi_name, event_val, prior);
+                  break;
+            }
+            //check that bayesian_events does not already contain this event
+            boolean found = false;
+            for(BayesianEvent be : bayesian_events){
+               if(be.equals(be_test)){
+                  //update count of this event and conditioned events
+                  //be.update(String );
+                  found = true;
+                  break;
+               }
+            }
+            if(!found){
+               this.bayesian_events.add(be_test);
+            }
          }
-         /*out.print("Updated cumulative probabilities:");
-         print_cumulative_probabilities();*/
+         
          
          for (BayesianGiven g: this.givens) {
             //out.println(g.name + " " + g.toString());

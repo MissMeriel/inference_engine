@@ -2,17 +2,17 @@
 
 public class Event{
    int num_samples = 0;
-   String sample;
-   String type = "";
+   String val;
+   String var_name = "";
    
-   public Event(String sample){
-      this.sample = sample;
+   public Event(String val){
+      this.val = val;
       update();
    }
-   
-   public Event(String type, String sample){
-      this.sample = sample;
-      this.type = type;
+
+   public Event(String var_name, String val){
+      this.val = val;
+      this.var_name = var_name;
       update();
    }
    
@@ -22,7 +22,7 @@ public class Event{
    
    @Override
    public String toString(){
-      return this.sample + "("+this.num_samples+")";
+      return this.val + "("+this.num_samples+")";
    }
 
 }

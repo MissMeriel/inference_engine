@@ -4,22 +4,23 @@ import java.util.Set;
 import java.util.logging.Logger;
 import static java.lang.System.out;
 
-public class BayesianBin extends Bin {
+public class TypedBayesianBin<T> extends Bin {
 
+   T t;
    HashMap<String, HashMap<String, Double>> priors; //prior P(A)
    HashMap<String, HashMap<String,Double[]>> conditional_priors; //P(B|A)
    HashMap<String, HashMap<String, Double[]>> cumulative_probabilities;
    int instance_count = 0;
    int total = 0;
-   boolean debug = false;
+   public boolean debug = true;
    
-   public BayesianBin(String template, HashMap<String, HashMap<String, Double>> priors){
+   public TypedBayesianBin(String template, HashMap<String, HashMap<String, Double>> priors){
       super(template);
       this.priors = priors;
       this.conditional_priors = new HashMap<String, HashMap<String,Double[]>>();
    }
    
-   public BayesianBin(String type, String template, HashMap<String, HashMap<String, Double>> priors){
+   public TypedBayesianBin(String type, String template, HashMap<String, HashMap<String, Double>> priors){
       super(type, template);
       this.priors = priors;
       this.conditional_priors = new HashMap<String, HashMap<String,Double[]>>();
@@ -89,7 +90,9 @@ public class BayesianBin extends Bin {
       double p_BgivenA = (d[0]/num_samples) / (double) total;
       //double p_BgivenA = (d[0]/instance_count) / p_A;
       double p_B = d[1]/(double)total;
-      out.format("p_BgivenA:%s   p_A:%s   p_B:%s%n", p_BgivenA, p_A, p_B);
+      out.println("p_BgivenA "+p_BgivenA);
+      out.println("p_A  "+p_A);
+      out.println("p_B "+p_B);
       /*out.println(e.type+" "+priors.get(e.type));
       out.println(e.sample);*/
       //return posterior conditional
@@ -107,7 +110,6 @@ public class BayesianBin extends Bin {
    
    public String toString(String probability){
       sort_events();
-      out.println("\nCONDITIONAL PRIORS FOR BIN "+type+"::"+template+":\n"+conditional_priors_toString());
       String str = this.type+" "+this.template+" ("+this.num_samples+") "+probability;
       //out.println("bin string: "+str);
       HashMap<String, String> event_groups = new HashMap<String,String>();
@@ -120,7 +122,6 @@ public class BayesianBin extends Bin {
          str += "\n\t"+key ;//+":: ";
          Set<String> keys2 = pBA_map.keySet();
          for(String key2 : keys2){
-            //out.format("key:%s   key2:%s%n",key,key2);
             Double[] dd = pBA_map.get(key2);
             double p_BA = dd[0] / this.num_samples;
             //out.format("%nkey:%s key2:%s%n",key,key2);
@@ -128,11 +129,13 @@ public class BayesianBin extends Bin {
             //double p_A = d[0]/d[1];
             double p_A = priors.get(key).get(key2);
             double p_B = num_samples/(double)total;
-            if(debug) str+="\t\t"+String.format("p_A:%f p_BA:%f p_B:%f%n", p_A, p_BA, p_B);
+            str+="\n\t\t"+String.format("p_A:%f p_BA:%f p_B:%f%n", p_A, p_BA, p_B);
             //out.format("",d[0],d[1],);
-            str+= "\n\t\t"+key2+":\t"+String.format("%.00f%%",(get_event_probability(p_A, p_BA, p_B)*100));
+            str+= "\n\t\t"+key2+":\t"+String.format("%.00f%%",(get_event_probability(p_A, p_BA, p_B)*100))+"\n";
          }
          //get cumulative prob of A and B (B comes from bin)
+         
+         
       }
       return str;
    }

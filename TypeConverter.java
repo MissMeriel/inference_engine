@@ -34,6 +34,42 @@ public class TypeConverter{
       return null;
    }
    
+   public static Class get_type_class(String type){
+      switch(type){
+         case "STRING":
+            return String.class;
+            //break;
+         case "INT":
+            return Integer.class;
+            //break;
+         case "DOUBLE":
+            return Double.class;
+            //break;
+         case "BOOLEAN":
+            return Boolean.class;
+            //break;
+      }
+      return null;
+   }
+   
+   public static RawType get_rawtype(String type){
+      switch(type){
+         case "STRING":
+            return RawType.STRING;
+            //break;
+         case "INT":
+            return RawType.INT;
+            //break;
+         case "DOUBLE":
+            return RawType.DOUBLE;
+            //break;
+         case "BOOLEAN":
+            return RawType.BOOLEAN;
+            //break;
+      }
+      return null;
+   }
+   
    public static Object instantiate_type(RawType type, String value){
       Object o = null;
       Class cls = get_type_class(type);

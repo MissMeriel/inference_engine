@@ -43,7 +43,7 @@ public class Bin{
          //out.format("bin events:%d%n",this.bin_events.size());
          for(Event e : this.bin_events){
             //System.out.format("e.sample:%s event.sample:%s %n",e.sample,event.sample);
-            if(e.sample.equals(event.sample)) {
+            if(e.val.equals(event.val)) {
                return e;
             }
          }
@@ -62,7 +62,7 @@ public class Bin{
    public ArrayList<Event> sort_events(){
       bin_events.sort(new Comparator<Event>(){
          public int compare(Event a, Event b){
-            return a.sample.compareTo(b.sample);
+            return a.val.compareTo(b.val);
          }
          });
       return bin_events;
@@ -82,14 +82,14 @@ public class Bin{
       String str = this.type+" "+this.template+" ("+this.num_samples+") "+probability;
       HashMap<String, String> event_groups = new HashMap<String,String>();
       for (Event e : bin_events){
-         if(event_groups.get(e.type) == null){
-            event_groups.put(e.type, "\n\t\t"+e.type +" ");
+         if(event_groups.get(e.var_name) == null){
+            event_groups.put(e.var_name, "\n\t\t"+e.var_name +" ");
          }
       }
       for (Event e : bin_events){
-         String event_group_string = event_groups.get(e.type);
+         String event_group_string = event_groups.get(e.var_name);
          event_group_string += "\n\t\t\t"+e.toString() +" "+ String.format("%.00f%%",get_event_probability(e)*100);
-         event_groups.put(e.type, event_group_string);
+         event_groups.put(e.var_name, event_group_string);
       }
       for (String k : event_groups.keySet()){
          str += event_groups.get(k);

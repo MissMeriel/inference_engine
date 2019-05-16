@@ -2,15 +2,15 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
-public class BayesianGiven extends Given {
+public class TypedBayesianGiven<T> extends Given {
 
+   T t;
    HashMap<String, HashMap<String, Double>> priors;
    HashMap<String, HashMap<String, Double[]>> cumulative_probabilities;
    public ArrayList<BayesianBin> bins = new ArrayList<BayesianBin>();
    int trace_total;
-   boolean debug = true;
    
-   public BayesianGiven(String name, HashMap<String, HashMap<String, Double>> priors){
+   public TypedBayesianGiven(String name, HashMap<String, HashMap<String, Double>> priors){
       super(name);
       this.priors = priors;
    }
