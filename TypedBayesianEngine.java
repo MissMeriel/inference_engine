@@ -41,7 +41,7 @@ public class TypedBayesianEngine extends BasicEngine {
    }
    
    public void loop_through_trace(){
-      debugBayesianEngine.info("Begin looping through trace");
+      if(debug) debugBayesianEngine.info("Begin looping through trace");
       //debugBayesianEngine.info("Length of trace: "+csv_array.length);
       //debugBayesianEngine.info("Trace variables: "+csv_array[0]));
       Object[] row;
@@ -67,7 +67,7 @@ public class TypedBayesianEngine extends BasicEngine {
             Iterator iter2 = vars_of_interest.iterator();
             BayesianEvent be_test = null;
             String event_val = (String) row[event_index];
-            // update frequency count for all vars
+            // update frequency count for voi
             update_cumulative_probabilites(voi_name, event_val, i);
             out.print("Updated cumulative probabilities:");
             print_cumulative_probabilities();

@@ -5,6 +5,7 @@ public class TypedEvent<T>{
    int num_samples = 0;
    T val = null;
    String var_name = null;
+   double threshold = 0.1;
    
    public TypedEvent(T val){
       this.val = val;
@@ -24,8 +25,18 @@ public class TypedEvent<T>{
    @Override
    public boolean equals(Object o){
       if(o instanceof TypedEvent){
-         TypedEvent te = (TypedEvent) o;
-         return (this.var_name.equals(te.var_name)) && (this.val.equals(te.val));
+            TypedEvent te = (TypedEvent) o;
+         if (val instanceof Integer){
+            Integer a = (Integer) this.val;
+            Integer b = (Integer) te.val;
+            return (this.var_name.equals(te.var_name)) && (Fuzzy.eq(a.doubleValue(), b.doubleValue(), threshold));
+         } else if (val instanceof Double) {
+            Double a = (Double) this.val;
+            Double b = (Double) te.val;
+            return (this.var_name.equals(te.var_name)) && (Fuzzy.eq(a.doubleValue(), b.doubleValue(), threshold));
+         } else {
+            return (this.var_name.equals(te.var_name)) && (this.val.equals(te.val));
+         }
       }
       return false;
    }
