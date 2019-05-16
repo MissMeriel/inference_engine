@@ -1,11 +1,12 @@
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.TreeSet;
 import java.util.Set;
 import java.util.Iterator;
 import java.util.logging.Logger;
 import static java.lang.System.out;
 import org.apache.commons.lang3.StringEscapeUtils;
+import java.util.Comparator;
 
 public class TypedBayesianEngine extends BasicEngine {
    
@@ -13,7 +14,7 @@ public class TypedBayesianEngine extends BasicEngine {
    ArrayList<BayesianGiven> givens = new ArrayList<BayesianGiven>();
    ArrayList<BayesianEvent> bayesian_events = new ArrayList<BayesianEvent>();
    HashMap<String, HashMap<String, Double[]>> cumulative_probabilities = null;
-   HashSet<String> vars_of_interest = new HashSet<String>();
+   TreeSet<String> vars_of_interest = new TreeSet<String>();
    HashMap<String, RawType> types = null;
    int trace_total;
    public static boolean debug = true;
@@ -25,30 +26,6 @@ public class TypedBayesianEngine extends BasicEngine {
       this.priors = priors;
       this.types = types;
    }
-   
-   /*public void build_bayesian_events(){
-      if(debug) out.println("\nBUILD bayesian_events\npriors: " + priors);
-      RawType type_enum;
-      for(String s : givens_vars) {
-         if(debug){
-            System.out.format("%s%n", s.toString());
-            System.out.format("%s%n", priors.get(s));
-            type_enum = types.get(s);
-            out.println("RawType: "+type_enum);
-         }
-         switch(type_enum){
-            case INT:
-               this.bayesian_events.add(new BayesianEvent<Integer>(s.toString(), priors));
-               break;
-            case DOUBLE:
-               this.bayesian_events.add(new BayesianEvent<Double>(s.toString(), priors));
-               break;
-            case STRING:
-               this.bayesian_events.add(new BayesianEvent<String>(s.toString(), priors));
-               break;
-         }
-      }
-   }*/
    
    public void build_vars_of_interest(){
       vars_of_interest.addAll(givens_vars);
@@ -86,82 +63,63 @@ public class TypedBayesianEngine extends BasicEngine {
             String voi_name = iter.next();
             RawType type_enum = types.get(voi_name);
             int event_index = get_var_index(voi_name);
-            out.println("RawType: "+type_enum);
+            //out.println("RawType: "+type_enum);
             Iterator iter2 = vars_of_interest.iterator();
             BayesianEvent be_test = null;
             String event_val = (String) row[event_index];
             // update frequency count for all vars
             update_cumulative_probabilites(voi_name, event_val, i);
-            /*out.print("Updated cumulative probabilities:");
-            print_cumulative_probabilities();*/
-            if(debug)out.format("Get prior for %s:%s%n", voi_name, (String)event_val);
-            out.println("event_val == empty string:"+(event_val.equals("")));
+            out.print("Updated cumulative probabilities:");
+            print_cumulative_probabilities();
+            /*if(debug)out.format("Get prior for %s:%s%n", voi_name, (String)event_val);*/
+            /*out.println("event_val == empty string:"+(event_val.equals("")));
             out.println(event_val+"; isempty:"+event_val.isEmpty()+"; length:"+event_val.length());
             //out.println(StringEscapeUtils.escapeJava(event_val.isEmpty()));
             out.println(priors.get(voi_name));
             out.println(priors.get(voi_name).get(""));
-            Driver.print_priors();
+            //Driver.print_priors();*/
             double prior = priors.get(voi_name).get(event_val);
             switch(type_enum){
                case INT:
-                  be_test = new BayesianEvent<Integer>(voi_name, Integer.parseInt(event_val), prior);
+                  be_test = new BayesianEvent<Integer>(voi_name, Integer.parseInt(event_val), prior, vars_of_interest);
                   break;
                case DOUBLE:
-                  be_test = new BayesianEvent<Double>(voi_name, Double.parseDouble(event_val), prior);
+                  be_test = new BayesianEvent<Double>(voi_name, Double.parseDouble(event_val), prior, vars_of_interest);
                   break;
                case STRING:
-                  be_test = new BayesianEvent<String>(voi_name, event_val, prior);
+                  be_test = new BayesianEvent<String>(voi_name, event_val, prior, vars_of_interest);
                   break;
             }
+            ArrayList voi_vals = get_voi_vals((String[]) csv_array[i]);
+            out.println("vars_of_interest: "+vars_of_interest);
+            out.println("voi_vals: "+voi_vals);
+            be_test.update_conditionals(voi_vals);
             //check that bayesian_events does not already contain this event
             boolean found = false;
-            for(BayesianEvent be : bayesian_events){
+            Iterator<BayesianEvent> iter_be = bayesian_events.iterator();
+            while(iter_be.hasNext()){
+               BayesianEvent be = iter_be.next();
                if(be.equals(be_test)){
                   //update count of this event and conditioned events
-                  //be.update(String );
+                  be.update_conditionals(voi_vals);
+                  out.println("Updating bayesian event: "+be.toString());
                   found = true;
                   break;
                }
             }
             if(!found){
+               out.println("Adding new bayesian event to list: "+be_test.toString());
                this.bayesian_events.add(be_test);
             }
-         }
-         
-         
-         for (BayesianGiven g: this.givens) {
-            //out.println(g.name + " " + g.toString());
-            // get current givens value
-            int given_index = get_var_index(g.name);
-            String given_val = (String) row[given_index];
-            //out.println(g.name +": "+given_val);
-            // update bin frequency counts
-            b = g.contains_bin(given_val);
-            if(b != null && !bin_updated){
-               // add to existing bin
-               b.update_count(i);
-               //out.println("Updated "+b.template+" bin count to "+b.num_samples);
-            } else if(b == null) {
-               // create new bin
-               //out.println("bin null, creating new bin for "+given_val);
-               b = g.add_bin(g.name, given_val);
-               //out.println("Updated "+b.template+" bin count to "+b.num_samples);//+"for BayesianGiven "+g.name);
+            out.println("\nBAYESIAN EVENTS at loop "+i+" after updating "+voi_name);
+            for(BayesianEvent be : bayesian_events){
+               out.println(be.toString());
             }
-            //update events in bins
-            ArrayList<BayesianBin> bins = g.get_bins();
-            for (BayesianBin bin : bins){
-               if(bin.template.equals(given_val)){
-                  for (String s : events_vars){
-                     int index = get_var_index(s);
-                     String event_val = (String) row[index];
-                     bin.update(s, event_val);
-                     //out.println("Updated bin "+bin.type+":"+bin.template+" with event "+s+":"+event_val);
-                  }
-               }
-            }
-            g.set_total(i);
-         }
-      }
+         } // end vars_of_interest iterator
+         /*if(i == 2){
+            System.exit(0);
+         }*/
+      } // end csv loop
       out.println("\nFINISHED TRACE");
       //out.println("cumulative_probabilities: ");
       //print_cumulative_probabilities();
@@ -172,8 +130,30 @@ public class TypedBayesianEngine extends BasicEngine {
          givens.get(i).set_cumulative_probabilities(cumulative_probabilities);
          out.println(givens.get(i)+" \n\n");
       }
+      out.println("\nBAYESIAN EVENTS");
+      sort_bayesian_events();
+      for(BayesianEvent be : bayesian_events){
+         out.println(be.toString());
+      }
    } // end loop_through_trace()
 
+   public ArrayList<BayesianEvent> sort_bayesian_events(){
+      bayesian_events.sort(new Comparator<BayesianEvent>(){
+         public int compare(BayesianEvent a, BayesianEvent b){
+            return a.var_name.compareTo(b.var_name) ;
+         }
+         });
+      return bayesian_events;
+   }
+   
+   public ArrayList get_voi_vals(String[] row){
+      ArrayList<String> al = new ArrayList<String>();
+      for (String voi : vars_of_interest){
+         int index = get_var_index(voi);
+         al.add(row[index]);
+      }
+      return al;
+   }
    
    public void update_cumulative_probabilites(String type, String val, int i){
       HashMap<String, Double[]> cumulative_probability = null;

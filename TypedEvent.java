@@ -2,8 +2,8 @@
 
 public class TypedEvent<T>{
    int num_samples = 0;
-   T val;
-   String var_name = "";
+   T val = null;
+   String var_name = null;
    
    public TypedEvent(T val){
       this.val = val;
