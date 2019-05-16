@@ -95,7 +95,9 @@ public class TypedBayesianEngine extends BasicEngine {
             /*out.print("Updated cumulative probabilities:");
             print_cumulative_probabilities();*/
             if(debug)out.format("Get prior for %s:%s%n", voi_name, (String)event_val);
-            out.println("event_val == null:"+(event_val == null));
+            out.println("event_val == empty string:"+(event_val.equals("")));
+            out.println(event_val+"; isempty:"+event_val.isEmpty()+"; length:"+event_val.length());
+            //out.println(StringEscapeUtils.escapeJava(event_val.isEmpty()));
             out.println(priors.get(voi_name));
             out.println(priors.get(voi_name).get(""));
             Driver.print_priors();
