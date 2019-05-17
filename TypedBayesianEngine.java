@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import static java.lang.System.out;
 import org.apache.commons.lang3.StringEscapeUtils;
 import java.util.Comparator;
+import static java.lang.Math.abs;
 
 public class TypedBayesianEngine extends BasicEngine {
    
@@ -23,8 +24,8 @@ public class TypedBayesianEngine extends BasicEngine {
    public TypedBayesianEngine(Object[][] csv_array, ArrayList<String> givens, ArrayList<String> events,
                       HashMap<String, HashMap<String, Double>> priors, HashMap<String, RawType> types){
       super(csv_array, givens, events);
-      this.priors = priors;
-      this.types = types;
+      this.priors = priors; //Global.priors = priors;
+      this.types = types; //Global.types = types;
    }
    
    public void build_vars_of_interest(){
@@ -82,7 +83,8 @@ public class TypedBayesianEngine extends BasicEngine {
                out.println(priors.get(voi_name).get(" "));
                //Driver.print_priors();*/
             }
-            double prior = priors.get(voi_name).get(event_val);
+            //retreive prior (special retrieval for fuzzy)
+            double prior = get_prior(voi_name, event_val);
             switch(type_enum){
                case INT:
                   be_test = new BayesianEvent<Integer>(voi_name, Integer.parseInt(event_val), prior, vars_of_interest);
@@ -142,6 +144,44 @@ public class TypedBayesianEngine extends BasicEngine {
       generate_bayesian_probabilities();
    } // end loop_through_trace()
 
+   
+   public double get_prior(String voi_name, String event_val){
+      double d = 0;
+      Double voi_threshold = 0.0;
+      try{
+         voi_threshold = Global.thresholds.get(voi_name);
+         d = priors.get(voi_name).get(event_val);
+      } catch(NullPointerException ex) {
+         //iterate over priors looking for closest one
+         HashMap<String, Double> voi_priors = priors.get(voi_name);
+         Set<String> keys = voi_priors.keySet();
+         RawType type_enum = types.get(voi_name);
+         for(String key : keys){
+            d = voi_priors.get(key);
+            switch(type_enum){
+               case DOUBLE:
+                  double dbl = Double.parseDouble(event_val);
+                  double key_val = Double.parseDouble(key);
+                  if(abs(dbl - key_val) < voi_threshold.doubleValue()){
+                     return d;
+                  }
+                  break;
+               case INT:
+                  int i = Integer.parseInt(event_val);
+                  int key_val_int = Integer.parseInt(key);
+                  if(Fuzzy.eq(i, key_val_int, voi_threshold.doubleValue())){
+                     return d;
+                  }
+                  break;
+               case STRING:
+                  
+                  break;
+            }
+         }
+      }
+      return d;
+   }
+   
    public ArrayList<BayesianEvent> sort_bayesian_events(){
       bayesian_events.sort(new Comparator<BayesianEvent>(){
          public int compare(BayesianEvent a, BayesianEvent b){

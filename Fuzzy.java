@@ -8,4 +8,16 @@ public class Fuzzy{
       return Math.abs(a-b) <= threshold;
    }
 
+   public static boolean eq(int a, int b, int threshold){
+      return Math.abs(a-b) <= threshold;
+   }
+   
+   public static boolean eq(String a, String b, double threshold){
+      if(threshold > 0){
+         return a.contains(b);
+      } else {
+         return a.equals(b);
+      }
+      
+   }
 }

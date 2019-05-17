@@ -141,17 +141,24 @@ public class Driver {
             String[] splitLine = thisLine.split(",");
             events.add(splitLine[0]);
             if(BayesianEngine.debug) out.format("Added %s to events%n",splitLine[0]);
-            if(types.get(splitLine[0]) == null) types.put(splitLine[0], RawType.valueOf(splitLine[1]));
+            if(types.get(splitLine[0]) == null) { types.put(splitLine[0], RawType.valueOf(splitLine[1]));}
+            if(splitLine[splitLine.length-1].contains("threshold")){
+               double threshold = Double.parseDouble(splitLine[splitLine.length-1].split("=")[1]);
+               out.format("Got %s threshold %f from file%n", splitLine[0], threshold);
+               Global.thresholds.put(splitLine[0], threshold);
+            }
          } else {
             vars_of_interest.add(thisLine);
          }
          //System.out.println(StringEscapeUtils.escapeJava(thisLine));
       }
+      Global.types = types;
       fis.close();
       dis.close();
       if(BayesianEngine.debug){
          out.format("GIVENS:%s%n", givens);
          out.format("EVENTS:%s%n", events);
+         print_thresholds();
       }
    }
    
@@ -182,6 +189,7 @@ public class Driver {
          //System.out.println(StringEscapeUtils.escapeJava(thisLine));
       }
       print_priors();
+      Global.priors = priors;
       fis.close();
       dis.close();    
    }
@@ -231,6 +239,17 @@ public class Driver {
          }
       }
       return priors_string;
+   }
+
+   public static String print_thresholds(){
+      String return_string = "";
+      Set<String> keys = Global.thresholds.keySet();
+      out.format("%nTHRESHOLDS:%n");
+      for(String str : keys){
+         out.format("%s : %s%n", str, Global.thresholds.get(str));
+         return_string += String.format("%s : %s%n", str, Global.thresholds.get(str));
+      }
+      return return_string;
    }
    
    public static String priors_toString(){
