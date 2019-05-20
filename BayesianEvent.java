@@ -62,7 +62,7 @@ public class BayesianEvent<T> extends TypedEvent{
             try{
                temp = get_pBA(voi, event_values.get(i).toString());
             } catch(NullPointerException ex){
-               out.format("update_conditionals: Caught null ptr from get_pBA");
+               out.format("update_conditionals: Caught null ptr from get_pBA%n");
             }
             try{
                double dbl = ((Double)temp[0]).doubleValue(); dbl++;
@@ -90,23 +90,28 @@ public class BayesianEvent<T> extends TypedEvent{
       double d = Double.MAX_VALUE; //goes into r[0]
       Double voi_threshold = 0.0;
       out.format("Inside get_pBA(%s, %s)%n", voi_name, event_val);
-      voi_threshold = new Double(Global.thresholds.get(voi_name));
-      print_thresholds();
-      out.format("Inside get_pBA; got %s threshold %f%n", voi_name, voi_threshold);
-      Set<String> keys_test = Global.thresholds.keySet();
-      for(String key : keys_test){
-         out.format("%s equals %s: %s%n", key, voi_name, key.equals(voi_name));
+      out.format("get_pBA: getting %s threshold %n", voi_name);
+      try{
+         voi_threshold = new Double(Global.thresholds.get(voi_name));
+      } catch(NullPointerException ex){
+         voi_threshold = 0.0;
       }
+      print_pBAs();
+      out.format("get_pBA: got %s threshold %f%n", voi_name, voi_threshold);
+      Set<String> keys_test = Global.thresholds.keySet();
+      /*for(String key : keys_test){
+         out.format("%s equals %s: %s%n", key, voi_name, key.equals(voi_name));
+      }*/
       Object[] r = new Object[2];
       try{
          d = pBAs.get(voi_name).get(event_val);
-         out.format("get_pBA: Got %f from pBAs%n", d);
+         out.format("get_pBA: pBAs.get(%s).get(%s): %f%n", voi_name, event_val, d);
          r = new Object[]{d, event_val.toString()};
          return r;
       } catch (NullPointerException ex) {
          //iterate over pBAs looking for closest one
          HashMap<String, Double> pBA_counts = pBAs.get(voi_name);
-         out.format("get_pBA: Got hashmap from pBAs: %s%n", pBA_counts);
+         out.format("get_pBA: pBAs.get(%s): %s%n", voi_name, pBA_counts);
          Set<String> keys = pBA_counts.keySet();
          RawType type_enum = Global.types.get(voi_name);
          for(String key : keys){
@@ -155,6 +160,25 @@ public class BayesianEvent<T> extends TypedEvent{
          return_string += String.format("%s : %s%n", str, Global.thresholds.get(str));
       }
       return return_string;
+   }
+   
+   public void print_pBAs(){
+      //System.out.println(cumulative_probabilities);
+      String str = "{";
+      Set<String> keys = pBAs.keySet();
+      for (String s : keys){
+         str += " "+s+":{";
+         HashMap<String, Double> hash = pBAs.get(s);
+         Set<String> keys2 = hash.keySet();
+         for (String s2 : keys2){
+            str += s2+"=";
+            Double d = hash.get(s2);
+            str += d.doubleValue() + " ";
+         }
+         str+="}";
+      }
+      str += "}";
+      out.println( str);
    }
    
    

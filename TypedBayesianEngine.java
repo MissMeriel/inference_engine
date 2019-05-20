@@ -72,7 +72,7 @@ public class TypedBayesianEngine extends BasicEngine {
             update_cumulative_probabilites(voi_name, event_val, i);
             out.print("Updated cumulative probabilities:");
             print_cumulative_probabilities();
-            if(debug){
+            /*if(debug){
                out.format("Get prior for %s:%s%n", voi_name, (String)event_val);
                out.println("event_val == empty string:"+(event_val.equals("")));
                out.println("event_val == space:"+(event_val.equals(" ")));
@@ -82,7 +82,7 @@ public class TypedBayesianEngine extends BasicEngine {
                out.println(priors.get(voi_name).get(""));
                out.println(priors.get(voi_name).get(" "));
                //Driver.print_priors();*/
-            }
+            //}
             //retreive prior (special retrieval for fuzzy)
             double prior = get_prior(voi_name, event_val);
             switch(type_enum){
