@@ -108,10 +108,6 @@ public class BayesianEvent<T> extends TypedEvent{
          voi_threshold = Double.MAX_VALUE;
       }
       if(debug) out.format("get_pBA: got %s threshold %f%n", voi_name, voi_threshold);
-      /*Set<String> keys_test = Global.thresholds.keySet();
-      for(String key : keys_test){
-         out.format("%s equals %s: %s%n", key, voi_name, key.equals(voi_name));
-      }*/
       Object[] r = new Object[2];
       try{
          event_val_count = pBAs.get(voi_name).get(event_val);
@@ -132,7 +128,10 @@ public class BayesianEvent<T> extends TypedEvent{
                   double dbl = Double.parseDouble(event_val);
                   if(debug) out.format("get_pBA: attempting to parse double %s%n", key);
                   double key_val = Double.parseDouble(key);
-                  if(Fuzzy.eq(dbl, key_val, voi_threshold.doubleValue())) {
+                  if(Fuzzy.eq(dbl, key_val, voi_threshold.doubleValue()) && voi_threshold != Double.MAX_VALUE) {
+                     r[0] = event_val_count; r[1] = key;
+                     return r;
+                  } else if(dbl == key_val) {
                      r[0] = event_val_count; r[1] = key;
                      return r;
                   }
@@ -140,7 +139,10 @@ public class BayesianEvent<T> extends TypedEvent{
                case INT:
                   int i = (int) (Double.parseDouble(event_val));
                   int key_val_int = (int) (Double.parseDouble(key));
-                  if(abs(i - key_val_int) < voi_threshold.doubleValue()){
+                  if(Fuzzy.eq(i, key_val_int, voi_threshold.doubleValue()) && voi_threshold != Double.MAX_VALUE){
+                     r[0] = event_val_count; r[1] = key;
+                     return r;
+                  } else if(i == key_val_int) {
                      r[0] = event_val_count; r[1] = key;
                      return r;
                   }
@@ -196,6 +198,7 @@ public class BayesianEvent<T> extends TypedEvent{
    
    
    public String generate_bayesian_probability(HashMap<String, HashMap<String, Double[]>> cumulative_probabilities){
+      if(debug) out.format("%nENTER generate_bayesian_probability: for %s %s",var_name, val.toString());
       String str = "";
       Set<String> keys1 = pBAs.keySet();
       for(String key1 : keys1){
@@ -203,12 +206,19 @@ public class BayesianEvent<T> extends TypedEvent{
          Set<String> keys2 = val_map.keySet();
          for(String key2 : keys2){
             //Double[] A_arr = cumulative_probabilities.get(var_name).get(val.toString());
+            if(debug) out.format("%ngenerate_bayesian_probability: cumulative_probabilities.get(%s).get(%s)=", key1, key2);
             Double[] A_arr = cumulative_probabilities.get(key1).get(key2);
-            double pA = (double) num_samples / A_arr[1].doubleValue();
+            if(debug) out.format("%.2f / %.2f %n", A_arr[0], A_arr[1]);
+            if(debug) out.format("pA = Global.priors.get(%s).get(%s)%n", var_name, val.toString());
+            double pA = Global.priors.get(var_name).get(val.toString());//(double) num_samples / A_arr[1].doubleValue();
             double pB = A_arr[0].doubleValue() / A_arr[1].doubleValue();
-            Double pBA = val_map.get(key2) / (double) num_samples;
+            Double pBA = (val_map.get(key2) / (double) A_arr[1].doubleValue()) / pA;
+            if(debug) print_pBAs();
+            if(debug) out.format("pBA = (%.2f / %.2f) / %.2f", val_map.get(key2), (double) A_arr[1].doubleValue(), pA);
             double pAB = (pA * pBA) / pB;
-            str += String.format("\nP(%s=%s|%s=%s):%.2f", var_name, val.toString(), key1, key2, pAB);
+            str += String.format("\nP(%s=%s|%s=%s) ", var_name, val.toString(), key1, key2);
+            if(debug)  str += String.format("= (%.2f * %.2f) / %.2f ", pA, pBA, pB);
+            str += String.format("= %.2f", pAB);
          }
       }
       return str;
@@ -218,6 +228,7 @@ public class BayesianEvent<T> extends TypedEvent{
    public String toString(){
       String str = String.format("BayesianEvent %s:%s p_A:%.2f", var_name, val.toString(), p_A);
       str+= " pBAs: " + pBAs;
+      str += " num_samples: " +num_samples;
       return str;
    }
    
