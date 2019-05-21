@@ -57,7 +57,6 @@ public class TypedBayesianEngine extends BasicEngine {
          int given_count = 0;
          BayesianBin b = null;
          boolean bin_updated = false;
-
          //update events in vars of interest
          Iterator<String> iter = vars_of_interest.iterator();
          while(iter.hasNext()){
@@ -84,7 +83,7 @@ public class TypedBayesianEngine extends BasicEngine {
                //Driver.print_priors();*/
             //}
             //retreive prior (special retrieval for fuzzy)
-            double prior = get_prior(voi_name, event_val);
+            /*double prior = get_prior(voi_name, event_val);
             switch(type_enum){
                case INT:
                   be_test = new BayesianEvent<Integer>(voi_name, Integer.parseInt(event_val), prior, vars_of_interest);
@@ -95,11 +94,11 @@ public class TypedBayesianEngine extends BasicEngine {
                case STRING:
                   be_test = new BayesianEvent<String>(voi_name, event_val, prior, vars_of_interest);
                   break;
-            }
+            }*/
             ArrayList voi_vals = get_voi_vals((String[]) csv_array[i]);
             out.println("vars_of_interest: "+vars_of_interest);
             out.println("voi_vals: "+voi_vals);
-            be_test.update_conditionals(voi_vals);
+            /*be_test.update_conditionals(voi_vals);
             //check that bayesian_events does not already contain this event
             boolean found = false;
             Iterator<BayesianEvent> iter_be = bayesian_events.iterator();
@@ -120,11 +119,8 @@ public class TypedBayesianEngine extends BasicEngine {
             out.println("\nBAYESIAN EVENTS at loop "+i+" after updating "+voi_name);
             for(BayesianEvent be : bayesian_events){
                out.println(be.toString());
-            }
-         } // end vars_of_interest iterator
-         /*if(i == 2){
-            System.exit(0);
-         }*/
+            }*/
+         }  // end vars_of_interest iterator
       } // end csv loop
       out.println("\nFINISHED TRACE");
       //out.println("cumulative_probabilities: ");
@@ -199,21 +195,66 @@ public class TypedBayesianEngine extends BasicEngine {
       }
       return al;
    }
-   
-   public void update_cumulative_probabilites(String type, String val, int i){
+
+   public void update_cumulative_probabilites(String voi_name, String val, int i){
       HashMap<String, Double[]> cumulative_probability = null;
+      cumulative_probability = cumulative_probabilities.get(voi_name);
       try{
-         cumulative_probability = cumulative_probabilities.get(type);
-         //out.println("Retrieved " +cumulative_probability_toString(cumulative_probability)+" from key "+type);
+         out.println("update_cumulative_probabilites: Retrieved " +cumulative_probability_toString(cumulative_probability)+" from key "+voi_name);
          Double[] d_array = cumulative_probability.get(val);
          d_array[0] = ++d_array[0]; d_array[1] = (double)i;
          cumulative_probability.put(val, d_array);
-      } catch(NullPointerException ex){
+      } catch(NullPointerException exc){
          //cumulative_probability = new HashMap<String, Double[]>();
-         Double[] d_array = {1.0, (double)i};
-         cumulative_probability.put(val, d_array);
+         out.format("update_cumulative_probabilites: caught null pointer on cumulative_probability.get(%s)%n", val);
+         boolean found = false;
+         Set<String> keys = cumulative_probability.keySet();
+         RawType raw_type = types.get(voi_name);
+         double threshold = 0;
+         Double[] d_array = new Double[2];
+         try{
+            threshold =  Global.thresholds.get(voi_name);
+         } catch(NullPointerException ex){
+            threshold = Double.MAX_VALUE; /* round doubles*/
+         }
+         for(String key : keys){
+            switch(raw_type){
+               case DOUBLE:
+                  if(Fuzzy.eq(Double.valueOf(key),Double.valueOf(val),threshold) && threshold != Double.MAX_VALUE){
+                     found = true;
+                     d_array = cumulative_probability.get(key);
+                     d_array[0] = ++d_array[0]; d_array[1] = (double)i;
+                     cumulative_probability.put(key, d_array);
+                  } else {
+                     if(Math.round(Double.valueOf(key))==Math.round(Double.valueOf(val))){
+                        found = true;
+                        d_array = cumulative_probability.get(key);
+                        d_array[0] = ++d_array[0]; d_array[1] = (double)i;
+                        cumulative_probability.put(key, d_array);
+                     }
+                  }
+                  break;
+               case INT:
+                  if(Fuzzy.eq(Integer.valueOf(key),Integer.valueOf(val),threshold)){
+                     found = true;
+                     d_array = cumulative_probability.get(key);
+                     d_array[0] = ++d_array[0]; d_array[1] = (double)i;
+                     cumulative_probability.put(key, d_array);
+                  }
+                  break;
+               case STRING:
+                  
+                  break;
+            }
+         }
+         d_array = new Double[]{1.0, (double)i};
+         if(!found){
+            cumulative_probability.put(val, new Double[]{1.0, (double)i});
+            out.format("update_cumulative_probabilites: cumulative_probability.put(%s, %s)%n", val, d_array);
+         }
       }
-      cumulative_probabilities.put(type, cumulative_probability);
+      out.format("update_cumulative_probabilites: cumulative_probabilities.put(%s, %s)%n", voi_name, cumulative_probabilities);
+      cumulative_probabilities.put(voi_name, cumulative_probability);
       //update all i's
       Set<String> keys1 = cumulative_probabilities.keySet();
       for(String k1 : keys1){
