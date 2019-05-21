@@ -18,7 +18,7 @@ public class TypedBayesianEngine extends BasicEngine {
    TreeSet<String> vars_of_interest = new TreeSet<String>();
    HashMap<String, RawType> types = null;
    int trace_total;
-   public static boolean debug = true;
+   public static boolean debug = false;
    
    public static final Logger debugBayesianEngine = Logger.getLogger("BayesianEngine");
    public TypedBayesianEngine(Object[][] csv_array, ArrayList<String> givens, ArrayList<String> events,
@@ -51,7 +51,7 @@ public class TypedBayesianEngine extends BasicEngine {
       build_vars_of_interest();
       // iterate over csv rows
       for (int i = 1; i < csv_array.length; i++) {
-         out.println("\n\nLoop "+i);
+         out.println("\n\nLOOP "+i);
          trace_total = i;
          row = csv_array[i];
          int given_count = 0;
@@ -69,9 +69,9 @@ public class TypedBayesianEngine extends BasicEngine {
             String event_val = (String) row[event_index];
             // update frequency count for voi
             update_cumulative_probabilites(voi_name, event_val, i);
-            out.print("Updated cumulative probabilities:");
+            if(debug) out.print("Updated cumulative probabilities:");
             print_cumulative_probabilities();
-            /*if(debug){
+            if(debug){
                out.format("Get prior for %s:%s%n", voi_name, (String)event_val);
                out.println("event_val == empty string:"+(event_val.equals("")));
                out.println("event_val == space:"+(event_val.equals(" ")));
@@ -81,9 +81,9 @@ public class TypedBayesianEngine extends BasicEngine {
                out.println(priors.get(voi_name).get(""));
                out.println(priors.get(voi_name).get(" "));
                //Driver.print_priors();*/
-            //}
+            }
             //retreive prior (special retrieval for fuzzy)
-            /*double prior = get_prior(voi_name, event_val);
+            double prior = get_prior(voi_name, event_val);
             switch(type_enum){
                case INT:
                   be_test = new BayesianEvent<Integer>(voi_name, Integer.parseInt(event_val), prior, vars_of_interest);
@@ -94,24 +94,27 @@ public class TypedBayesianEngine extends BasicEngine {
                case STRING:
                   be_test = new BayesianEvent<String>(voi_name, event_val, prior, vars_of_interest);
                   break;
-            }*/
+            }
             ArrayList voi_vals = get_voi_vals((String[]) csv_array[i]);
             out.println("vars_of_interest: "+vars_of_interest);
             out.println("voi_vals: "+voi_vals);
-            /*be_test.update_conditionals(voi_vals);
+            be_test.update_conditionals(voi_vals, false);
             //check that bayesian_events does not already contain this event
             boolean found = false;
             Iterator<BayesianEvent> iter_be = bayesian_events.iterator();
             while(iter_be.hasNext()){
                BayesianEvent be = iter_be.next();
+               out.format("be EQUALS be_test: %s%n", be.equals(be_test));
+               out.println("\tbe:"+be.toString()+"\n\tbe_test:"+be_test.toString());
                if(be.equals(be_test)){
                   //update count of this event and conditioned events
-                  be.update_conditionals(voi_vals);
+                  be.update_conditionals(voi_vals, false);
                   out.println("Updating bayesian event: "+be.toString());
                   found = true;
                   break;
                }
             }
+            out.println();
             if(!found){
                out.println("Adding new bayesian event to list: "+be_test.toString());
                this.bayesian_events.add(be_test);
@@ -119,7 +122,7 @@ public class TypedBayesianEngine extends BasicEngine {
             out.println("\nBAYESIAN EVENTS at loop "+i+" after updating "+voi_name);
             for(BayesianEvent be : bayesian_events){
                out.println(be.toString());
-            }*/
+            }
          }  // end vars_of_interest iterator
       } // end csv loop
       out.println("\nFINISHED TRACE");
@@ -200,13 +203,13 @@ public class TypedBayesianEngine extends BasicEngine {
       HashMap<String, Double[]> cumulative_probability = null;
       cumulative_probability = cumulative_probabilities.get(voi_name);
       try{
-         out.println("update_cumulative_probabilites: Retrieved " +cumulative_probability_toString(cumulative_probability)+" from key "+voi_name);
+         if(debug) out.println("update_cumulative_probabilites: Retrieved " +cumulative_probability_toString(cumulative_probability)+" from key "+voi_name);
          Double[] d_array = cumulative_probability.get(val);
          d_array[0] = ++d_array[0]; d_array[1] = (double)i;
          cumulative_probability.put(val, d_array);
       } catch(NullPointerException exc){
          //cumulative_probability = new HashMap<String, Double[]>();
-         out.format("update_cumulative_probabilites: caught null pointer on cumulative_probability.get(%s)%n", val);
+         if(debug) out.format("update_cumulative_probabilites: caught null pointer on cumulative_probability.get(%s)%n", val);
          boolean found = false;
          Set<String> keys = cumulative_probability.keySet();
          RawType raw_type = types.get(voi_name);
@@ -250,10 +253,10 @@ public class TypedBayesianEngine extends BasicEngine {
          d_array = new Double[]{1.0, (double)i};
          if(!found){
             cumulative_probability.put(val, new Double[]{1.0, (double)i});
-            out.format("update_cumulative_probabilites: cumulative_probability.put(%s, %s)%n", val, d_array);
+            if(debug) out.format("update_cumulative_probabilites: cumulative_probability.put(%s, %s)%n", val, d_array);
          }
       }
-      out.format("update_cumulative_probabilites: cumulative_probabilities.put(%s, %s)%n", voi_name, cumulative_probabilities);
+      if(debug) out.format("update_cumulative_probabilites: cumulative_probabilities.put(%s, %s)%n", voi_name, cumulative_probabilities);
       cumulative_probabilities.put(voi_name, cumulative_probability);
       //update all i's
       Set<String> keys1 = cumulative_probabilities.keySet();

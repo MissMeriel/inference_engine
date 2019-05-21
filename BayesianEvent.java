@@ -12,7 +12,7 @@ public class BayesianEvent<T> extends TypedEvent{
    double p_A;
    double p_B;
    TreeSet<String> vars_of_interest = new TreeSet<String>();
-   boolean debug = true;
+   boolean debug = false;
    
    /**
     * default constructor: p_A from .priors file
@@ -52,34 +52,41 @@ public class BayesianEvent<T> extends TypedEvent{
       }
    }*/
    
-   public void update_conditionals(ArrayList event_values){
+   public void update_conditionals(ArrayList event_values, boolean debug){
       int i = 0;
       Double d;
-      
+      this.debug = debug;
       for(String voi: vars_of_interest){
-         Object[] temp = new Object[]{0.0, voi};
+         Object[] temp = new Object[]{0.0, event_values.get(i)};
          if(!voi.equals(this.var_name)){
             try{
                temp = get_pBA(voi, event_values.get(i).toString());
+               if(debug) out.format("update_conditionals: temp from get_pBA=%s%n", temp_toStr(temp));
             } catch(NullPointerException ex){
-               out.format("update_conditionals: Caught null ptr from get_pBA%n");
+               if(debug) out.format("update_conditionals: Caught null ptr from get_pBA%n");
             }
             try{
+               if(debug) out.format("update_conditionals: temp=%s%n", temp_toStr(temp));
                double dbl = ((Double)temp[0]).doubleValue(); dbl++;
-               out.format("update_conditionals: Getting %s pBA%n",voi);
+               if(debug) out.format("update_conditionals: Getting %s pBA%n",voi);
                HashMap<String, Double> pBA = pBAs.get(voi);
-               out.format("update_conditionals: Got %s pBA: %s%n",voi, pBA);
-               pBA.put(event_values.get(i).toString(), dbl); //change later
-               out.format("update_conditionals: Put %s:%s into %s:%s %n", voi, event_values.get(i).toString(), temp[1].toString(), temp[0].toString());
+               if(debug)out.format("update_conditionals: Got %s pBA: %s%n",voi, pBA);
+               pBA.put(temp[1].toString(), dbl); //change later
+               pBAs.put(voi, pBA);
+               if(debug)out.format("update_conditionals: Put %s:%s into %s:%s %n", voi, event_values.get(i).toString(), temp[1].toString(), temp[0].toString());
             } catch(NullPointerException ex){
                pBAs.get(voi).put(event_values.get(i).toString(), 1.0);
-               out.format("update_conditionals: Caught null ptr except inside update_conditionals%nPut %s:%s into %s:%s %n", voi, event_values.get(i).toString(),voi, event_values.get(i).toString());
-               out.println(ex.getLocalizedMessage());
+               if(debug) out.format("update_conditionals: Caught null ptr inside update_conditionals%nPut %s:1.0 into %s:%s %n", event_values.get(i).toString(),voi, event_values.get(i).toString());
+               if(debug) out.println(ex.getLocalizedMessage());
             }
          }
          i++;
+         if(debug) out.println("Updated conditionals in "+var_name+"="+val+": "+pBAs);
       }
-      if(debug) out.println("Updated conditionals in "+var_name+"="+val+": "+pBAs);
+   }
+   
+   public String temp_toStr(Object[] temp){
+      return String.format("[ %s, %s]", temp[0].toString(), temp[1].toString());
    }
    
    /**
@@ -87,65 +94,71 @@ public class BayesianEvent<T> extends TypedEvent{
     * return_val[0] == pBA count; return_val[1] == pBA name
     **/
    public Object[] get_pBA(String voi_name, String event_val){
-      double d = Double.MAX_VALUE; //goes into r[0]
+      double event_val_count = Double.MAX_VALUE; //goes into r[0]
       Double voi_threshold = 0.0;
-      out.format("Inside get_pBA(%s, %s)%n", voi_name, event_val);
-      out.format("get_pBA: getting %s threshold %n", voi_name);
+      if(debug) {
+         out.format("Inside get_pBA(%s, %s)%n", voi_name, event_val);
+         out.format("get_pBAs: pBAs:");
+         print_pBAs();
+         out.format("get_pBA: getting %s threshold %n", voi_name);
+      }
       try{
          voi_threshold = new Double(Global.thresholds.get(voi_name));
       } catch(NullPointerException ex){
-         voi_threshold = 0.0;
+         voi_threshold = Double.MAX_VALUE;
       }
-      print_pBAs();
-      out.format("get_pBA: got %s threshold %f%n", voi_name, voi_threshold);
-      Set<String> keys_test = Global.thresholds.keySet();
-      /*for(String key : keys_test){
+      if(debug) out.format("get_pBA: got %s threshold %f%n", voi_name, voi_threshold);
+      /*Set<String> keys_test = Global.thresholds.keySet();
+      for(String key : keys_test){
          out.format("%s equals %s: %s%n", key, voi_name, key.equals(voi_name));
       }*/
       Object[] r = new Object[2];
       try{
-         d = pBAs.get(voi_name).get(event_val);
-         out.format("get_pBA: pBAs.get(%s).get(%s): %f%n", voi_name, event_val, d);
-         r = new Object[]{d, event_val.toString()};
+         event_val_count = pBAs.get(voi_name).get(event_val);
+         if(debug) out.format("get_pBA: pBAs.get(%s).get(%s)= %f%n", voi_name, event_val, event_val_count);
+         r = new Object[]{event_val_count, event_val.toString()};
          return r;
       } catch (NullPointerException ex) {
-         //iterate over pBAs looking for closest one
+         //exact match not found --> iterate over pBAs looking for closest one
          HashMap<String, Double> pBA_counts = pBAs.get(voi_name);
-         out.format("get_pBA: pBAs.get(%s): %s%n", voi_name, pBA_counts);
+         if(debug) out.format("get_pBA: pBAs.get(%s): %s%n", voi_name, pBA_counts);
          Set<String> keys = pBA_counts.keySet();
          RawType type_enum = Global.types.get(voi_name);
          for(String key : keys){
-            d = pBA_counts.get(key);
-            out.format("get_pBA: Got key %s count %f from pBAs%n", key, d);
+            event_val_count = pBA_counts.get(key);
+            if(debug) out.format("get_pBA: Got key %s count %f from pBAs%n", key, event_val_count);
             switch(type_enum){
                case DOUBLE:
                   double dbl = Double.parseDouble(event_val);
+                  if(debug) out.format("get_pBA: attempting to parse double %s%n", key);
                   double key_val = Double.parseDouble(key);
                   if(Fuzzy.eq(dbl, key_val, voi_threshold.doubleValue())) {
-                     r[0] = ++d; r[1] = key;
+                     r[0] = event_val_count; r[1] = key;
                      return r;
                   }
                   break;
                case INT:
-                  int i = Integer.parseInt(event_val);
-                  int key_val_int = Integer.parseInt(key);
+                  int i = (int) (Double.parseDouble(event_val));
+                  int key_val_int = (int) (Double.parseDouble(key));
                   if(abs(i - key_val_int) < voi_threshold.doubleValue()){
-                     r[0] = ++d; r[1] = key;
+                     r[0] = event_val_count; r[1] = key;
                      return r;
                   }
                   break;
                case STRING:
                   if(event_val.equals(key)){
-                     r[0] = ++d; r[1] = event_val;
+                     r[0] = event_val_count; r[1] = event_val;
                   }
                   break;
             }
          }
-         out.format("d=%f%n",d);
-         out.format("d==Double.MAX_VALUE: %s%n",(d==Double.MAX_VALUE));
-         if(d == Double.MAX_VALUE){
-            out.format("%s:%s not found in existing events for %s:%s%n",voi_name, event_val, this.var_name, this.val);
-            throw new NullPointerException(String.format("%s:%s not found in existing events for %s:%s%n",voi_name, event_val, this.var_name, this.val));
+         if(debug) {
+            out.format("get_pBA: d=%f%n",event_val_count);
+            out.format("get_pBA: d==Double.MAX_VALUE: %s%n",(event_val_count==Double.MAX_VALUE));
+         }
+         if(event_val_count == Double.MAX_VALUE){
+            if(debug) out.format("get_pBA: %s:%s not found in existing events for %s:%s%n",voi_name, event_val, this.var_name, this.val);
+            throw new NullPointerException(String.format("get_pBA(): %s:%s not found in existing events for %s:%s%n",voi_name, event_val, this.var_name, this.val));
          }
       }
       return r;
