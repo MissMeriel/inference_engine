@@ -67,6 +67,7 @@ public class Driver {
          e.printStackTrace();
       }
       build_inference_engine(csv_array, givens, events, priors);
+      run_inference_engine();
    } // end main
    
    
@@ -82,6 +83,10 @@ public class Driver {
       } else {
          engine = new BasicEngine(csv_array, givens, events);
       }
+   }
+   
+   
+   public static void run_inference_engine(){
       engine.loop_through_trace();
    }
    
@@ -135,13 +140,20 @@ public class Driver {
          if (g && thisLine != "\n") {
             String[] splitLine = thisLine.split(",");
             givens.add(splitLine[0]);
-            if(BayesianEngine.debug) out.format("Added %s to givens%n",splitLine[0]);
+            if(TypedBayesianEngine.debug) out.format("Added %s to givens%n",splitLine[0]);
             if(types.get(splitLine[0]) == null) types.put(splitLine[0], RawType.valueOf(splitLine[1]));
+            out.println("splitLine[splitLine.length-1]:"+splitLine[splitLine.length-1]);
+            if(splitLine[splitLine.length-1].contains("threshold")){
+               double threshold = Double.parseDouble(splitLine[splitLine.length-1].split("=")[1]);
+               out.format("Got %s threshold %f from file%n", splitLine[0], threshold);
+               Global.thresholds.put(splitLine[0], threshold);
+            }
          } else if(e && thisLine != "\n") {
             String[] splitLine = thisLine.split(",");
             events.add(splitLine[0]);
-            if(BayesianEngine.debug) out.format("Added %s to events%n",splitLine[0]);
+            if(TypedBayesianEngine.debug) out.format("Added %s to events%n",splitLine[0]);
             if(types.get(splitLine[0]) == null) { types.put(splitLine[0], RawType.valueOf(splitLine[1]));}
+            out.println("splitLine[splitLine.length-1]:"+splitLine[splitLine.length-1]);
             if(splitLine[splitLine.length-1].contains("threshold")){
                double threshold = Double.parseDouble(splitLine[splitLine.length-1].split("=")[1]);
                out.format("Got %s threshold %f from file%n", splitLine[0], threshold);
@@ -160,6 +172,7 @@ public class Driver {
          out.format("EVENTS:%s%n", events);
          print_thresholds();
       }
+      //System.exit(0);
    }
    
    public static void parse_priors_file(String config_file) throws IOException {
@@ -173,14 +186,34 @@ public class Driver {
          if (thisLine != "\n") {
             String[] splitLine = thisLine.split(",");
             HashMap<String, Double>  val = new HashMap<String, Double>();
+            if(BayesianEngine.debug) print_types();
             for(int i = 1; i < splitLine.length; i++){
                String[] distSplit = splitLine[i].split("=");
                //out.format("key:%s value:%s%n", distSplit[0],distSplit[1]);
-               val.put(distSplit[0],  new Double(distSplit[1]));
+               if(types == null){
+                  val.put(distSplit[0],  new Double(distSplit[1]));
+               } else {
+                  try{
+                     RawType raw_type = types.get(splitLine[0]);
+                     out.println("types.get("+splitLine[0]+")"+raw_type);
+                     switch(raw_type){
+                        case DOUBLE:
+                           Double val_double = new Double(distSplit[0]);
+                           val.put(val_double.toString(),  new Double(distSplit[1]));
+                           break;
+                        case INT:
+                           val.put(distSplit[0],  new Double(distSplit[1]));
+                           break;
+                        case STRING:
+                           val.put(distSplit[0],  new Double(distSplit[1]));
+                           break;
+                     }
+                  } catch(NullPointerException ex){}
+               }
                //out.format("put %s into key %s%n", distSplit[1], distSplit[0]);
             }
             priors.put(splitLine[0], val);
-            //out.format("put %s into key %s%n", val, splitLine[0]);
+            //out.format("parse_priors_file: put %s into key %s%n", val, splitLine[0]);
             //System.exit(0);
             /*if(types.get(splitLine[0]) == null) {
                types.put(splitLine[0], RawType.valueOf(splitLine[1]));
@@ -233,10 +266,10 @@ public class Driver {
          priors_string += String.format("%s : %s%n", str, priors.get(str));
          HashMap<String, Double> blah = priors.get(str);
          Set<String> keys2 = blah.keySet();
-         for (String str2 : keys2){
+         /*for (String str2 : keys2){
             out.format("%-20s : %f%n", str2, blah.get(str2));
             priors_string += String.format("%-20s : %f%n", str2, blah.get(str2));
-         }
+         }*/
       }
       return priors_string;
    }

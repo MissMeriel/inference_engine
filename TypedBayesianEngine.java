@@ -18,7 +18,7 @@ public class TypedBayesianEngine extends BasicEngine {
    TreeSet<String> vars_of_interest = new TreeSet<String>();
    HashMap<String, RawType> types = null;
    int trace_total;
-   public static boolean debug = true;
+   public static boolean debug = false;
    
    public static final Logger debugBayesianEngine = Logger.getLogger("BayesianEngine");
    public TypedBayesianEngine(Object[][] csv_array, ArrayList<String> givens, ArrayList<String> events,
@@ -145,6 +145,7 @@ public class TypedBayesianEngine extends BasicEngine {
       for(BayesianEvent be : bayesian_events){
          out.println(be.toString());
       }
+      Driver.print_priors();
       out.println("\n\nGENERATE BAYESIAN PROBABILITIES:");
       generate_bayesian_probabilities();
    } // end loop_through_trace()
@@ -167,7 +168,8 @@ public class TypedBayesianEngine extends BasicEngine {
                case DOUBLE:
                   double dbl = Double.parseDouble(event_val);
                   double key_val = Double.parseDouble(key);
-                  if(abs(dbl - key_val) < voi_threshold.doubleValue()){
+                  out.format("get_prior: threshold for %s = %f%n", voi_name, voi_threshold);
+                  if(Fuzzy.eq(dbl, key_val, voi_threshold.doubleValue())){
                      return d;
                   }
                   break;
