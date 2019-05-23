@@ -1,5 +1,5 @@
 public enum RawType{
 
-   STRING, INT, DOUBLE, BOOLEAN
+   STRING, INT, DOUBLE, BOOLEAN, EXPRESSION
 
 }

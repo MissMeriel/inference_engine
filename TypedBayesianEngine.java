@@ -131,16 +131,14 @@ public class TypedBayesianEngine extends BasicEngine {
          }  // end vars_of_interest iterator
       } // end csv loop
       out.println("\nFINISHED TRACE");
-      //out.println("cumulative_probabilities: ");
-      //print_cumulative_probabilities();
       for (int i = 0; i< givens.size(); i++){
          givens.get(i).set_total(trace_total);
          givens.get(i).set_priors(priors);
          givens.get(i).set_cumulative_probabilities(cumulative_probabilities);
-         out.println(givens.get(i)+" \n\n");
+         //out.println(givens.get(i)+" \n\n");
       }
-      out.format("CUMULATIVE PROBABILITIES:%n"); print_cumulative_probabilities();
-      out.println("\nBAYESIAN EVENTS");
+      //out.format("CUMULATIVE PROBABILITIES:%n"); print_cumulative_probabilities();
+      //out.println("\nBAYESIAN EVENTS");
       sort_bayesian_events();
       for(BayesianEvent be : bayesian_events){
          out.println(be.toString());
