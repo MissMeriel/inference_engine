@@ -112,17 +112,26 @@ public class BayesianEvent<T> extends TypedEvent{
          if(debug) out.format("get_pBA: pBAs.get(%s): %s%n", voi_name, pBA_counts);
          Set<String> keys = pBA_counts.keySet();
          RawType type_enum = Global.types.get(voi_name);
+         String closest_match_key = null;
          for(String key : keys){
             event_val_count = pBA_counts.get(key);
             if(debug) out.format("get_pBA: Got key %s count %f from pBAs%n", key, event_val_count);
             switch(type_enum){
                case DOUBLE:
                   double dbl = Double.parseDouble(event_val);
+                  double key_val_dbl = Double.parseDouble(key);
                   if(debug) out.format("get_pBA: attempting to parse double %s%n", key);
                   double key_val = Double.parseDouble(key);
                   if(Fuzzy.eq(dbl, key_val, voi_threshold.doubleValue()) && voi_threshold != Double.MAX_VALUE) {
-                     r[0] = event_val_count; r[1] = key;
-                     return r;
+                     if(closest_match_key != null){
+                        double closest_match_key_double = Double.parseDouble(closest_match_key);
+                        //if(debug) out.format("get_cumulative_probability: abs(%.2f-%.2f) < abs(%.2f-%.2f) = %s%n",dbl,closest_match_key_double,dbl,key_val_dbl,(abs(dbl-closest_match_key_double) < abs(dbl-key_val_dbl)));
+                        if(abs(dbl-closest_match_key_double) > abs(dbl-key_val_dbl)){
+                           closest_match_key = key;
+                        }
+                     } else {
+                        closest_match_key = key;
+                     }
                   } else if(Math.round(dbl) == Math.round(key_val)) {
                      r[0] = event_val_count; r[1] = key;
                      return r;
@@ -132,8 +141,14 @@ public class BayesianEvent<T> extends TypedEvent{
                   int i = (int) (Double.parseDouble(event_val));
                   int key_val_int = (int) (Double.parseDouble(key));
                   if(Fuzzy.eq(i, key_val_int, voi_threshold.doubleValue()) && voi_threshold != Double.MAX_VALUE){
-                     r[0] = event_val_count; r[1] = key;
-                     return r;
+                     if(closest_match_key != null){
+                        double closest_match_key_int = Double.valueOf(closest_match_key);
+                        if(abs(i-closest_match_key_int) > abs(i-key_val_int)){
+                           closest_match_key = key;
+                        }
+                     } else {
+                        closest_match_key = key;
+                     }
                   } else if(i == key_val_int) {
                      r[0] = event_val_count; r[1] = key;
                      return r;
@@ -142,10 +157,11 @@ public class BayesianEvent<T> extends TypedEvent{
                case STRING:
                   if(event_val.equals(key)){
                      r[0] = event_val_count; r[1] = event_val;
+                     return r;
                   }
                   break;
             }
-         }
+         } //end for keys
          if(debug) {
             out.format("get_pBA: d=%f%n",event_val_count);
             out.format("get_pBA: d==Double.MAX_VALUE: %s%n",(event_val_count==Double.MAX_VALUE));
@@ -154,8 +170,11 @@ public class BayesianEvent<T> extends TypedEvent{
             if(debug) out.format("get_pBA: %s:%s not found in existing events for %s:%s%n",voi_name, event_val, this.var_name, this.val);
             throw new NullPointerException(String.format("get_pBA(): %s:%s not found in existing events for %s:%s%n",voi_name, event_val, this.var_name, this.val));
          }
-      }
-      return r;
+         event_val_count = pBA_counts.get(closest_match_key);
+         r[0] = event_val_count; r[1] = closest_match_key;
+         return r;
+      } //end catch
+      //return r;
    }
    
    public void print_cumulative_probabilities(HashMap<String, HashMap<String, Double[]>> cumulative_probabilities){
@@ -213,6 +232,7 @@ public class BayesianEvent<T> extends TypedEvent{
    
    
    public String generate_bayesian_probability(HashMap<String, HashMap<String, Double[]>> cumulative_probabilities){
+      debug = false;
       if(debug) out.format("%nENTER generate_bayesian_probability: for %s %s",var_name, val.toString());
       String str = "";
       Set<String> keys1 = pBAs.keySet();
@@ -228,24 +248,24 @@ public class BayesianEvent<T> extends TypedEvent{
             }
             Double[] A_arr = get_cumulative_probability(key1, key2, cumulative_probabilities);
             if(debug) out.println("A_arr for "+key1+":"+key2+" == null? "+(A_arr == null));
-            if(debug) out.format("%.2f / %.2f %n", A_arr[0], A_arr[1]);
+            //if(debug) out.format("%.2f / %.2f %n", A_arr[0], A_arr[1]);
             double pB = A_arr[0].doubleValue() / A_arr[1].doubleValue();
-            if(debug) out.format("pB = %.2f / %.2f = %.2f%n", A_arr[0].doubleValue(), A_arr[1].doubleValue(), pB);
+            if(true) out.format("pB = %.3f / %.3f = %.3f%n", A_arr[0].doubleValue(), A_arr[1].doubleValue(), pB);
             //Driver.print_priors();
-            HashMap<String,Double> val_map1 = Global.priors.get(var_name);
+            /*HashMap<String,Double> val_map1 = Global.priors.get(var_name);
             Set<String> keys = val_map1.keySet();
-            /*for(String key : keys){
+            for(String key : keys){
                out.println(val.toString()+".equals("+key+")? "+(val.toString().equals(key)));
             }*/
-            if(debug) out.format("pA = get_prior(%s, %s)%n", var_name, val.toString());
+            if(true) out.format("pA = get_prior(%s, %s)%n", var_name, val.toString());
             double pA = (double) get_prior(var_name, val.toString())[0];
             Double pBA = (val_map.get(key2) / (double) A_arr[1].doubleValue()) / pA;
-            if(debug) print_pBAs();
-            if(debug) out.format("pBA = (%.2f / %.2f) / %.2f = %.2f", val_map.get(key2), (double) A_arr[1].doubleValue(), pA, pBA);
+            if(true) print_pBAs();
+            if(true) out.format("pBA = (%.3f / %.3f) / %.3f = %.3f", val_map.get(key2), (double) A_arr[1].doubleValue(), pA, pBA);
             double pAB = (pA * pBA) / pB;
             str += String.format("\nP(%s=%s|%s=%s) ", var_name, val.toString(), key1, key2);
-            if(debug)  str += String.format("= (%.2f * %.2f) / %.2f ", pA, pBA, pB);
-            str += String.format("= %.2f", pAB);
+            if(true)  str += String.format("= (%.3f * %.3f) / %.3f ", pA, pBA, pB);
+            str += String.format("= %.3f", pAB);
             if(pAB > 1.0){
                out.println(str);
                System.exit(0);
@@ -354,6 +374,7 @@ public class BayesianEvent<T> extends TypedEvent{
          //exact match not found --> iterate over pBAs looking for closest one
          HashMap<String, Double> prior_map = Global.priors.get(voi_name);
          if(debug) out.format("get_prior: priors.get(%s): %s%n", voi_name, prior_map);
+         out.format("prior_map null? %s%n", (prior_map == null));
          Set<String> keys = prior_map.keySet();
          RawType type_enum = Global.types.get(voi_name);
          String closest_match_key = null;
@@ -412,7 +433,7 @@ public class BayesianEvent<T> extends TypedEvent{
          }
          return r;
       }
-      return r;
+      //return r;
    }
    
    

@@ -43,6 +43,7 @@ public class Driver {
             config_file = s;
             types = new HashMap<String, RawType>();
          } else if (s.contains(".priors")) {
+            out.format("%s.contains(.priors)%n",s,s.contains(".priors"));
             priors_file = s;
             priors = new HashMap<String, HashMap<String, Double>>();
          } else if (s.equals("-h")){
@@ -53,16 +54,16 @@ public class Driver {
       try{
          csv_array = parse_csv_file(csv_file, get_csv_dimensions(csv_file));
          out.println("Types null:"+(types == null));
+         out.println("Priors null:"+(priors == null));
          out.println("config file:"+config_file);
          if(types != null){ 
             parse_typed_config_file(config_file);
          } else if (priors != null) {
-            parse_priors_file(config_file);
+            parse_priors_file(priors_file);
             //out.println("priors: " + priors);
          } else {
             parse_config_file(config_file);
          }
-         parse_priors_file(priors_file);
       } catch(IOException e){
          e.printStackTrace();
       }
@@ -73,8 +74,10 @@ public class Driver {
    
    public static void build_inference_engine(Object[][] csv_array,
                            ArrayList<String> givens, ArrayList<String> events, HashMap<String, HashMap<String, Double>> priors){
-      if(priors != null && types != null){
-         print_types();
+      if(config_file.contains(".bayesianconfig") && types != null){
+         //print_types();
+         //pass in null priors --> build uniform dist in preprocess_trace()
+         out.format("build_inference_engine: priors == null? %s%n", (priors == null));
          engine = new TypedBayesianEngine(csv_array, givens, events, priors, types);
       } else if (types != null) {
          engine = new TypedEngine(csv_array, givens, events, types);
@@ -140,23 +143,23 @@ public class Driver {
          if (g && thisLine != "\n") {
             String[] splitLine = thisLine.split(",");
             givens.add(splitLine[0]);
-            if(TypedBayesianEngine.debug) out.format("Added %s to givens%n",splitLine[0]);
+            //if(TypedBayesianEngine.debug) out.format("Added %s to givens%n",splitLine[0]);
             if(types.get(splitLine[0]) == null) types.put(splitLine[0], RawType.valueOf(splitLine[1]));
-            out.println("splitLine[splitLine.length-1]:"+splitLine[splitLine.length-1]);
+            //out.println("splitLine[splitLine.length-1]:"+splitLine[splitLine.length-1]);
             if(splitLine[splitLine.length-1].contains("threshold")){
                double threshold = Double.parseDouble(splitLine[splitLine.length-1].split("=")[1]);
-               out.format("Got %s threshold %f from file%n", splitLine[0], threshold);
+               //out.format("Got %s threshold %f from file%n", splitLine[0], threshold);
                Global.thresholds.put(splitLine[0], threshold);
             }
          } else if(e && thisLine != "\n") {
             String[] splitLine = thisLine.split(",");
             events.add(splitLine[0]);
-            if(TypedBayesianEngine.debug) out.format("Added %s to events%n",splitLine[0]);
+            //if(TypedBayesianEngine.debug) out.format("Added %s to events%n",splitLine[0]);
             if(types.get(splitLine[0]) == null) { types.put(splitLine[0], RawType.valueOf(splitLine[1]));}
-            out.println("splitLine[splitLine.length-1]:"+splitLine[splitLine.length-1]);
+            //out.println("splitLine[splitLine.length-1]:"+splitLine[splitLine.length-1]);
             if(splitLine[splitLine.length-1].contains("threshold")){
                double threshold = Double.parseDouble(splitLine[splitLine.length-1].split("=")[1]);
-               out.format("Got %s threshold %f from file%n", splitLine[0], threshold);
+               //out.format("Got %s threshold %f from file%n", splitLine[0], threshold);
                Global.thresholds.put(splitLine[0], threshold);
             }
          } else {
@@ -172,6 +175,7 @@ public class Driver {
          out.format("EVENTS:%s%n", events);
          print_thresholds();
       }
+      out.println("Finished parse_typed_config_file()");
       //System.exit(0);
    }
    
@@ -195,7 +199,7 @@ public class Driver {
                } else {
                   try{
                      RawType raw_type = types.get(splitLine[0]);
-                     out.println("types.get("+splitLine[0]+")"+raw_type);
+                     //out.println("types.get("+splitLine[0]+")"+raw_type);
                      switch(raw_type){
                         case DOUBLE:
                            Double val_double = new Double(distSplit[0]);
@@ -274,6 +278,23 @@ public class Driver {
       return priors_string;
    }
 
+   public static String print_priors(HashMap<String, HashMap<String, Double>> priors){
+      String priors_string = "";
+      Set<String> keys = priors.keySet();
+      out.format("%nPRIORS:%n");
+      for(String str : keys){
+         out.format("%s : %s%n", str, priors.get(str));
+         priors_string += String.format("%s : %s%n", str, priors.get(str));
+         HashMap<String, Double> blah = priors.get(str);
+         Set<String> keys2 = blah.keySet();
+         for (String str2 : keys2){
+            out.format("%-20s : %f%n", str2, blah.get(str2));
+            priors_string += String.format("%-20s : %f%n", str2, blah.get(str2));
+         }
+      }
+      return priors_string;
+   }
+   
    public static String print_thresholds(){
       String return_string = "";
       Set<String> keys = Global.thresholds.keySet();
