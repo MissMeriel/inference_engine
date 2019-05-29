@@ -289,7 +289,7 @@ public class TypedBayesianEngine extends BasicEngine {
                case DOUBLE:
                   double dbl = Double.parseDouble(event_val);
                   double key_val = Double.parseDouble(key);
-                  out.format("get_prior: threshold for %s = %f%n", voi_name, voi_threshold);
+                  if(debug/*true*/) out.format("get_prior: threshold for %s = %f%n", voi_name, voi_threshold);
                   if(Fuzzy.eq(dbl, key_val, voi_threshold.doubleValue())){
                      return d;
                   }

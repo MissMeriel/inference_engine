@@ -13,7 +13,7 @@ public class BayesianEvent<T> extends TypedEvent{
    double p_B;
    TreeSet<String> vars_of_interest = new TreeSet<String>();
    boolean debug = false;
-   
+   static int gt_one_count = 0;
    /**
     * default constructor: p_A from .priors file
     **/
@@ -249,26 +249,33 @@ public class BayesianEvent<T> extends TypedEvent{
             Double[] A_arr = get_cumulative_probability(key1, key2, cumulative_probabilities);
             if(debug) out.println("A_arr for "+key1+":"+key2+" == null? "+(A_arr == null));
             //if(debug) out.format("%.2f / %.2f %n", A_arr[0], A_arr[1]);
+            if(true) Driver.print_priors(Global.priors);
             double pB = A_arr[0].doubleValue() / A_arr[1].doubleValue();
             if(true) out.format("pB = %.3f / %.3f = %.3f%n", A_arr[0].doubleValue(), A_arr[1].doubleValue(), pB);
-            //Driver.print_priors();
+            
             /*HashMap<String,Double> val_map1 = Global.priors.get(var_name);
             Set<String> keys = val_map1.keySet();
             for(String key : keys){
                out.println(val.toString()+".equals("+key+")? "+(val.toString().equals(key)));
             }*/
-            if(true) out.format("pA = get_prior(%s, %s)%n", var_name, val.toString());
             double pA = (double) get_prior(var_name, val.toString())[0];
-            Double pBA = (val_map.get(key2) / (double) A_arr[1].doubleValue()) / pA;
-            if(true) print_pBAs();
-            if(true) out.format("pBA = (%.3f / %.3f) / %.3f = %.3f", val_map.get(key2), (double) A_arr[1].doubleValue(), pA, pBA);
+            if(true) out.format("calculating probability for P(%s=%s|%s=%s)%n",var_name, val.toString(), key1, key2);
+            if(true) out.format("pA = get_prior(%s, %s) = %.2f%n", var_name, val.toString(), pA);
+            double actual_pA = ((double)num_samples) / A_arr[1].doubleValue();
+            if(true) out.format("actual_pA = %.2f / %.2f = %.2f%n", ((double)num_samples), A_arr[1].doubleValue(), actual_pA);
+            Double pBA = (val_map.get(key2) / (double) A_arr[1].doubleValue()) / actual_pA;
+            if(true) {
+               out.format("pBAs: ");
+               print_pBAs();
+               out.format("pBA = (%.3f / %.3f) / %.3f = %.3f%n", val_map.get(key2), (double) A_arr[1].doubleValue(), actual_pA, pBA);
+            }
             double pAB = (pA * pBA) / pB;
             str += String.format("\nP(%s=%s|%s=%s) ", var_name, val.toString(), key1, key2);
             if(true)  str += String.format("= (%.3f * %.3f) / %.3f ", pA, pBA, pB);
             str += String.format("= %.3f", pAB);
             if(pAB > 1.0){
                out.println(str);
-               System.exit(0);
+               out.println("PROBABILITY > 1 (count="+ (++gt_one_count) +")\n\n");//System.exit(0);
             }
          }
       }
@@ -288,7 +295,7 @@ public class BayesianEvent<T> extends TypedEvent{
          if(debug) {
             out.format("Inside get_cumulative_probability(%s, %s)%n", voi_name, val);
             out.format("get_cumulative_probability: priors:");
-            Driver.print_priors();
+            Driver.print_priors(Global.priors);
             out.format("get_cumulative_probability: getting %s threshold %n", voi_name);
          }
          try{
@@ -356,7 +363,7 @@ public class BayesianEvent<T> extends TypedEvent{
       if(debug) {
          out.format("Inside get_prior(%s, %s)%n", voi_name, val);
          out.format("get_prior: priors:");
-         Driver.print_priors();
+         Driver.print_priors(Global.priors);
          out.format("get_prior: getting %s threshold %n", voi_name);
       }
       try{
@@ -370,11 +377,11 @@ public class BayesianEvent<T> extends TypedEvent{
          double pA = Global.priors.get(voi_name).get(val);//(double) num_samples / A_arr[1].doubleValue();
          return new Object[]{pA, val};
       } catch(NullPointerException e){
-         out.format("get_prior: Null pointer on Global.priors.get(%s).get(%s)%n", var_name, val.toString());
+         if(debug/*true*/) out.format("get_prior: Null pointer on Global.priors.get(%s).get(%s)%n", var_name, val.toString());
          //exact match not found --> iterate over pBAs looking for closest one
          HashMap<String, Double> prior_map = Global.priors.get(voi_name);
          if(debug) out.format("get_prior: priors.get(%s): %s%n", voi_name, prior_map);
-         out.format("prior_map null? %s%n", (prior_map == null));
+         if(debug/*true*/) out.format("prior_map null? %s%n", (prior_map == null));
          Set<String> keys = prior_map.keySet();
          RawType type_enum = Global.types.get(voi_name);
          String closest_match_key = null;

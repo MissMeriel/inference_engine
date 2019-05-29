@@ -25,6 +25,7 @@ public class Driver {
    static ArrayList<String> vars_of_interest = new ArrayList<String>();
    static HashMap<String, RawType> types = null;
    static HashMap<String, HashMap<String, Double>> priors = null;
+   static boolean debug = true;
    
    public static void main(String[] args) throws ClassNotFoundException {
       Class ss_cls = TypeConverter.get_type_class(RawType.STRING);
@@ -170,10 +171,11 @@ public class Driver {
       Global.types = types;
       fis.close();
       dis.close();
-      if(BayesianEngine.debug){
+      if(debug){
          out.format("GIVENS:%s%n", givens);
          out.format("EVENTS:%s%n", events);
          print_thresholds();
+         print_types();
       }
       out.println("Finished parse_typed_config_file()");
       //System.exit(0);
@@ -209,6 +211,12 @@ public class Driver {
                            val.put(distSplit[0],  new Double(distSplit[1]));
                            break;
                         case STRING:
+                           val.put(distSplit[0],  new Double(distSplit[1]));
+                           break;
+                        case INTEXP:
+                           val.put(distSplit[0],  new Double(distSplit[1]));
+                           break;
+                        case DOUBLEEXP:
                            val.put(distSplit[0],  new Double(distSplit[1]));
                            break;
                      }
