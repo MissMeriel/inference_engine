@@ -23,6 +23,11 @@ public class TypedEvent<T>{
       return ++num_samples;
    }
    
+   public int zero_samples(){
+      num_samples = 0;
+      return num_samples;
+   }
+   
    @Override
    public boolean equals(Object o){
       if(o instanceof TypedEvent){

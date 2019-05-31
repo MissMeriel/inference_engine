@@ -26,6 +26,7 @@ public class Driver {
    static HashMap<String, RawType> types = null;
    static HashMap<String, HashMap<String, Double>> priors = null;
    static boolean debug = true;
+   static HashMap<String, String[]> bounds = new HashMap<String, String[]>();
    
    public static void main(String[] args) throws ClassNotFoundException {
       Class ss_cls = TypeConverter.get_type_class(RawType.STRING);
@@ -54,9 +55,11 @@ public class Driver {
       }
       try{
          csv_array = parse_csv_file(csv_file, get_csv_dimensions(csv_file));
-         out.println("Types null:"+(types == null));
-         out.println("Priors null:"+(priors == null));
-         out.println("config file:"+config_file);
+         if(debug){
+            out.println("Types null:"+(types == null));
+            out.println("Priors null:"+(priors == null));
+            out.println("config file:"+config_file);
+         }
          if(types != null){ 
             parse_typed_config_file(config_file);
          } else if (priors != null) {
@@ -118,12 +121,14 @@ public class Driver {
          } else {
             vars_of_interest.add(thisLine);
          }
-         System.out.println(StringEscapeUtils.escapeJava(thisLine));
+         //System.out.println(StringEscapeUtils.escapeJava(thisLine));
       }
       fis.close();
       dis.close();
-      System.out.println("GIVENS:"+givens);
-      System.out.println("EVENTS:"+events+"\n");
+      if(debug){
+         System.out.println("GIVENS:"+givens);
+         System.out.println("EVENTS:"+events+"\n");
+      }
    }
    
    
@@ -151,6 +156,12 @@ public class Driver {
                double threshold = Double.parseDouble(splitLine[splitLine.length-1].split("=")[1]);
                //out.format("Got %s threshold %f from file%n", splitLine[0], threshold);
                Global.thresholds.put(splitLine[0], threshold);
+            } else if (thisLine.contains("<") || thisLine.contains(">")){
+               String[] bounds_arr = new String[splitLine.length-2];
+               for (int i = 2; i < splitLine.length; i++){
+                  bounds_arr[i-2] = splitLine[i];
+               }
+               bounds.put(splitLine[0], bounds_arr);
             }
          } else if(e && thisLine != "\n") {
             String[] splitLine = thisLine.split(",");
@@ -169,6 +180,7 @@ public class Driver {
          //System.out.println(StringEscapeUtils.escapeJava(thisLine));
       }
       Global.types = types;
+      Global.bounds = bounds;
       fis.close();
       dis.close();
       if(debug){
@@ -176,6 +188,7 @@ public class Driver {
          out.format("EVENTS:%s%n", events);
          print_thresholds();
          print_types();
+         print_bounds();
       }
       out.println("Finished parse_typed_config_file()");
       //System.exit(0);
@@ -236,7 +249,7 @@ public class Driver {
       print_priors();
       Global.priors = priors;
       fis.close();
-      dis.close();    
+      dis.close();
    }
    
    public static Object[][] parse_csv_file(String csv_file, int[] dims) throws IOException {
@@ -313,6 +326,24 @@ public class Driver {
       }
       return return_string;
    }
+
+   
+   public static String print_bounds(){
+      String return_string = "";
+      Set<String> keys = bounds.keySet();
+      out.format("%nBOUNDS:%n");
+      for(String str : keys){
+         String[] val = bounds.get(str);
+         String val_str = "[";
+         for(String vs : val){
+            val_str += vs + " ";
+         }
+         out.format("%s : %s]%n", str, val_str);
+         return_string += String.format("%s : %s%n", str, bounds.get(str));
+      }
+      return return_string;
+   }
+   
    
    public static String priors_toString(){
       String priors_string = String.format("%nPRIORS:%n");
