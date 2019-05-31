@@ -1,0 +1,4 @@
+GIVENS
+Speed_Machine,DOUBLE,x<10
+EVENTS
+Trust_Human,INT,x<=10
