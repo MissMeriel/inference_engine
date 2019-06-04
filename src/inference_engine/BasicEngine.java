@@ -40,12 +40,11 @@ public class BasicEngine{
    }
    
    public void loop_through_trace(){
-      build_givens(givens_vars);
       //System.out.println("\nBegin looping through trace");
       //System.out.println(csv_array[0].toString());
-      Object[] row;
       //System.out.println(csv_array.length);
-      //for(Object[] row : csv_array){
+      build_givens(givens_vars);
+      Object[] row;
       for (int i = 1; i < csv_array.length; i++) {
          row = csv_array[i];
          int given_count = 0;

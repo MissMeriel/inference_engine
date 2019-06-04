@@ -9,8 +9,11 @@ import org.w3c.dom.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.function.Predicate;
 import org.apache.commons.lang3.StringEscapeUtils;
 import static java.lang.System.out;
+import mjparser.*;
+
 
 /**
  * Parses command line args and constructs BasicEngine
@@ -23,7 +26,7 @@ public class Driver {
    static ArrayList<String> givens = new ArrayList<String>();
    static ArrayList<String> events = new ArrayList<String>();
    static ArrayList<String> vars_of_interest = new ArrayList<String>();
-   static HashMap<String, RawType> types = null;
+   //static HashMap<String, RawType> types = null;
    static HashMap<String, HashMap<String, Double>> priors = null;
    static boolean debug = true;
    static HashMap<String, String[]> bounds = new HashMap<String, String[]>();
@@ -40,10 +43,10 @@ public class Driver {
             config_file = s;
          } else if (s.contains(".typedconfig")) {
             config_file = s;
-            types = new HashMap<String, RawType>();
+            Global.types = new HashMap<String, RawType>();
          } else if (s.contains(".bayesianconfig")) {
             config_file = s;
-            types = new HashMap<String, RawType>();
+            Global.types = new HashMap<String, RawType>();
          } else if (s.contains(".priors")) {
             out.format("%s.contains(.priors)%n",s,s.contains(".priors"));
             priors_file = s;
@@ -56,37 +59,35 @@ public class Driver {
       try{
          csv_array = parse_csv_file(csv_file, get_csv_dimensions(csv_file));
          if(debug){
-            out.println("Types null:"+(types == null));
+            out.println("Types null:"+(Global.types == null));
             out.println("Priors null:"+(priors == null));
             out.println("config file:"+config_file);
          }
-         if(types != null){ 
-            parse_typed_config_file(config_file);
-         } else if (priors != null) {
+         parse_typed_config_file(config_file);
+         if (priors != null) {
             parse_priors_file(priors_file);
             //out.println("priors: " + priors);
          } else {
-            parse_config_file(config_file);
+            //parse_config_file(config_file);
          }
       } catch(IOException e){
          e.printStackTrace();
       }
-      build_inference_engine(csv_array, givens, events, priors);
+      build_inference_engine(csv_array, priors);
       run_inference_engine();
    } // end main
    
    
-   public static void build_inference_engine(Object[][] csv_array,
-                           ArrayList<String> givens, ArrayList<String> events, HashMap<String, HashMap<String, Double>> priors){
-      if(config_file.contains(".bayesianconfig") && types != null){
+   public static void build_inference_engine(Object[][] csv_array, HashMap<String, HashMap<String, Double>> priors){
+      if(config_file.contains(".bayesianconfig") && Global.types != null){
          //print_types();
          //pass in null priors --> build uniform dist in preprocess_trace()
          out.format("build_inference_engine: priors == null? %s%n", (priors == null));
-         engine = new TypedBayesianEngine(csv_array, givens, events, priors, types);
-      } else if (types != null) {
-         engine = new TypedEngine(csv_array, givens, events, types);
+         engine = new TypedBayesianEngine(csv_array);
+      } else if (Global.types != null) {
+         engine = new TypedEngine(csv_array, Global.givens, Global.events, Global.types);
       } else if (priors != null) {
-         engine = new BayesianEngine(csv_array, givens, events, priors);
+         engine = new BayesianEngine(csv_array, Global.givens, Global.events, priors);
       } else {
          engine = new BasicEngine(csv_array, givens, events);
       }
@@ -133,7 +134,7 @@ public class Driver {
    
    
    public static void parse_typed_config_file(String config_file) throws IOException {
-      FileInputStream fis = new FileInputStream(config_file);
+      /*FileInputStream fis = new FileInputStream(config_file);
       DataInputStream dis = new DataInputStream(fis);
       String thisLine;
       // rows x columns
@@ -182,13 +183,19 @@ public class Driver {
       Global.types = types;
       Global.bounds = bounds;
       fis.close();
-      dis.close();
+      dis.close();*/
+      try{
+         new parser(new Yylex(new FileInputStream(config_file))).parse();
+      } catch(Exception ex){
+         ex.printStackTrace();
+      }
       if(debug){
-         out.format("GIVENS:%s%n", givens);
-         out.format("EVENTS:%s%n", events);
+         out.format("GIVENS:%s%n", Global.givens);
+         out.format("EVENTS:%s%n", Global.events);
          print_thresholds();
          print_types();
          print_bounds();
+         print_deltas();
       }
       out.println("Finished parse_typed_config_file()");
       //System.exit(0);
@@ -209,11 +216,11 @@ public class Driver {
             for(int i = 1; i < splitLine.length; i++){
                String[] distSplit = splitLine[i].split("=");
                //out.format("key:%s value:%s%n", distSplit[0],distSplit[1]);
-               if(types == null){
+               if(Global.types == null){
                   val.put(distSplit[0],  new Double(distSplit[1]));
                } else {
                   try{
-                     RawType raw_type = types.get(splitLine[0]);
+                     RawType raw_type = Global.types.get(splitLine[0]);
                      //out.println("types.get("+splitLine[0]+")"+raw_type);
                      switch(raw_type){
                         case DOUBLE:
@@ -330,16 +337,30 @@ public class Driver {
    
    public static String print_bounds(){
       String return_string = "";
-      Set<String> keys = bounds.keySet();
+      Set<String> keys = Global.bounds.keySet();
       out.format("%nBOUNDS:%n");
       for(String str : keys){
-         String[] val = bounds.get(str);
+         ArrayList<Predicate<Double>> val = Global.bounds.get(str);
          String val_str = "[";
-         for(String vs : val){
+         for(Predicate vs : val){
             val_str += vs + " ";
          }
          out.format("%s : %s]%n", str, val_str);
-         return_string += String.format("%s : %s%n", str, bounds.get(str));
+         return_string += String.format("%s : %s%n", str, Global.bounds.get(str));
+      }
+      return return_string;
+   }
+   
+   
+   public static String print_deltas(){
+      String return_string = "";
+      Set<String> keys = Global.deltas.keySet();
+      out.format("%nDELTAS:%n");
+      for(String str : keys){
+         Double val = Global.deltas.get(str);
+         String val_str = val.toString();
+         out.format("%s : %s%n", str, val_str);
+         return_string += String.format("%s : %s%n", str, Global.deltas.get(str));
       }
       return return_string;
    }
@@ -363,20 +384,20 @@ public class Driver {
    
    public static String print_types(){
       String types_string = "";
-      Set<String> keys = types.keySet();
+      Set<String> keys = Global.types.keySet();
       out.format("%nTYPES:%n");
       for(String str : keys){
-         out.format("%-20s : %s%n", str, types.get(str));
-         types_string += String.format("%-20s : %s%n", str, types.get(str));
+         out.format("%-20s : %s%n", str, Global.types.get(str));
+         types_string += String.format("%-20s : %s%n", str, Global.types.get(str));
       }
       return types_string;
    }
    
    public static String types_toString(){
       String types_string = String.format("%nTYPES:%n");
-      Set<String> keys = types.keySet();
+      Set<String> keys = Global.types.keySet();
       for(String str : keys){
-         types_string += String.format("%-20s : %s%n", str, types.get(str));
+         types_string += String.format("%-20s : %s%n", str, Global.types.get(str));
          //types_string += String.format("%s : %s%n", str, types.get(str));
       }
       return types_string;

@@ -25,8 +25,13 @@ import java_cup.runtime.Symbol;
 %%
 "GIVENS" { return new Symbol(sym.GIVENS, new SymbolValue(yyline+1, yychar+1, yytext())); }
 "EVENTS" { return new Symbol(sym.EVENTS, new SymbolValue(yyline+1, yychar+1, yytext())); }
+"threshold" { return new Symbol(sym.THRESHOLD, new SymbolValue(yyline+1, yychar+1, yytext())); }
+"delta" { return new Symbol(sym.DELTA, new SymbolValue(yyline+1, yychar+1, yytext())); }
+":=" { return new Symbol(sym.DEF, new SymbolValue(yyline+1, yychar+1, yytext())); }
 "," { return new Symbol(sym.COMMA, new SymbolValue(yyline+1, yychar+1, yytext())); }
 ";" { return new Symbol(sym.SEMI, new SymbolValue(yyline+1, yychar+1, yytext())); }
+"==" { return new Symbol(sym.EQ, new SymbolValue(yyline+1, yychar+1, yytext())); }
+"!=" { return new Symbol(sym.NOTEQ, new SymbolValue(yyline+1, yychar+1, yytext())); }
 "<" { return new Symbol(sym.LT, new SymbolValue(yyline+1, yychar+1, yytext()));}
 "<=" { return new Symbol(sym.LTEQ, new SymbolValue(yyline+1, yychar+1, yytext()));}
 ">" { return new Symbol(sym.GT, new SymbolValue(yyline+1, yychar+1, yytext()));}
@@ -34,6 +39,8 @@ import java_cup.runtime.Symbol;
 "INT" { return new Symbol(sym.RAWTYPE, new SymbolValue(yyline+1, yychar+1, yytext())); }
 "DOUBLE" { return new Symbol(sym.RAWTYPE, new SymbolValue(yyline+1, yychar+1, yytext())); }
 "STRING" { return new Symbol(sym.RAWTYPE, new SymbolValue(yyline+1, yychar+1, yytext())); }
+"INTEXP" { return new Symbol(sym.RAWTYPE, new SymbolValue(yyline+1, yychar+1, yytext())); }
+"DOUBLEEXP" { return new Symbol(sym.RAWTYPE, new SymbolValue(yyline+1, yychar+1, yytext())); }
 ([a-zA-Z]|_)([a-zA-Z]|[0-9]|[_])* {return new Symbol(sym.VARIABLE, new SymbolValue(yyline+1, yychar+1, yytext()));}
 [ \t\r\n\f] { /* ignore white space. */ }
 -*[0-9]+ {return new Symbol(sym.NUMBER, new SymbolValue(yyline+1, yychar+1, yytext())); }

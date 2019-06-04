@@ -10,6 +10,7 @@ import static java.lang.System.out;
 import org.apache.commons.lang3.StringEscapeUtils;
 import java.util.Comparator;
 import static java.lang.Math.abs;
+import java.util.function.Predicate;
 
 public class TypedBayesianEngine extends BasicEngine {
    
@@ -18,16 +19,12 @@ public class TypedBayesianEngine extends BasicEngine {
    ArrayList<BayesianEvent> bayesian_events = new ArrayList<BayesianEvent>();
    HashMap<String, HashMap<String, Double[]>> cumulative_probabilities = null;
    TreeSet<String> vars_of_interest = new TreeSet<String>();
-   HashMap<String, RawType> types = null;
    int trace_total;
    public static boolean debug = true;
    
    public static final Logger debugBayesianEngine = Logger.getLogger("BayesianEngine");
-   public TypedBayesianEngine(Object[][] csv_array, ArrayList<String> givens, ArrayList<String> events,
-                      HashMap<String, HashMap<String, Double>> priors, HashMap<String, RawType> types){
-      super(csv_array, givens, events);
-      this.priors = priors; Global.priors = priors;
-      this.types = types; Global.types = types;
+   public TypedBayesianEngine(Object[][] csv_array){
+      super(csv_array, Global.givens, Global.events);
    }
    
    public void build_vars_of_interest(){
@@ -42,7 +39,7 @@ public class TypedBayesianEngine extends BasicEngine {
     */
    public void preprocess_trace(){
       setup_threshold_means();
-      if(priors == null){
+      if(Global.priors.keySet().isEmpty()){
          setup_prior_uniform_dist();
       }
    }
@@ -53,7 +50,8 @@ public class TypedBayesianEngine extends BasicEngine {
          /*if(threshold == null){
             continue; //threshold = Double.MAX_VALUE;
          }*/
-         RawType type = types.get(voi_name);
+         RawType type = Global.types.get(voi_name);
+         //System.out.println(voi_name+" type == niull? "+(type == null));
          TreeSet<Double> d_set = new TreeSet<Double>();
          TreeSet<Integer> i_set = new TreeSet<Integer>();
          TreeSet<String> s_set = new TreeSet<String>();
@@ -70,7 +68,7 @@ public class TypedBayesianEngine extends BasicEngine {
                   s_set.add(row[get_var_index(voi_name)]);
                   break;
                case INTEXP:
-                  String[] bound_vals = Global.bounds.get(voi_name);
+                  ArrayList<Predicate<Double>> bound_vals = Global.bounds.get(voi_name);
                   // create new BoundedEvents for each bound, add to bayesian_events, zero num_samples
                   break;
                case DOUBLEEXP:
@@ -78,7 +76,24 @@ public class TypedBayesianEngine extends BasicEngine {
                   break;
             }
          }
-         if(debug) out.println("d_set:"+d_set.toString());
+         if(debug){
+            switch(type){
+               case DOUBLE:
+                  out.println(voi_name+" d_set:"+d_set.toString());
+                  break;
+               case INT:
+                  out.println(voi_name+" i_set:"+i_set.toString());
+                  break;
+               case STRING:
+                  out.println(voi_name+" s_set:"+s_set.toString());
+                  break;
+               case INTEXP:
+                  break;
+               case DOUBLEEXP:
+                  break;
+            }
+            
+         }
          //initalize cumulative_probabilities keys
          switch(type){
             case DOUBLE:{
@@ -86,18 +101,31 @@ public class TypedBayesianEngine extends BasicEngine {
                Iterator<Double> d_iter = d_set.iterator();
                while(d_iter.hasNext()){
                   Double curr = d_iter.next();
+                  System.out.format("curr=%f%n",curr);
                   Double[] d_arr = new Double[]{0.0,0.0};
-                  /*out.println("last:"+last);
-                  out.println("curr:"+curr+"\n");
-                  print_cumulative_probabilities();*/
                   if(curr.equals(d_set.first())){
+                     System.out.format("%f.equals(d_set.first())=%s%n", curr, (curr.equals(d_set.first())));
                      cumulative_probabilities.get(voi_name).put(curr.toString(), d_arr);
                      last = curr;
                      continue;
-                  } else if(abs(last-curr) >= threshold*2){
+                  } else if (threshold == null){
+                     System.out.println("threshold null");
+                     cumulative_probabilities.get(voi_name).put(Double.toString(Math.round(curr)), d_arr);
+                  } else if(threshold != null && abs(last-curr) == threshold*2){
+                     System.out.format("threshold=%f && abs(last=%f - curr=%f) >= threshold*2 = %s%n", threshold, last, curr, (abs(last-curr) >= threshold*2));
                      cumulative_probabilities.get(voi_name).put(curr.toString(), d_arr);
                      last = curr;
-                  }else if(curr.equals(d_set.last()) && abs(last-curr)>threshold){
+                  }else if(threshold != null && last-threshold > curr){
+                     System.out.format("threshold=%f && abs(last=%f - curr=%f) >= threshold*2 = %s%n", threshold, last, curr, (abs(last-curr) >= threshold*2));
+                     cumulative_probabilities.get(voi_name).put(Double.toString(last-threshold*2), d_arr);
+                     if(last-threshold*2 > curr+threshold){
+                        cumulative_probabilities.get(voi_name).put(Double.toString(curr), d_arr);
+                        last = curr;
+                     } else {
+                        last = last-threshold*2;
+                     }
+                  }else if(threshold != null && curr.equals(d_set.last()) && abs(last-curr)>threshold){
+                     System.out.format("threshold=%f && %f .equals(d_set.last()) && abs(last=%f - curr=%f) > threshold%n", threshold, curr, last, curr, (abs(last-curr) >= threshold*2));
                      cumulative_probabilities.get(voi_name).put(curr.toString(), d_arr);
                   }
                }
@@ -112,6 +140,8 @@ public class TypedBayesianEngine extends BasicEngine {
                      cumulative_probabilities.get(voi_name).put(curr.toString(), d_arr);
                      last = curr;
                      continue;
+                  } else if (threshold == null){
+                     cumulative_probabilities.get(voi_name).put(Integer.toString(curr), d_arr);
                   } else if(abs(last-curr) >= threshold*2){
                      cumulative_probabilities.get(voi_name).put(curr.toString(), d_arr);
                      last = curr;
@@ -129,35 +159,34 @@ public class TypedBayesianEngine extends BasicEngine {
                break;}
          }
       }//end voi for
-      /*out.println("Finished setup_threshold_means()");
-      print_cumulative_probabilities();*/
-      //System.exit(0);
+      out.println("Finished setup_threshold_means()");
+      print_cumulative_probabilities();
+      System.exit(0);
    }
    
    
    public void setup_prior_uniform_dist(){
       out.println("\nEntered setup_prior_uniform_dist()");
       print_cumulative_probabilities();
-      priors = new HashMap<String, HashMap<String, Double>>();
+      Global.priors = new HashMap<String, HashMap<String, Double>>();
       Set<String> keys1 = cumulative_probabilities.keySet();
       for(String key1 : keys1){
          HashMap<String, Double[]> cumulative_probability = cumulative_probabilities.get(key1);
          Set<String> keys2 = cumulative_probability.keySet();
-         out.println("key1:"+key1);
+         //out.println("key1:"+key1);
          for(String key2 : keys2){
-            out.println("key2:"+key2);
+            //out.println("key2:"+key2);
             try{
-               priors.get(key1).put(key2, 1.0/keys2.size());
+               Global.priors.get(key1).put(key2, 1.0/keys2.size());
             }catch(NullPointerException ex){
-               priors.put(key1, new HashMap<String, Double>());
-               priors.get(key1).put(key2, 1.0/keys2.size());
+               Global.priors.put(key1, new HashMap<String, Double>());
+               Global.priors.get(key1).put(key2, 1.0/keys2.size());
             }
          }
       }
-      Global.priors = priors;
-      /*out.print("setup_prior_uniform_dist(): ");
-      Driver.print_priors(priors);
-      System.exit(0);*/
+      out.print("setup_prior_uniform_dist(): ");
+      Driver.print_priors(Global.priors);
+      //System.exit(0);
    }
    
     
@@ -195,7 +224,7 @@ public class TypedBayesianEngine extends BasicEngine {
          Iterator<String> iter = vars_of_interest.iterator();
          while(iter.hasNext()){
             String voi_name = iter.next();
-            RawType type_enum = types.get(voi_name);
+            RawType type_enum = Global.types.get(voi_name);
             int event_index = get_var_index(voi_name);
             //out.println("RawType: "+type_enum);
             Iterator iter2 = vars_of_interest.iterator();
@@ -206,12 +235,7 @@ public class TypedBayesianEngine extends BasicEngine {
             update_cumulative_probabilites(voi_name, event_val, i);
             if(debug) out.print("Updated cumulative probabilities:");
             print_cumulative_probabilities();
-            if(debug){
-               out.format("Get prior for %s:%s%n", voi_name, (String)event_val);
-               out.println("event_val == empty string:"+(event_val.equals("")));
-               out.println("event_val == space:"+(event_val.equals(" ")));
-               out.println(event_val+"; isempty:"+event_val.isEmpty()+"; length:"+event_val.length());
-            }
+            if(debug) { out.format("Get prior for %s:%s%n", voi_name, (String)event_val); }
             //retreive prior (special retrieval for fuzzy)
             double prior = get_prior(voi_name, event_val);
             switch(type_enum){
@@ -224,10 +248,19 @@ public class TypedBayesianEngine extends BasicEngine {
                case STRING:
                   be_test = new BayesianEvent<String>(voi_name, event_val, prior, vars_of_interest);
                   break;
+               case INTEXP:
+                  Predicate<Double> tester = get_tester(voi_name, Double.parseDouble(event_val));
+                  be_test = new BoundedEvent<Integer>(voi_name, Integer.parseInt(event_val), prior, vars_of_interest, tester);
+                  break;
+               case DOUBLEEXP:
+                  tester = get_tester(voi_name, Double.parseDouble(event_val));
+                  be_test = new BoundedEvent<Double>(voi_name, Double.parseDouble(event_val), prior, vars_of_interest, tester);
+                  break;
             }
             ArrayList voi_vals = get_voi_vals((String[]) csv_array[i]);
             out.println("vars_of_interest: "+vars_of_interest);
             out.println("voi_vals: "+voi_vals);
+            out.println("be_test == null?"+(be_test == null));
             be_test.update_conditionals(voi_vals, true);
             //check that bayesian_events does not already contain this event
             boolean found = false;
@@ -261,7 +294,7 @@ public class TypedBayesianEngine extends BasicEngine {
       out.println("\nFINISHED TRACE");
       for (int i = 0; i< givens.size(); i++){
          givens.get(i).set_total(trace_total);
-         givens.get(i).set_priors(priors);
+         givens.get(i).set_priors(Global.priors);
          givens.get(i).set_cumulative_probabilities(cumulative_probabilities);
          //out.println(givens.get(i)+" \n\n");
       }
@@ -271,45 +304,75 @@ public class TypedBayesianEngine extends BasicEngine {
       for(BayesianEvent be : bayesian_events){
          out.println(be.toString());
       }
-      Driver.print_priors(priors);
+      Driver.print_priors(Global.priors);
       out.println("\n\nGENERATE BAYESIAN PROBABILITIES:");
       generate_bayesian_probabilities();
    } // end loop_through_trace()
-
+   
+   
+   public Predicate<Double> get_tester(String voi_name, Double dbl){
+      ArrayList<Predicate<Double>> al = Global.bounds.get(voi_name);
+      for (Predicate<Double> p : al){
+         if(p.test(dbl)){
+            return p;
+         }
+      }
+      return null;
+   }
+   
    
    public double get_prior(String voi_name, String event_val){
       double d = 0;
       Double voi_threshold = 0.0;
       try{
          voi_threshold = Global.thresholds.get(voi_name);
-         d = priors.get(voi_name).get(event_val);
+         d = Global.priors.get(voi_name).get(event_val);
       } catch(NullPointerException ex) {
          //iterate over priors looking for closest one
-         HashMap<String, Double> voi_priors = priors.get(voi_name);
-         Set<String> keys = voi_priors.keySet();
-         RawType type_enum = types.get(voi_name);
-         for(String key : keys){
-            d = voi_priors.get(key);
+         HashMap<String, Double> voi_priors = Global.priors.get(voi_name);
+         System.out.println(voi_name+" priors:");
+         System.out.println(voi_priors);
+         RawType type_enum = Global.types.get(voi_name);
+         try{
+            Set<String> keys = voi_priors.keySet();
+            for(String key : keys){
+               d = voi_priors.get(key);
+               switch(type_enum){
+                  case DOUBLE:
+                     double dbl = Double.parseDouble(event_val);
+                     double key_val = Double.parseDouble(key);
+                     if(debug/*true*/) out.format("get_prior: threshold for %s = %f%n", voi_name, voi_threshold);
+                     if(voi_threshold == null && Math.round(dbl) == Math.round(key_val)){
+                        return d;
+                     }else if(voi_threshold != null && Fuzzy.eq(dbl, key_val, voi_threshold.doubleValue())){
+                        return d;
+                     }
+                     break;
+                  case INT:
+                     int i = Integer.parseInt(event_val);
+                     int key_val_int = Integer.parseInt(key);
+                     if(Fuzzy.eq(i, key_val_int, voi_threshold.doubleValue())){
+                        return d;
+                     }
+                     break;
+                  case STRING: break;
+               }
+            }
+         } catch(NullPointerException ex2){
             switch(type_enum){
-               case DOUBLE:
-                  double dbl = Double.parseDouble(event_val);
-                  double key_val = Double.parseDouble(key);
-                  if(debug/*true*/) out.format("get_prior: threshold for %s = %f%n", voi_name, voi_threshold);
-                  if(Fuzzy.eq(dbl, key_val, voi_threshold.doubleValue())){
-                     return d;
-                  }
+               case INTEXP:
+                  ArrayList<Predicate<Double>> al = Global.bounds.get(voi_name);
+                  d = 1.0 / al.size();
                   break;
-               case INT:
-                  int i = Integer.parseInt(event_val);
-                  int key_val_int = Integer.parseInt(key);
-                  if(Fuzzy.eq(i, key_val_int, voi_threshold.doubleValue())){
-                     return d;
-                  }
+               case DOUBLEEXP:
+                  al = Global.bounds.get(voi_name);
+                  d = 1.0 / al.size();
                   break;
-               case STRING: break;
             }
          }
+
       }
+      System.out.println("get_prior(): returning "+d);
       return d;
    }
    
@@ -344,7 +407,7 @@ public class TypedBayesianEngine extends BasicEngine {
          if(debug) out.format("update_cumulative_probabilites: caught null pointer on cumulative_probability.get(%s)%n", val);
          boolean found = false;
          Set<String> keys = cumulative_probability.keySet();
-         RawType raw_type = types.get(voi_name);
+         RawType raw_type = Global.types.get(voi_name);
          double threshold = 0;
          Double[] d_array = new Double[2];
          try{
@@ -453,25 +516,23 @@ public class TypedBayesianEngine extends BasicEngine {
       String str = "{";
       Set<String> keys = cumulative_probabilities.keySet();
       for (String s : keys){
-         if(s.equals("Speed_Machine")){
-            str += " "+s+":{";
-            HashMap<String, Double[]> hash = cumulative_probabilities.get(s);
-            Set<String> keys2 = hash.keySet();
-            for (String s2 : keys2){
-               str += s2+":[";
-               Double[] d = hash.get(s2);
-               for (Double dd : d){
-                  try{
-                     str += dd.doubleValue() + " ";
-                  } catch(NullPointerException ex){
-                     str += "null ";
-                  }
-                  
+         str += " "+s+":{";
+         HashMap<String, Double[]> hash = cumulative_probabilities.get(s);
+         Set<String> keys2 = hash.keySet();
+         for (String s2 : keys2){
+            str += s2+":[";
+            Double[] d = hash.get(s2);
+            for (Double dd : d){
+               try{
+                  str += dd.doubleValue() + " ";
+               } catch(NullPointerException ex){
+                  str += "null ";
                }
-               str += "]";
+               
             }
-            str+="}";
+            str += "]";
          }
+         str+="}";
       }
       str += "}";
       out.println( str);
