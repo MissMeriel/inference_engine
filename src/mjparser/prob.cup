@@ -86,10 +86,10 @@ terminal SymbolValue COMMENT;
 non terminal program;
 non terminal ArrayList<String> vars;
 non terminal String var;
-non terminal ArrayList<Predicate> stmts;
-non terminal stmt;
+non terminal BoundList stmts;
+non terminal Bound stmt;
 non terminal SymbolValue rawtype;
-non terminal Predicate exp;
+non terminal Bound exp;
 non terminal SymbolValue threshold_stmt;
 non terminal SymbolValue delta_stmt;
 non terminal SymbolValue int;
@@ -131,7 +131,8 @@ var ::=
 				System.out.println("Handling rawtype "+t.lexeme);
 				RawType rt = RawType.valueOf(t.lexeme);
 				Global.types.put(v.lexeme, rt);
-				Global.bounds.put(v.lexeme, s);
+				Global.bounds.put(v.lexeme, s.tester_list);
+				Global.bound_ids.put(v.lexeme, s.id_map);
 				RESULT = v.lexeme;
 		:}
 		| variable:v COMMA rawtype:t COMMA threshold_stmt:th
@@ -174,7 +175,8 @@ var ::=
 				System.out.println("delta_stmt "+ d.toString());
 				Double dbl = Double.valueOf(d.lexeme);
 				Global.deltas.put(v.lexeme, dbl);
-				Global.bounds.put(v.lexeme, s);
+				Global.bounds.put(v.lexeme, s.tester_list);
+				Global.bound_ids.put(v.lexeme, s.id_map);
 				RESULT = v.lexeme;
 		:}
 		;
@@ -182,32 +184,69 @@ var ::=
 stmts   ::=
     stmts:ss COMMA stmt:s
 				{:
-						ss.add((Predicate) s);
+						ss.tester_list.add((Predicate) s.tester);
+						ss.id_map.put(s.id, s.tester);
 						RESULT = ss;
 				:}
     |	stmt:s
 				{:
-						ArrayList<Predicate> al = new ArrayList();
-						al.add((Predicate)s);
-						RESULT = al;
+						BoundList blist = new BoundList();
+						blist.tester_list.add(s.tester);
+						blist.id_map.put(s.id, s.tester);
+						RESULT = blist;
 				:}
 				;
 
 stmt	::=
     exp:e
 				{:
-						System.out.println("exp "+ e.toString());
+						//System.out.println("exp "+ e.toString());
 						RESULT = e;
 				:}
     ;
 
 
 exp ::=            
-				variable:a LT:op int:b       {: System.out.println(a.toString() + " < " + b.toString()); RESULT = (Predicate<Double>) (Double d) -> {return d < Double.valueOf(b.lexeme);}; :}
-				|	variable:a LTEQ:op int:b			{: System.out.println(a.toString() +" <= " + b.toString()); RESULT = (Predicate<Double>) (Double d) -> {return d <= Double.valueOf(b.lexeme);}; :}
-				|	variable:a GT:op int:b			  {: System.out.println(a.toString() +" > " + b.toString()); RESULT = (Predicate<Double>) (Double d) -> {return d > Double.valueOf(b.lexeme);}; :}
-				|	variable:a GTEQ:op int:b			{: System.out.println(a.toString() +" >= " + b.toString()); RESULT = (Predicate<Double>) (Double d) -> {return d >= Double.valueOf(b.lexeme);}; :}
-				| NUMBER:n              					{: RESULT = (Predicate<Double>) (Double d) -> {return Math.abs(d-Double.valueOf(n.lexeme))<1;}; :}
+				variable:a LT:op int:b
+				{:
+							String id = a.toString()+ "<" + b.toString();
+							System.out.println(id);
+							Predicate<Double> tester = (Predicate<Double>) (Double d) -> {return d < Double.valueOf(b.lexeme);};
+							Bound bound = new Bound(id, tester);
+							RESULT = bound;
+				:}
+				|	variable:a LTEQ:op int:b
+				{:
+						String id = a.toString()+"<=" + b.toString();
+						System.out.println(id);
+						Predicate<Double> tester = (Predicate<Double>) (Double d) -> {return d <= Double.valueOf(b.lexeme);};
+						Bound bound = new Bound(id, tester);
+						RESULT = bound;
+				:}
+				|	variable:a GT:op int:b
+				{:
+						String id = a.toString() +">" + b.toString();
+						System.out.println(id);
+						Predicate<Double> tester = (Predicate<Double>) (Double d) -> {return d > Double.valueOf(b.lexeme);};
+						Bound bound = new Bound(id, tester);
+						RESULT = bound;
+				:}
+				|	variable:a GTEQ:op int:b
+				{:
+						String id = a.toString() +">=" + b.toString();
+						System.out.println(id);
+						Predicate<Double> tester = (Predicate<Double>) (Double d) -> {return d >= Double.valueOf(b.lexeme);};
+						Bound bound = new Bound(id, tester);
+						RESULT = bound;
+				:}
+				| variable:a EQ:op NUMBER:n
+				{:
+						String id = a.toString() + op.lexeme + n.lexeme;
+						System.out.println(id);
+						Predicate<Double> tester = (Predicate<Double>) (Double d) -> {return Math.abs(d-Double.valueOf(n.lexeme))<1;};
+						Bound bound = new Bound(id, tester);
+						RESULT = bound;
+				:}
     ;
 
 

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.TreeSet;
 import java.util.ArrayList;
 import java.util.Set;
+import java.util.function.Predicate;
 import static java.lang.System.out;
 import static java.lang.Math.abs;
 
@@ -34,6 +35,7 @@ public class BayesianEvent<T> extends TypedEvent{
       this.prior_attribution = prior_attribution;
    }
    
+   
    public void initialize_pBAs(){
       pBAs = new HashMap<String, HashMap<String, Double>>();
       for(String voi : vars_of_interest){
@@ -47,15 +49,50 @@ public class BayesianEvent<T> extends TypedEvent{
    public void update_conditionals(ArrayList event_values, boolean debug){
       int i = 0;
       Double d;
+      boolean temp_found = false;
       //this.debug = debug;
+      out.format("pBAs: "); print_pBAs();
       for(String voi: vars_of_interest){
          Object[] temp = new Object[]{0.0, event_values.get(i)};
          if(!voi.equals(this.var_name)){
             try{
-               temp = get_pBA(voi, event_values.get(i).toString());
+               RawType rawtype = Global.types.get(voi);
+               switch(rawtype){
+                  case INT:
+                     temp = get_pBA(voi, event_values.get(i).toString());
+                     break;
+                  case DOUBLE:
+                     temp = get_pBA(voi, event_values.get(i).toString());
+                     break;
+                  case STRING:
+                     temp = get_pBA(voi, event_values.get(i).toString());
+                     break;
+                  case INTEXP:{
+                     HashMap<String, Predicate<Double>> id_map = Global.bound_ids.get(voi);
+                     Set<String> keys = id_map.keySet();
+                     for(String key : keys){
+                        if(id_map.get(key).test(Double.valueOf(temp[1].toString()))){
+                           temp = get_pBA(voi, key);
+                           temp_found = true;
+                        }
+                     }
+                     break;}
+                  case DOUBLEEXP:{
+                     HashMap<String, Predicate<Double>> id_map = Global.bound_ids.get(voi);
+                     Set<String> keys = id_map.keySet();
+                     for(String key : keys){
+                        if(id_map.get(key).test(Double.valueOf(temp[1].toString()))){
+                           temp = get_pBA(voi, key);
+                           temp_found = true;
+                        }
+                     }
+                     break;}
+               }
+               
                if(debug) out.format("update_conditionals: temp from get_pBA=%s%n", temp_toStr(temp));
-            } catch(NullPointerException ex){
+            } catch(NullPointerException | NumberFormatException ex ){
                if(debug) out.format("update_conditionals: Caught null ptr from get_pBA%n");
+               temp_found = false;
             }
             try{
                if(debug) out.format("update_conditionals: temp=%s%n", temp_toStr(temp));
@@ -63,20 +100,94 @@ public class BayesianEvent<T> extends TypedEvent{
                if(debug) out.format("update_conditionals: Getting %s pBA%n",voi);
                HashMap<String, Double> pBA = pBAs.get(voi);
                if(debug)out.format("update_conditionals: Got %s pBA: %s%n",voi, pBA);
-               pBA.put(temp[1].toString(), dbl); //change later
+               RawType rawtype = Global.types.get(voi);
+               switch(rawtype){
+                  case INT:
+                     pBA.put(temp[1].toString(), dbl); //change later
+                     break;
+                  case DOUBLE:
+                     pBA.put(temp[1].toString(), dbl); //change later
+                     break;
+                  case STRING:
+                     pBA.put(temp[1].toString(), dbl); //change later
+                     break;
+                  case INTEXP:{
+                     if(!temp_found){
+                        HashMap<String, Predicate<Double>> id_map = Global.bound_ids.get(voi);
+                        Set<String> keys = id_map.keySet();
+                        for(String key : keys){
+                           if(id_map.get(key).test(Double.valueOf(temp[1].toString()))){
+                              pBA.put(key, dbl); //change later
+                           }
+                        }   
+                     } else {
+                        pBA.put(temp[1].toString(), dbl); //change later
+                     }
+                     break;}
+                  case DOUBLEEXP:{
+                     if(!temp_found){
+                        HashMap<String, Predicate<Double>> id_map = Global.bound_ids.get(voi);
+                        Set<String> keys = id_map.keySet();
+                        for(String key : keys){
+                           if(id_map.get(key).test(Double.valueOf(temp[1].toString()))){
+                              pBA.put(key, dbl); //change later
+                           }
+                        }
+                     } else {
+                        pBA.put(temp[1].toString(), dbl); //change later
+                     }
+                     break;}
+               }
                pBAs.put(voi, pBA);
                if(debug)out.format("update_conditionals: Put %s:%s into %s:%s %n", voi, event_values.get(i).toString(), temp[1].toString(), temp[0].toString());
             } catch(NullPointerException ex){
-               pBAs.get(voi).put(event_values.get(i).toString(), 1.0);
+               RawType type_enum = Global.types.get(voi);
+               switch(type_enum){
+                  case INT:
+                     pBAs.get(voi).put(event_values.get(i).toString(), 1.0);
+                     break;
+                  case DOUBLE:
+                     pBAs.get(voi).put(event_values.get(i).toString(), 1.0);
+                     break;
+                  case STRING:
+                     pBAs.get(voi).put(event_values.get(i).toString(), 1.0);
+                     break;
+                  case INTEXP:
+                     //get bound id
+                     String new_key = get_bounded_invariant_id(voi, event_values.get(i).toString());
+                     if(new_key != null){
+                        out.println(voi+" new_key: "+new_key);
+                        pBAs.get(voi).put(new_key, 1.0);
+                     }
+                     break;
+                  case DOUBLEEXP:
+                     break;
+               }
                if(debug) out.format("update_conditionals: Caught null ptr inside update_conditionals%nPut %s:1.0 into %s:%s %n", event_values.get(i).toString(),voi, event_values.get(i).toString());
                if(debug) out.println(ex.getLocalizedMessage());
             }
          }
          i++;
-         if(debug) out.println("Updated conditionals in "+var_name+"="+val+": "+pBAs);
+      }
+      if(debug){
+         out.println("Updated conditionals in "+var_name+"="+val+": "+pBAs);
+         out.format("end of BayesianEvent.update_conditionals(%s, %s)%n%n", event_values, debug);
       }
    }
    
+   /**
+    * Get id to use as pBAs key
+    **/
+   public String get_bounded_invariant_id(String voi_name, String event_value){
+      HashMap<String, Predicate<Double>> voi_map = Global.bound_ids.get(voi_name);
+      Set<String> keys = voi_map.keySet();
+      for(String key : keys){
+         Predicate<Double> p = voi_map.get(key);
+         boolean b = p.test(Double.valueOf(event_value));
+         if(b) { return key; }
+      }
+      return null;
+   }
    
    public String temp_toStr(Object[] temp){
       return String.format("[ %s, %s]", temp[0].toString(), temp[1].toString());
@@ -119,7 +230,7 @@ public class BayesianEvent<T> extends TypedEvent{
             event_val_count = pBA_counts.get(key);
             if(debug) out.format("get_pBA: Got key %s count %f from pBAs%n", key, event_val_count);
             switch(type_enum){
-               case DOUBLE:
+               case DOUBLE:{
                   double dbl = Double.parseDouble(event_val);
                   double key_val_dbl = Double.parseDouble(key);
                   if(debug) out.format("get_pBA: attempting to parse double %s%n", key);
@@ -138,8 +249,8 @@ public class BayesianEvent<T> extends TypedEvent{
                      r[0] = event_val_count; r[1] = key;
                      return r;
                   }
-                  break;
-               case INT:
+                  break;}
+               case INT:{
                   int i = (int) (Double.parseDouble(event_val));
                   int key_val_int = (int) (Double.parseDouble(key));
                   if(Fuzzy.eq(i, key_val_int, voi_threshold.doubleValue()) && voi_threshold != Double.MAX_VALUE){
@@ -155,13 +266,24 @@ public class BayesianEvent<T> extends TypedEvent{
                      r[0] = event_val_count; r[1] = key;
                      return r;
                   }
-                  break;
+                  break;}
                case STRING:
                   if(event_val.equals(key)){
                      r[0] = event_val_count; r[1] = event_val;
                      return r;
                   }
                   break;
+               case INTEXP:{
+                  //Double d = Double.valueOf(event_val);
+                  /*if(){
+                     
+                  }*/
+                  
+                  break;}
+               case DOUBLEEXP:{
+                  /*Double d = Double.valueOf(event_val);*/
+                  
+                  break;}
             }
          } //end for keys
          if(debug) {
@@ -232,7 +354,6 @@ public class BayesianEvent<T> extends TypedEvent{
       out.println( str);
    }
    
-   
    public String generate_bayesian_probability(HashMap<String, HashMap<String, Double[]>> cumulative_probabilities){
       debug = false;
       if(debug) out.format("%nENTER generate_bayesian_probability: for %s %s",var_name, val.toString());
@@ -261,8 +382,10 @@ public class BayesianEvent<T> extends TypedEvent{
                out.println(val.toString()+".equals("+key+")? "+(val.toString().equals(key)));
             }*/
             double pA = (double) get_prior(var_name, val.toString())[0];
-            if(debug) out.format("calculating probability for P(%s=%s|%s=%s)%n",var_name, val.toString(), key1, key2);
-            if(debug) out.format("pA = get_prior(%s, %s) = %.2f%n", var_name, val.toString(), pA);
+            if(debug) {
+               out.format("calculating probability for P(%s=%s|%s=%s)%n",var_name, val.toString(), key1, key2);
+               out.format("pA = get_prior(%s, %s) = %.2f%n", var_name, val.toString(), pA);
+            }
             double actual_pA = ((double)num_samples) / A_arr[1].doubleValue();
             if(debug) out.format("actual_pA = %.3f / %.3f = %.3f%n", ((double)num_samples), A_arr[1].doubleValue(), actual_pA);
             //Double pBA = (val_map.get(key2) / (double) A_arr[1].doubleValue()) / actual_pA;
@@ -372,7 +495,7 @@ public class BayesianEvent<T> extends TypedEvent{
    
    
    public Object[] get_prior(String voi_name, String val){
-      debug = true;
+      debug = false;
       double event_val_count = Double.MAX_VALUE; //goes into r[0]
       Double voi_threshold = 0.0;
       if(debug) {

@@ -12,6 +12,7 @@ public class BoundedEvent<T> extends BayesianEvent{
    double lower_bound = Double.MIN_VALUE;
    double upper_bound = Double.MAX_VALUE;
    Predicate<Double> tester = (Double x) -> {return x > this.lower_bound && x < this.upper_bound;};
+   String id = null;
    
    public BoundedEvent(String var_name, T val, double p_A, TreeSet<String> vars_of_interest, double lower_bound, double upper_bound){
       super(var_name, val, p_A, vars_of_interest);
@@ -31,9 +32,10 @@ public class BoundedEvent<T> extends BayesianEvent{
       }
    }
    
-   public BoundedEvent(String var_name, T val, double p_A, TreeSet<String> vars_of_interest, Predicate<Double> tester){
-      super(var_name, val, p_A, vars_of_interest);
+   public BoundedEvent(String var_name, String id, double p_A, TreeSet<String> vars_of_interest, Predicate<Double> tester){
+      super(var_name, null, p_A, vars_of_interest);
       this.tester = tester;
+      this.id = id;
    }
    
    public boolean check_bounds(double x){
@@ -44,10 +46,19 @@ public class BoundedEvent<T> extends BayesianEvent{
    public boolean equals(Object o){
       if(o instanceof BoundedEvent){
          BoundedEvent be = (BoundedEvent) o;
-         out.format("BoundedEvent equals: this.tester.equals(be.tester)=%s%n", this.tester.equals(be.tester));
-         return (this.var_name.equals(be.var_name)) && lower_bound == be.lower_bound && upper_bound == be.upper_bound ;
+         //out.format("BoundedEvent equals: this.tester.equals(be.tester)=%s%n", this.tester.equals(be.tester));
+         return (this.var_name.equals(be.var_name)) && this.id.equals(be.id) && lower_bound == be.lower_bound && upper_bound == be.upper_bound ;
       } else {
          return false;
       }
+   }
+   
+   @Override
+   public String toString(){
+      String str = String.format("BoundedEvent %s:%s p_A:%.2f", var_name, this.id, p_A);
+      str+= " pBAs: " + pBAs;
+      str += " num_samples: " +num_samples;
+      //str += " tester: "+tester.toString();
+      return str;
    }
 }

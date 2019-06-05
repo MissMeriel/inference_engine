@@ -58,11 +58,11 @@ public class Driver {
       }
       try{
          csv_array = parse_csv_file(csv_file, get_csv_dimensions(csv_file));
-         if(debug){
+         /*if(debug){
             out.println("Types null:"+(Global.types == null));
             out.println("Priors null:"+(priors == null));
             out.println("config file:"+config_file);
-         }
+         }*/
          parse_typed_config_file(config_file);
          if (priors != null) {
             parse_priors_file(priors_file);

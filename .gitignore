@@ -1,5 +1,6 @@
 *.class
 example_files/.~lock*#
+*/Yylex.java
 src/mjparser/Yylex.java
 src/mjparser/parser.java
 src/mjparser/sym.java
