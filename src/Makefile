@@ -8,7 +8,7 @@ parser: mjparser/parser.java mjparser/Yylex.java
 
 #### lexer Java
 mjparser/Yylex.java: mjparser/prob.lex
-	javac Bound.java BoundList.java
+	javac mjparser/Bound.java mjparser/BoundList.java
 	java -classpath ~/inference_engine -jar JLex.jar mjparser/prob.lex
 	mv mjparser/prob.lex.java mjparser/Yylex.java
 

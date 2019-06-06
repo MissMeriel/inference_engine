@@ -184,17 +184,11 @@ public class Driver {
                            val.put(val_double.toString(),  new Double(distSplit[1]));
                            break;
                         case INT:
-                           val.put(distSplit[0],  new Double(distSplit[1]));
-                           break;
                         case STRING:
-                           val.put(distSplit[0],  new Double(distSplit[1]));
-                           break;
                         case INTEXP:
+                        case DOUBLEEXP:{
                            val.put(distSplit[0],  new Double(distSplit[1]));
-                           break;
-                        case DOUBLEEXP:
-                           val.put(distSplit[0],  new Double(distSplit[1]));
-                           break;
+                           break;}
                      }
                   } catch(NullPointerException ex){}
                }

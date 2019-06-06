@@ -1,5 +1,4 @@
 GIVENS
 Trust_Human,INT
-Alarm_M2H,STRING
 EVENTS
-PupilChange_Human,DOUBLE,threshold=0.03
+Speed_Machine,DOUBLE,threshold:=0.001

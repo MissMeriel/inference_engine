@@ -189,8 +189,7 @@ public class BayesianEvent<T> extends TypedEvent{
       }
    }
    
-   /**
-    * Get id to use as pBAs key
+   /** Get id to use as pBAs key
     **/
    public String get_bounded_invariant_id(String voi_name, String event_value){
       HashMap<String, Predicate<Double>> voi_map = Global.bound_ids.get(voi_name);
@@ -289,13 +288,8 @@ public class BayesianEvent<T> extends TypedEvent{
                      return r;
                   }
                   break;
-               case INTEXP:{
-                  r[0] = pBA_counts.get(event_val);
-                  r[1] = event_val;
-                  found = true;
-                  break;}
+               case INTEXP:
                case DOUBLEEXP:{
-                  /*Double d = Double.valueOf(event_val);*/
                   r[0] = pBA_counts.get(event_val);
                   r[1] = event_val;
                   found = true;
@@ -318,6 +312,73 @@ public class BayesianEvent<T> extends TypedEvent{
       //return r;
    }
    
+   
+   public double get_total_probability(String key1, String key2){
+      debug = false;
+      double prob = 0.0;
+      try{
+         return total_probabilities.get(key1).get(key2);
+      }catch(NullPointerException ex){
+         Double voi_threshold = 0.0;
+         try{
+            voi_threshold = new Double(Global.thresholds.get(key1));
+         } catch(NullPointerException e){
+            voi_threshold = Double.MAX_VALUE;
+         }
+         RawType rawtype = Global.types.get(key1);
+         HashMap<String,Double> total_probability_map = total_probabilities.get(key1);
+         Set<String> keys = total_probability_map.keySet();
+         String closest_match_key = null;
+         boolean found = false;
+         for(String key: keys){
+            switch(rawtype){
+               case DOUBLE:{
+                  double dbl = Double.parseDouble(key2);
+                  double key_val_dbl = Double.parseDouble(key);
+                  if(debug) out.format("get_total_probability(): attempting to parse double %s%n", key);
+                  double key_val = Double.parseDouble(key);
+                  if(Fuzzy.eq(dbl, key_val, voi_threshold.doubleValue()) && voi_threshold != Double.MAX_VALUE) {
+                     if(closest_match_key != null){
+                        double closest_match_key_double = Double.parseDouble(closest_match_key);
+                        //if(debug) out.format("get_cumulative_probability: abs(%.2f-%.2f) < abs(%.2f-%.2f) = %s%n",dbl,closest_match_key_double,dbl,key_val_dbl,(abs(dbl-closest_match_key_double) < abs(dbl-key_val_dbl)));
+                        if(abs(dbl-closest_match_key_double) > abs(dbl-key_val_dbl)){
+                           closest_match_key = key;
+                        }
+                     } else {
+                        closest_match_key = key;
+                     }
+                  } else if(Math.round(dbl) == Math.round(key_val)) {
+                     return total_probabilities.get(key1).get(key);
+                  }
+                  break;}
+               case INT:{
+                  int i = (int) (Double.parseDouble(key2));
+                  int key_val_int = (int) (Double.parseDouble(key));
+                  if(Fuzzy.eq(i, key_val_int, voi_threshold.doubleValue()) && voi_threshold != Double.MAX_VALUE){
+                     if(closest_match_key != null){
+                        double closest_match_key_int = Double.valueOf(closest_match_key);
+                        if(abs(i-closest_match_key_int) > abs(i-key_val_int)){
+                           closest_match_key = key;
+                        }
+                     } else {
+                        closest_match_key = key;
+                     }
+                  } else if(i == key_val_int) {
+                     return total_probabilities.get(key1).get(key);
+                  }
+                  break;}
+               case STRING:{
+                  break;}
+               case INTEXP:
+               case DOUBLEEXP:{
+                  break;}
+            }
+            if(found) break;
+         } //end for keys
+         return total_probabilities.get(key1).get(closest_match_key);
+      }
+      //return prob;
+   }
    
    public void print_cumulative_probabilities(HashMap<String, HashMap<String, Double[]>> cumulative_probabilities){
       //System.out.println(cumulative_probabilities);
@@ -393,7 +454,12 @@ public class BayesianEvent<T> extends TypedEvent{
             if(debug) out.println("A_arr for "+key1+":"+key2+" == null? "+(A_arr == null));
             //if(debug) out.format("%.2f / %.2f %n", A_arr[0], A_arr[1]);
             if(debug) Driver.print_priors(Global.priors);
-            double pB = A_arr[0].doubleValue() / A_arr[1].doubleValue();
+            //double pB = A_arr[0].doubleValue() / A_arr[1].doubleValue();
+            if(debug) out.format("getting total_probabilities(%s).get(%s)%n", key1, key2);
+            /*out.println(total_probabilities.get(key1));
+            out.println(total_probabilities.get(key1).get(key2));
+            double pB = total_probabilities.get(key1).get(key2);*/
+            double pB = get_total_probability(key1,key2);
             if(debug) out.format("pB = %.3f / %.3f = %.3f%n", A_arr[0].doubleValue(), A_arr[1].doubleValue(), pB);
             double pA = (double) get_prior(var_name, val.toString())[0];
             if(debug) {
@@ -433,6 +499,9 @@ public class BayesianEvent<T> extends TypedEvent{
       return str;
    }
    
+   /*public Double get_total_probability(String key1, String key2){
+      return total_probabilities.get(key1).get(key2);
+   }*/
    
    public Double[] get_cumulative_probability(String voi_name, String val, HashMap<String, HashMap<String, Double[]>> cumulative_probabilities){
       Double[] d_arr = new Double[2];
@@ -574,6 +643,7 @@ public class BayesianEvent<T> extends TypedEvent{
                   break;
                case STRING:
                   if(val.equals(key)){
+                     closest_match_key = key;
                      r[0] = event_val_count; r[1] = val;
                   }
                   break;
