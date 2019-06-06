@@ -10,13 +10,14 @@ import static java.lang.Math.abs;
 
 public class BayesianEvent<T> extends TypedEvent{
    
-   Prior prior_attribution = Prior.PROB_A; //default is PROB_A
-   HashMap<String, HashMap<String, Double>> pBAs = null;
-   double p_A;
-   double p_B;
-   TreeSet<String> vars_of_interest = new TreeSet<String>();
-   boolean debug = false;
-   static int gt_one_count = 0;
+   public Prior prior_attribution = Prior.PROB_A; //default is PROB_A
+   public HashMap<String, HashMap<String, Double>> pBAs = null;
+   public HashMap<String, HashMap<String, Double>> total_probabilities = null;
+   public double p_A;
+   public double p_B;
+   public TreeSet<String> vars_of_interest = new TreeSet<String>();
+   public boolean debug = false;
+   public static int gt_one_count = 0;
    /**
     * default constructor: p_A from .priors file
     **/
@@ -25,6 +26,7 @@ public class BayesianEvent<T> extends TypedEvent{
       this.p_A = p_A;
       this.vars_of_interest = vars_of_interest; //consider removing this.var_name
       initialize_pBAs();
+      initialize_total_probabilities();
    }
    
    /**
@@ -41,6 +43,15 @@ public class BayesianEvent<T> extends TypedEvent{
       for(String voi : vars_of_interest){
          if(!voi.equals(this.var_name)){
             pBAs.put(voi, new HashMap<String, Double>());
+         }
+      }
+   }
+   
+   public void initialize_total_probabilities(){
+      total_probabilities = new HashMap<String, HashMap<String, Double>>();
+      for(String voi : vars_of_interest){
+         if(!voi.equals(this.var_name)){
+            total_probabilities.put(voi, new HashMap<String, Double>());
          }
       }
    }
@@ -88,11 +99,14 @@ public class BayesianEvent<T> extends TypedEvent{
                      }
                      break;}
                }
-               
                if(debug) out.format("update_conditionals: temp from get_pBA=%s%n", temp_toStr(temp));
-            } catch(NullPointerException | NumberFormatException ex ){
+            } catch(NullPointerException ex ){
                if(debug) out.format("update_conditionals: Caught null ptr from get_pBA%n");
                temp_found = false;
+            }catch(NumberFormatException ex ){
+               if(debug) out.format("update_conditionals: Caught NumberFormatException from get_pBA%n");
+               ex.printStackTrace();
+               temp_found = true;
             }
             try{
                if(debug) out.format("update_conditionals: temp=%s%n", temp_toStr(temp));
@@ -189,6 +203,7 @@ public class BayesianEvent<T> extends TypedEvent{
       return null;
    }
    
+   
    public String temp_toStr(Object[] temp){
       return String.format("[ %s, %s]", temp[0].toString(), temp[1].toString());
    }
@@ -219,7 +234,8 @@ public class BayesianEvent<T> extends TypedEvent{
          if(debug) out.format("get_pBA: pBAs.get(%s).get(%s)= %f%n", voi_name, event_val, event_val_count);
          r = new Object[]{event_val_count, event_val.toString()};
          return r;
-      } catch (NullPointerException ex) {
+      } catch (NullPointerException | NumberFormatException ex) {
+         boolean found = false;
          //exact match not found --> iterate over pBAs looking for closest one
          HashMap<String, Double> pBA_counts = pBAs.get(voi_name);
          if(debug) out.format("get_pBA: pBAs.get(%s): %s%n", voi_name, pBA_counts);
@@ -274,17 +290,18 @@ public class BayesianEvent<T> extends TypedEvent{
                   }
                   break;
                case INTEXP:{
-                  //Double d = Double.valueOf(event_val);
-                  /*if(){
-                     
-                  }*/
-                  
+                  r[0] = pBA_counts.get(event_val);
+                  r[1] = event_val;
+                  found = true;
                   break;}
                case DOUBLEEXP:{
                   /*Double d = Double.valueOf(event_val);*/
-                  
+                  r[0] = pBA_counts.get(event_val);
+                  r[1] = event_val;
+                  found = true;
                   break;}
             }
+            if(found) break;
          } //end for keys
          if(debug) {
             out.format("get_pBA: d=%f%n",event_val_count);
@@ -300,6 +317,7 @@ public class BayesianEvent<T> extends TypedEvent{
       } //end catch
       //return r;
    }
+   
    
    public void print_cumulative_probabilities(HashMap<String, HashMap<String, Double[]>> cumulative_probabilities){
       //System.out.println(cumulative_probabilities);
@@ -324,6 +342,7 @@ public class BayesianEvent<T> extends TypedEvent{
       out.println( str);
    }
    
+   
    public static String print_thresholds(){
       String return_string = "";
       Set<String> keys = Global.thresholds.keySet();
@@ -334,6 +353,7 @@ public class BayesianEvent<T> extends TypedEvent{
       }
       return return_string;
    }
+   
    
    public void print_pBAs(){
       //System.out.println(cumulative_probabilities);
@@ -354,6 +374,7 @@ public class BayesianEvent<T> extends TypedEvent{
       out.println( str);
    }
    
+   
    public String generate_bayesian_probability(HashMap<String, HashMap<String, Double[]>> cumulative_probabilities){
       debug = false;
       if(debug) out.format("%nENTER generate_bayesian_probability: for %s %s",var_name, val.toString());
@@ -363,7 +384,6 @@ public class BayesianEvent<T> extends TypedEvent{
          HashMap<String, Double> val_map = pBAs.get(key1);
          Set<String> keys2 = val_map.keySet();
          for(String key2 : keys2){
-            //Double[] A_arr = cumulative_probabilities.get(var_name).get(val.toString());
             if(debug) {
                out.format("%ngenerate_bayesian_probability: cumulative_probabilities.get(%s).get(%s)=%n", key1, key2);
                out.println("CUMULATIVE PROBABILITIES:");
@@ -375,12 +395,6 @@ public class BayesianEvent<T> extends TypedEvent{
             if(debug) Driver.print_priors(Global.priors);
             double pB = A_arr[0].doubleValue() / A_arr[1].doubleValue();
             if(debug) out.format("pB = %.3f / %.3f = %.3f%n", A_arr[0].doubleValue(), A_arr[1].doubleValue(), pB);
-            
-            /*HashMap<String,Double> val_map1 = Global.priors.get(var_name);
-            Set<String> keys = val_map1.keySet();
-            for(String key : keys){
-               out.println(val.toString()+".equals("+key+")? "+(val.toString().equals(key)));
-            }*/
             double pA = (double) get_prior(var_name, val.toString())[0];
             if(debug) {
                out.format("calculating probability for P(%s=%s|%s=%s)%n",var_name, val.toString(), key1, key2);
@@ -405,7 +419,7 @@ public class BayesianEvent<T> extends TypedEvent{
                out.println("PROBABILITY > 1 (count="+ (++gt_one_count) +")");//System.exit(0);
                out.format("calculating probability for P(%s=%s|%s=%s)%n",var_name, val.toString(), key1, key2);
                out.format("pB = %.3f / %.3f = %.3f%n", A_arr[0].doubleValue(), A_arr[1].doubleValue(), pB);
-               /*System.out.print("PRIORS: ");*/ Driver.print_priors(Global.priors);
+               Driver.print_priors(Global.priors);
                System.out.print("CUMULATIVE_PROBABILITIES: "); print_cumulative_probabilities(cumulative_probabilities);
                out.format("pA = get_prior(%s, %s) = %.2f%n", var_name, val.toString(), pA);
                out.format("actual_pA = %.3f / %.3f = %.3f%n", ((double)num_samples), A_arr[1].doubleValue(), actual_pA);

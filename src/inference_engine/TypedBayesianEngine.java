@@ -18,19 +18,13 @@ public class TypedBayesianEngine extends BasicEngine {
    ArrayList<BayesianGiven> givens = new ArrayList<BayesianGiven>();
    ArrayList<BayesianEvent> bayesian_events = new ArrayList<BayesianEvent>();
    HashMap<String, HashMap<String, Double[]>> cumulative_probabilities = null;
-   TreeSet<String> vars_of_interest = new TreeSet<String>();
+   //TreeSet<String> vars_of_interest = new TreeSet<String>();
    int trace_total;
    public static boolean debug = true;
    
    public static final Logger debugBayesianEngine = Logger.getLogger("BayesianEngine");
    public TypedBayesianEngine(Object[][] csv_array){
       super(csv_array, Global.givens, Global.events);
-   }
-   
-   public void build_vars_of_interest(){
-      vars_of_interest.addAll(givens_vars);
-      vars_of_interest.addAll(events_vars);
-      if(debug) out.format("vars_of_interest:%s%n",vars_of_interest);
    }
    
    /**
@@ -45,7 +39,7 @@ public class TypedBayesianEngine extends BasicEngine {
    }
    
    public void setup_threshold_means(){
-      for(String voi_name : vars_of_interest){
+      for(String voi_name : Global.vars_of_interest){
          Double threshold = Global.thresholds.get(voi_name);
          /*if(threshold == null){
             continue; //threshold = Double.MAX_VALUE;
@@ -218,7 +212,7 @@ public class TypedBayesianEngine extends BasicEngine {
     
    public void initialize_cumulative_var_probabilities(){
       cumulative_probabilities = new HashMap<String, HashMap<String, Double[]>>();
-      Iterator<String> iter = vars_of_interest.iterator();
+      Iterator<String> iter = Global.vars_of_interest.iterator();
       while(iter.hasNext()){
          String voi_name = iter.next();
          cumulative_probabilities.put(voi_name, new HashMap<String, Double[]>());
@@ -234,8 +228,6 @@ public class TypedBayesianEngine extends BasicEngine {
       //debugBayesianEngine.info("Length of trace: "+csv_array.length);
       //debugBayesianEngine.info("Trace variables: "+csv_array[0]));
       Object[] row;
-      //build_givens();
-      build_vars_of_interest();
       initialize_cumulative_var_probabilities();
       preprocess_trace();
       // iterate over csv rows
@@ -247,13 +239,13 @@ public class TypedBayesianEngine extends BasicEngine {
          //BayesianBin b = null;
          boolean bin_updated = false;
          //update events in vars of interest
-         Iterator<String> iter = vars_of_interest.iterator();
+         Iterator<String> iter = Global.vars_of_interest.iterator();
          while(iter.hasNext()){
             String voi_name = iter.next();
             RawType type_enum = Global.types.get(voi_name);
             int event_index = get_var_index(voi_name);
             //out.println("RawType: "+type_enum);
-            Iterator iter2 = vars_of_interest.iterator();
+            Iterator iter2 = Global.vars_of_interest.iterator();
             BayesianEvent be_test = null;
             String event_val = (String) row[event_index];
             // update frequency count for voi
@@ -266,29 +258,29 @@ public class TypedBayesianEngine extends BasicEngine {
             double prior = get_prior(voi_name, event_val);
             switch(type_enum){
                case INT:
-                  be_test = new BayesianEvent<Integer>(voi_name, Integer.parseInt(event_val), prior, vars_of_interest);
+                  be_test = new BayesianEvent<Integer>(voi_name, Integer.parseInt(event_val), prior, Global.vars_of_interest);
                   break;
                case DOUBLE:
-                  be_test = new BayesianEvent<Double>(voi_name, Double.parseDouble(event_val), prior, vars_of_interest);
+                  be_test = new BayesianEvent<Double>(voi_name, Double.parseDouble(event_val), prior, Global.vars_of_interest);
                   break;
                case STRING:
-                  be_test = new BayesianEvent<String>(voi_name, event_val, prior, vars_of_interest);
+                  be_test = new BayesianEvent<String>(voi_name, event_val, prior, Global.vars_of_interest);
                   break;
                case INTEXP:{
                   Predicate<Double> tester = get_tester(voi_name, Double.parseDouble(event_val));
                   String tester_id = get_tester_id(voi_name, Double.parseDouble(event_val));
                   out.format("Got tester %s%n", tester_id);
-                  be_test = new BoundedEvent<Integer>(voi_name, tester_id, prior, vars_of_interest, tester);
+                  be_test = new BoundedEvent<Integer>(voi_name, tester_id, prior, Global.vars_of_interest, tester);
                   break;}
                case DOUBLEEXP:{
                   Predicate<Double> tester = get_tester(voi_name, Double.parseDouble(event_val));
                   String tester_id = get_tester_id(voi_name, Double.parseDouble(event_val));
                   out.format("Got tester %s%n", tester_id);
-                  be_test = new BoundedEvent<Double>(voi_name, tester_id, prior, vars_of_interest, tester);
+                  be_test = new BoundedEvent<Double>(voi_name, tester_id, prior, Global.vars_of_interest, tester);
                   break;}
             }
             ArrayList voi_vals = get_voi_vals((String[]) csv_array[i]);
-            out.println("vars_of_interest: "+vars_of_interest);
+            out.println("vars_of_interest: "+Global.vars_of_interest);
             out.println("voi_vals: "+voi_vals);
             out.println("be_test == null?"+(be_test == null));
             out.println("\nbe_test.update_conditionals("+voi_vals+", true)");
@@ -323,7 +315,7 @@ public class TypedBayesianEngine extends BasicEngine {
                out.println(bev.toString());
             }
          }  // end vars_of_interest iterator
-         if(i >= 5){System.exit(0);}
+         //if(i >= 5){System.exit(0);}
       } // end csv loop
       out.println("\nFINISHED TRACE");
       for (int i = 0; i< givens.size(); i++){
@@ -434,7 +426,7 @@ public class TypedBayesianEngine extends BasicEngine {
    
    public ArrayList get_voi_vals(String[] row){
       ArrayList<String> al = new ArrayList<String>();
-      for (String voi : vars_of_interest){
+      for (String voi : Global.vars_of_interest){
          int index = get_var_index(voi);
          al.add(row[index]);
       }
@@ -558,7 +550,7 @@ public class TypedBayesianEngine extends BasicEngine {
    
    
    public String generate_bayesian_probabilities(){
-      //HashMap<String, HashMap<String >>
+      calculate_total_probabilities();
       String str = "";
       Iterator<BayesianEvent> iter = bayesian_events.iterator();
       while(iter.hasNext()){
@@ -572,6 +564,44 @@ public class TypedBayesianEngine extends BasicEngine {
          } // end switch
       } // end while
       return str;
+   }
+   
+   
+   public void calculate_total_probabilities(){
+      out.println("inside calculate_total_probabilities()");
+      out.println("Global vars of interest: "+Global.vars_of_interest);
+      for(String voi : Global.vars_of_interest){
+         ArrayList<BayesianEvent> events = new ArrayList<BayesianEvent>();
+         for(BayesianEvent be : bayesian_events){
+            if(be.var_name.equals(voi)){
+               events.add(be);
+            }
+         }
+         //use cumulative_probabilities keys so as not to miss bins
+         Set<String> keys1 = cumulative_probabilities.keySet();
+         for(String key1 : keys1){
+            if(!key1.equals(voi)){
+               Set<String> keys2 = cumulative_probabilities.get(key1).keySet();
+               for(String key2 : keys2){
+                  double total_probability = 0.0;
+                  for(BayesianEvent be : events){
+                     try{
+                        HashMap<String, Double> pBA_val_map = (HashMap<String, Double>) be.pBAs.get(key1);
+                        total_probability += pBA_val_map.get(key2) / be.num_samples;
+                     } catch(NullPointerException ex){
+                        total_probability += 0.0;
+                     }
+                  } // end for voi-specific events
+                  for(BayesianEvent be : events){
+                     HashMap<String, Double> total_probability_map = (HashMap<String, Double>) be.total_probabilities.get(key1);
+                     total_probability_map.put(key2, total_probability);
+                  } // end for voi-specific events
+                  out.format("total probability for %s:%s = %.3f%n", key1, key2, total_probability);
+               } // end for keys2
+            }
+         } // end for keys1
+      }
+      out.println("end calculate_total_probabilities()\n");
    }
    
    

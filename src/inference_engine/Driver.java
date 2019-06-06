@@ -134,56 +134,6 @@ public class Driver {
    
    
    public static void parse_typed_config_file(String config_file) throws IOException {
-      /*FileInputStream fis = new FileInputStream(config_file);
-      DataInputStream dis = new DataInputStream(fis);
-      String thisLine;
-      // rows x columns
-      int row_count = 0;
-      boolean g = false;
-      boolean e = false;
-      while ((thisLine = dis.readLine()) != null){
-         if(thisLine.contains("GIVENS")){
-            g = true; e = false; continue;
-         } else if(thisLine.contains("EVENTS")) {
-            e = true; g = false; continue;
-         }
-         if (g && thisLine != "\n") {
-            String[] splitLine = thisLine.split(",");
-            givens.add(splitLine[0]);
-            //if(TypedBayesianEngine.debug) out.format("Added %s to givens%n",splitLine[0]);
-            if(types.get(splitLine[0]) == null) types.put(splitLine[0], RawType.valueOf(splitLine[1]));
-            //out.println("splitLine[splitLine.length-1]:"+splitLine[splitLine.length-1]);
-            if(splitLine[splitLine.length-1].contains("threshold")){
-               double threshold = Double.parseDouble(splitLine[splitLine.length-1].split("=")[1]);
-               //out.format("Got %s threshold %f from file%n", splitLine[0], threshold);
-               Global.thresholds.put(splitLine[0], threshold);
-            } else if (thisLine.contains("<") || thisLine.contains(">")){
-               String[] bounds_arr = new String[splitLine.length-2];
-               for (int i = 2; i < splitLine.length; i++){
-                  bounds_arr[i-2] = splitLine[i];
-               }
-               bounds.put(splitLine[0], bounds_arr);
-            }
-         } else if(e && thisLine != "\n") {
-            String[] splitLine = thisLine.split(",");
-            events.add(splitLine[0]);
-            //if(TypedBayesianEngine.debug) out.format("Added %s to events%n",splitLine[0]);
-            if(types.get(splitLine[0]) == null) { types.put(splitLine[0], RawType.valueOf(splitLine[1]));}
-            //out.println("splitLine[splitLine.length-1]:"+splitLine[splitLine.length-1]);
-            if(splitLine[splitLine.length-1].contains("threshold")){
-               double threshold = Double.parseDouble(splitLine[splitLine.length-1].split("=")[1]);
-               //out.format("Got %s threshold %f from file%n", splitLine[0], threshold);
-               Global.thresholds.put(splitLine[0], threshold);
-            }
-         } else {
-            vars_of_interest.add(thisLine);
-         }
-         //System.out.println(StringEscapeUtils.escapeJava(thisLine));
-      }
-      Global.types = types;
-      Global.bounds = bounds;
-      fis.close();
-      dis.close();*/
       try{
          new parser(new Yylex(new FileInputStream(config_file))).parse();
       } catch(Exception ex){
@@ -197,8 +147,15 @@ public class Driver {
          print_bounds();
          print_deltas();
       }
+      build_vars_of_interest();
       out.println("Finished parse_typed_config_file()");
       //System.exit(0);
+   }
+   
+   public static void build_vars_of_interest(){
+      Global.vars_of_interest.addAll(Global.givens);
+      Global.vars_of_interest.addAll(Global.events);
+      if(debug) out.format("vars_of_interest:%s%n",Global.vars_of_interest);
    }
    
    public static void parse_priors_file(String config_file) throws IOException {
@@ -207,7 +164,6 @@ public class Driver {
       String thisLine;
       // rows x columns
       int row_count = 0;
-      //HashMap<String, Double> val = new HashMap<String, Double>();
       while ((thisLine = dis.readLine()) != null){
          if (thisLine != "\n") {
             String[] splitLine = thisLine.split(",");
