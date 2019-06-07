@@ -14,14 +14,14 @@ public class BoundedEvent<T> extends BayesianEvent<T>{
    Predicate<Double> tester = (Double x) -> {return x > this.lower_bound && x < this.upper_bound;};
    String id = null;
    
-   public BoundedEvent(String var_name, T val, double p_A, TreeSet<String> vars_of_interest, double lower_bound, double upper_bound){
-      super(var_name, val, p_A, vars_of_interest);
+   public BoundedEvent(String var_name, T val, double p_A,  double lower_bound, double upper_bound){
+      super(var_name, val, p_A);
       this.lower_bound = lower_bound;
       this.upper_bound = upper_bound;
    }
    
-   public BoundedEvent(String var_name, T val, double p_A, TreeSet<String> vars_of_interest, double bound, Bound bound_type){
-      super(var_name, val, p_A, vars_of_interest);
+   public BoundedEvent(String var_name, T val, double p_A, double bound, Bound bound_type){
+      super(var_name, val, p_A);
       switch(bound_type){
          case UPPER:
             upper_bound = bound;
@@ -32,8 +32,8 @@ public class BoundedEvent<T> extends BayesianEvent<T>{
       }
    }
    
-   public BoundedEvent(String var_name, String id, double p_A, TreeSet<String> vars_of_interest, Predicate<Double> tester){
-      super(var_name, null, p_A, vars_of_interest);
+   public BoundedEvent(String var_name, String id, double p_A, Predicate<Double> tester){
+      super(var_name, null, p_A);
       this.tester = tester;
       this.id = id;
    }

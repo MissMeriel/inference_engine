@@ -74,7 +74,6 @@ public class TypedBayesianEngine extends BasicEngine {
                   out.println(voi_name+" s_set:"+s_set.toString());
                   break;
             }
-            
          }
          //initalize cumulative_probabilities keys
          switch(type){
@@ -84,39 +83,44 @@ public class TypedBayesianEngine extends BasicEngine {
                Iterator<Double> d_iter = d_set.iterator();
                while(d_iter.hasNext()){
                   Double curr = d_iter.next();
-                  System.out.format("curr=%f%n",curr);
+                  System.out.format("curr=%.2f last= %.2f%n",curr,last);
                   Double[] d_arr = new Double[]{0.0,0.0};
+                  //always add first value(?)
                   if(curr.equals(d_set.first())){
-                     System.out.format("%f.equals(d_set.first())=%s%n", curr, (curr.equals(d_set.first())));
+                     System.out.format("%.2f.equals(d_set.first())=%s%n", curr, (curr.equals(d_set.first())));
                      cumulative_probabilities.get(voi_name).put(curr.toString(), d_arr);
                      last = curr;
                      continue;
                   } else if (threshold == null){
-                     System.out.println("threshold null");
+                     System.out.println("threshold null; adding rounded unique value "+ Double.toString(Math.round(curr)));
                      cumulative_probabilities.get(voi_name).put(Double.toString(Math.round(curr)), d_arr);
                   } else if(threshold != null) {
-                     if(last.equals(d_set.first()) && curr >= last - threshold){
-                        continue;
-                     } else {
-                         
-                     }
-                     if(abs(last-curr) == threshold*2){
+                     if(last == d_set.first() && abs(last-curr) >= threshold){
+                        out.format("last == d_set.first() && abs(last-curr) >= threshold%n");
+                        cumulative_probabilities.get(voi_name).put(Double.toString(curr), d_arr);
+                        last = curr;
+                     } else if(abs(last-curr) == threshold*2){
                         System.out.format("threshold=%f && abs(last=%f - curr=%f) >= threshold*2 = %s%n", threshold, last, curr, (abs(last-curr) >= threshold*2));
                         cumulative_probabilities.get(voi_name).put(curr.toString(), d_arr);
                         last = curr;
-                     } else if(last-threshold > curr) {
-                        System.out.format("threshold=%f && abs(last=%f - curr=%f) >= threshold*2 = %s%n", threshold, last, curr, (abs(last-curr) >= threshold*2));
-                        cumulative_probabilities.get(voi_name).put(Double.toString(last-threshold*2), d_arr);
-                        if(last-threshold*2 > curr+threshold){
-                           cumulative_probabilities.get(voi_name).put(Double.toString(curr), d_arr);
-                           last = curr;
+                     } else if(last-curr < threshold) {
+                        out.format("slice: %s%n", slice);
+                        if(slice.isEmpty()){
+                           slice.add(curr);
+                        } else if(abs(curr-slice.first()) >= threshold*2){
+                           out.format("abs(curr-slice.first()) >= threshold*2%n");
+                           Double mid = (slice.last() + slice.first())/2.0;
+                           cumulative_probabilities.get(voi_name).put(Double.toString(mid), d_arr);
+                           last = mid+threshold;
+                           slice = new TreeSet<Double>();
                         } else {
-                           last = last-threshold*2;
+                           slice.add(curr);
                         }
                      } else if(curr.equals(d_set.last()) && abs(last-curr)>threshold){
                         System.out.format("threshold=%f && %f .equals(d_set.last()) && abs(last=%f - curr=%f) > threshold%n", threshold, curr, last, curr, (abs(last-curr) >= threshold*2));
                         cumulative_probabilities.get(voi_name).put(curr.toString(), d_arr);
                      }
+                     print_cumulative_probabilities(); out.println();
                   }
                }
                break;}
@@ -162,7 +166,7 @@ public class TypedBayesianEngine extends BasicEngine {
       out.println("Finished setup_threshold_means()");
       out.println("\tSet up cumulative probabilities:");
       print_cumulative_probabilities();
-      //System.exit(0);
+      System.exit(0);
    }
    
    
@@ -239,25 +243,25 @@ public class TypedBayesianEngine extends BasicEngine {
             double prior = get_prior(voi_name, event_val);
             switch(type_enum){
                case INT:
-                  be_test = new BayesianEvent<Integer>(voi_name, Integer.parseInt(event_val), prior, Global.vars_of_interest);
+                  be_test = new BayesianEvent<Integer>(voi_name, Integer.parseInt(event_val), prior);
                   break;
                case DOUBLE:
-                  be_test = new BayesianEvent<Double>(voi_name, Double.parseDouble(event_val), prior, Global.vars_of_interest);
+                  be_test = new BayesianEvent<Double>(voi_name, Double.parseDouble(event_val), prior);
                   break;
                case STRING:
-                  be_test = new BayesianEvent<String>(voi_name, event_val, prior, Global.vars_of_interest);
+                  be_test = new BayesianEvent<String>(voi_name, event_val, prior);
                   break;
                case INTEXP:{
                   Predicate<Double> tester = get_tester(voi_name, Double.parseDouble(event_val));
                   String tester_id = get_tester_id(voi_name, Double.parseDouble(event_val));
                   out.format("Got tester %s%n", tester_id);
-                  be_test = new BoundedEvent<Integer>(voi_name, tester_id, prior, Global.vars_of_interest, tester);
+                  be_test = new BoundedEvent<Integer>(voi_name, tester_id, prior, tester);
                   break;}
                case DOUBLEEXP:{
                   Predicate<Double> tester = get_tester(voi_name, Double.parseDouble(event_val));
                   String tester_id = get_tester_id(voi_name, Double.parseDouble(event_val));
                   out.format("Got tester %s%n", tester_id);
-                  be_test = new BoundedEvent<Double>(voi_name, tester_id, prior, Global.vars_of_interest, tester);
+                  be_test = new BoundedEvent<Double>(voi_name, tester_id, prior, tester);
                   break;}
             }
             ArrayList voi_vals = get_voi_vals((String[]) csv_array[i]);

@@ -15,16 +15,16 @@ public class BayesianEvent<T> extends TypedEvent{
    public HashMap<String, HashMap<String, Double>> total_probabilities = null;
    public double p_A;
    public double p_B;
-   public TreeSet<String> vars_of_interest = new TreeSet<String>();
+   //public TreeSet<String> vars_of_interest = new TreeSet<String>();
    public boolean debug = false;
    public static int gt_one_count = 0;
    /**
     * default constructor: p_A from .priors file
     **/
-   public BayesianEvent(String var_name, T val, double p_A, TreeSet<String> vars_of_interest){
+   public BayesianEvent(String var_name, T val, double p_A){
       super(var_name, val);
       this.p_A = p_A;
-      this.vars_of_interest = vars_of_interest; //consider removing this.var_name
+      //this.vars_of_interest = vars_of_interest; //consider removing this.var_name
       initialize_pBAs();
       initialize_total_probabilities();
    }
@@ -40,7 +40,7 @@ public class BayesianEvent<T> extends TypedEvent{
    
    public void initialize_pBAs(){
       pBAs = new HashMap<String, HashMap<String, Double>>();
-      for(String voi : vars_of_interest){
+      for(String voi : Global.vars_of_interest){
          if(!voi.equals(this.var_name)){
             pBAs.put(voi, new HashMap<String, Double>());
          }
@@ -49,7 +49,7 @@ public class BayesianEvent<T> extends TypedEvent{
    
    public void initialize_total_probabilities(){
       total_probabilities = new HashMap<String, HashMap<String, Double>>();
-      for(String voi : vars_of_interest){
+      for(String voi : Global.vars_of_interest){
          if(!voi.equals(this.var_name)){
             total_probabilities.put(voi, new HashMap<String, Double>());
          }
@@ -63,7 +63,7 @@ public class BayesianEvent<T> extends TypedEvent{
       boolean temp_found = false;
       //this.debug = debug;
       out.format("pBAs: "); print_pBAs();
-      for(String voi: vars_of_interest){
+      for(String voi: Global.vars_of_interest){
          Object[] temp = new Object[]{0.0, event_values.get(i)};
          if(!voi.equals(this.var_name)){
             try{

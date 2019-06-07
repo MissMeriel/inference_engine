@@ -247,6 +247,14 @@ exp ::=
 						Bound bound = new Bound(id, tester);
 						RESULT = bound;
 				:}
+				| variable:a NOTEQ:op NUMBER:n
+				{:
+						String id = a.toString() + op.lexeme + n.lexeme;
+						System.out.println(id);
+						Predicate<Double> tester = (Predicate<Double>) (Double d) -> {return Math.abs(d-Double.valueOf(n.lexeme))>1;};
+						Bound bound = new Bound(id, tester);
+						RESULT = bound;
+				:}
     ;
 
 
