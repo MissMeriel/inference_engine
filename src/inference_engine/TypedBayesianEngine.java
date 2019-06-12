@@ -19,7 +19,9 @@ public class TypedBayesianEngine extends BasicEngine {
    ArrayList<BayesianEvent> bayesian_events = new ArrayList<BayesianEvent>();
    HashMap<String, HashMap<String, Double[]>> cumulative_probabilities = null;
    int trace_total;
-   public static boolean debug = true;
+   public static boolean debug = false;
+   //ArrayList<DeltaTracker> delta_trackers = null;
+   HashMap<String, DeltaTracker> delta_trackers = null;
    
    public static final Logger debugBayesianEngine = Logger.getLogger("BayesianEngine");
    public TypedBayesianEngine(Object[][] csv_array){
@@ -36,6 +38,7 @@ public class TypedBayesianEngine extends BasicEngine {
          setup_prior_uniform_dist();
       }
    }
+   
    
    public void setup_threshold_means(){
       for(String voi_name : Global.vars_of_interest){
@@ -112,6 +115,10 @@ public class TypedBayesianEngine extends BasicEngine {
                            Double mid = (slice.last() + slice.first())/2.0;
                            cumulative_probabilities.get(voi_name).put(Double.toString(mid), d_arr);
                            last = mid+threshold;
+                           if(curr > last){
+                              cumulative_probabilities.get(voi_name).put(Double.toString(curr), d_arr);
+                              last = curr;
+                           }
                            slice = new TreeSet<Double>();
                         } else {
                            slice.add(curr);
@@ -152,7 +159,9 @@ public class TypedBayesianEngine extends BasicEngine {
                }
                break;}
             case INTEXP:
-            case DOUBLEEXP:{
+            case DOUBLEEXP:
+            case INTDELTA:
+            case DOUBLEDELTA: {
                HashMap<String, Predicate<Double>> bound_id_map = Global.bound_ids.get(voi_name);
                Set<String> keys = bound_id_map.keySet();
                for(String key: keys){
@@ -163,24 +172,23 @@ public class TypedBayesianEngine extends BasicEngine {
                break;}
          }
       }//end voi for
-      out.println("Finished setup_threshold_means()");
-      out.println("\tSet up cumulative probabilities:");
+      out.println("Finished setup_threshold_means(); set up cumulative probabilities:");
       print_cumulative_probabilities();
-      System.exit(0);
+      //System.exit(0);
    }
    
    
    public void setup_prior_uniform_dist(){
-      out.println("\nEntered setup_prior_uniform_dist()");
-      print_cumulative_probabilities();
+      //out.println("\nEntered setup_prior_uniform_dist()");
+      //print_cumulative_probabilities();
       Global.priors = new HashMap<String, HashMap<String, Double>>();
       Set<String> keys1 = cumulative_probabilities.keySet();
       for(String key1 : keys1){
          HashMap<String, Double[]> cumulative_probability = cumulative_probabilities.get(key1);
          Set<String> keys2 = cumulative_probability.keySet();
-         out.println("key1:"+key1);
+         //out.println("key1:"+key1);
          for(String key2 : keys2){
-            out.println("key2:"+key2);
+            //out.println("key2:"+key2);
             try{
                Global.priors.get(key1).put(key2, 1.0/keys2.size());
             }catch(NullPointerException ex){
@@ -189,7 +197,7 @@ public class TypedBayesianEngine extends BasicEngine {
             }
          }
       }
-      out.print("setup_prior_uniform_dist(): ");
+      out.print("Finished setup_prior_uniform_dist(): ");
       Driver.print_priors(Global.priors);
       //System.exit(0);
    }
@@ -208,6 +216,48 @@ public class TypedBayesianEngine extends BasicEngine {
    }
    
    
+   public void initialize_delta_trackers(){
+      out.println("begin initialize_delta_trackers()");
+      delta_trackers = new HashMap<String, DeltaTracker>(); //new ArrayList<DeltaTracker>();
+      Iterator<String> iter = Global.vars_of_interest.iterator();
+      while(iter.hasNext()){
+         String voi_name = iter.next();
+         RawType rawtype = Global.types.get(voi_name);
+         switch(rawtype){
+            case INTDELTA:
+            case DOUBLEDELTA:{
+               //out.println("initialize_delta_trackers(): var_name: "+voi_name);
+               //delta_trackers.put(voi_name, new HashMap<String, DeltaTracker>());
+               double delta = Global.deltas.get(voi_name);
+               //out.println("initialize_delta_trackers(): delta: "+delta);
+               Set<String> keys = cumulative_probabilities.get(voi_name).keySet();
+               //out.println("initialize_delta_trackers(): # keys: "+keys.size());
+               for(String key : keys){
+                  DeltaTracker dt = new DeltaTracker(voi_name, delta, 0.0);
+                  delta_trackers.put(voi_name, dt);
+                  //initialize next_values with the next delta values
+                  int index = get_var_index(voi_name);
+                  double[] next_values = new double[(int) Math.round(delta)];
+                  for(int i = 1; i <= delta; i++){
+                     next_values[i-1] = Double.parseDouble((String)csv_array[i][index]);
+                  }
+                  //initialize last_values with delta iterations of the first value
+                  double first_value = Double.parseDouble((String)csv_array[1][index]);
+                  double[] last_values = new double[(int) Math.round(delta)];
+                  for(int i = 1; i <= delta; i++){
+                     last_values[i-1] = first_value;
+                  }
+                  dt.set_next_values(next_values);
+                  dt.set_last_values(last_values);
+               }
+               break;}
+         }
+      }
+      //print_delta_trackers();
+      //System.exit(0);
+   }
+   
+   
    public void loop_through_trace(){
       if(debug) debugBayesianEngine.info("Begin looping through trace");
       //debugBayesianEngine.info("Length of trace: "+csv_array.length);
@@ -215,14 +265,16 @@ public class TypedBayesianEngine extends BasicEngine {
       Object[] row;
       initialize_cumulative_var_probabilities();
       preprocess_trace();
+      initialize_delta_trackers();
       // iterate over csv rows
       for (int i = 1; i < csv_array.length; i++) {
          if(debug) out.println("\n\nLOOP "+i);
          trace_total = i;
          row = csv_array[i];
          int given_count = 0;
-         //BayesianBin b = null;
          boolean bin_updated = false;
+         //TODO: update delta_trackers
+         update_delta_trackers((String[]) csv_array[i], i);
          //update events in vars of interest
          Iterator<String> iter = Global.vars_of_interest.iterator();
          while(iter.hasNext()){
@@ -233,11 +285,7 @@ public class TypedBayesianEngine extends BasicEngine {
             Iterator iter2 = Global.vars_of_interest.iterator();
             BayesianEvent be_test = null;
             String event_val = (String) row[event_index];
-            // update frequency count for voi
-            out.format("update_cumulative_probabilites(%s, %s, %s)%n", voi_name, event_val, i);
-            update_cumulative_probabilites(voi_name, event_val, i);
-            if(debug) out.print("Updated cumulative probabilities:");
-            print_cumulative_probabilities();
+            
             if(debug) { out.format("Get prior for %s:%s%n", voi_name, (String)event_val); }
             //retreive prior (special retrieval for fuzzy)
             double prior = get_prior(voi_name, event_val);
@@ -254,45 +302,85 @@ public class TypedBayesianEngine extends BasicEngine {
                case INTEXP:{
                   Predicate<Double> tester = get_tester(voi_name, Double.parseDouble(event_val));
                   String tester_id = get_tester_id(voi_name, Double.parseDouble(event_val));
-                  out.format("Got tester %s%n", tester_id);
+                  if(debug) out.format("Got tester %s%n", tester_id);
                   be_test = new BoundedEvent<Integer>(voi_name, tester_id, prior, tester);
                   break;}
                case DOUBLEEXP:{
                   Predicate<Double> tester = get_tester(voi_name, Double.parseDouble(event_val));
                   String tester_id = get_tester_id(voi_name, Double.parseDouble(event_val));
-                  out.format("Got tester %s%n", tester_id);
+                  if(debug) out.format("Got tester %s%n", tester_id);
                   be_test = new BoundedEvent<Double>(voi_name, tester_id, prior, tester);
                   break;}
+               case INTDELTA:{
+                  //make new DeltaEvent
+                  Predicate<Double> tester = get_tester(voi_name, Double.parseDouble(event_val));
+                  String tester_id = get_tester_id(voi_name, Double.parseDouble(event_val));
+                  if(debug) out.format("Got tester %s%n", tester_id);
+                  double delta = Global.deltas.get(voi_name);
+                  be_test = new DeltaEvent<Integer>(voi_name, tester_id, prior, tester, delta);
+                  DeltaTracker dt = delta_trackers.get(voi_name);
+                  try{
+                     event_val = new Double(dt.compute_last_delta()).toString();
+                  } catch(DeltaException de){
+                     out.println(de.getMessage());
+                     event_val = "0.0";
+                  }
+                  break;}
+               case DOUBLEDELTA:{
+                  //make new DeltaEvent
+                  Predicate<Double> tester = get_tester(voi_name, Double.parseDouble(event_val));
+                  String tester_id = get_tester_id(voi_name, Double.parseDouble(event_val));
+                  if(debug) out.format("Got tester %s%n", tester_id);
+                  double delta = Global.deltas.get(voi_name);
+                  be_test = new DeltaEvent<Double>(voi_name, tester_id, prior, tester, delta);
+                  DeltaTracker dt = delta_trackers.get(voi_name);
+                  try{
+                     event_val = new Double(dt.compute_last_delta()).toString();
+                  } catch(DeltaException de){
+                     out.println(de.getMessage());
+                     event_val = "0.0";
+                  }
+                  break;}
+            }
+            // update frequency count for voi
+            if(true) out.format("update_cumulative_probabilites(%s, %s, %s)%n", voi_name, event_val, i);
+            update_cumulative_probabilites(voi_name, event_val, i);
+            if(true) {
+               out.print("Updated cumulative probabilities:");
+               print_cumulative_probabilities();
             }
             ArrayList voi_vals = get_voi_vals((String[]) csv_array[i]);
-            out.println("vars_of_interest: "+Global.vars_of_interest);
-            out.println("voi_vals: "+voi_vals);
-            out.println("be_test == null?"+(be_test == null));
-            out.println("\nbe_test.update_conditionals("+voi_vals+", true)");
-            be_test.update_conditionals(voi_vals, true);
+            if(debug) {
+               out.println("vars_of_interest: "+Global.vars_of_interest);
+               out.println("voi_vals: "+voi_vals);
+               out.println("be_test == null?"+(be_test == null));
+               out.println("\nbe_test.update_conditionals("+voi_vals+", true)");
+            }
+            be_test.update_conditionals(voi_vals, false);
             //check that bayesian_events does not already contain this event
             boolean found = false;
             Iterator<BayesianEvent> iter_be = bayesian_events.iterator();
             BayesianEvent be = null;
             while(iter_be.hasNext()){
                be = iter_be.next();
-               out.format("be EQUALS be_test: %s%n", be.equals(be_test));
-               out.println("\tbe:"+be.toString()+"\n\tbe_test:"+be_test.toString());
+               if(debug) {
+                  out.format("be EQUALS be_test: %s%n", be.equals(be_test));
+                  out.println("\tbe:"+be.toString()+"\n\tbe_test:"+be_test.toString());
+               }
                if(be.equals(be_test)){
                   //update count of this event and conditioned events
-                  out.println("\nbe.update_conditionals("+voi_vals+", true)");
-                  be.update_conditionals(voi_vals, true);
-                  out.println("Updated bayesian event: "+be.toString());
+                  if(debug) out.println("\nbe.update_conditionals("+voi_vals+", true)");
+                  be.update_conditionals(voi_vals, false);
+                  if(debug) out.println("Updated bayesian event: "+be.toString());
                   found = true;
                   break;
                }
             }
             out.println();
             if(!found){
-               out.println("Adding new bayesian event to list: "+be_test.toString());
+               if(debug) out.println("Adding new bayesian event to list: "+be_test.toString());
                this.bayesian_events.add(be_test);
             } else {
-               
                be.update();
             }
             out.println("\nBAYESIAN EVENTS at loop "+i+" after updating "+voi_name);
@@ -383,15 +471,18 @@ public class TypedBayesianEngine extends BasicEngine {
                }
             }
          } catch(NullPointerException ex2){
+            //TODO: change to search through prior keys
             switch(type_enum){
                case INTEXP:
-                  ArrayList<Predicate<Double>> al = Global.bounds.get(voi_name);
+               case DOUBLEEXP: {
+                  ArrayList al = Global.bounds.get(voi_name);
                   d = 1.0 / al.size();
-                  break;
-               case DOUBLEEXP:
-                  al = Global.bounds.get(voi_name);
+                  break;}
+               case INTDELTA:
+               case DOUBLEDELTA: {
+                  ArrayList al = Global.bounds.get(voi_name);
                   d = 1.0 / al.size();
-                  break;
+                  break;}
             }
          }
 
@@ -414,12 +505,62 @@ public class TypedBayesianEngine extends BasicEngine {
    public ArrayList get_voi_vals(String[] row){
       ArrayList<String> al = new ArrayList<String>();
       for (String voi : Global.vars_of_interest){
+         //change voi_vals to delta value
+         RawType rawtype = Global.types.get(voi);
          int index = get_var_index(voi);
-         al.add(row[index]);
+         switch(rawtype){
+            case INT:
+            case DOUBLE:
+            case STRING:
+            case INTEXP:
+            case DOUBLEEXP:{
+               al.add(row[index]);
+               break;}
+            case INTDELTA:
+            case DOUBLEDELTA:{
+               Double d = Double.parseDouble(row[index]);
+               Set<String> keys = Global.bound_ids.get(voi).keySet();
+               DeltaTracker dt = delta_trackers.get(voi);
+               double delta_value = 0.0;
+               try{
+                  delta_value = dt.compute_next_delta();
+                  out.println("get_voi_vals(): "+voi+" delta_value: "+delta_value);
+               } catch(DeltaException de){
+                  out.println("get_voi_vals(): "+de.getMessage());
+               }
+               al.add(Double.toString(delta_value));
+               break;}
+         }
       }
       return al;
    }
 
+   
+   public void update_delta_trackers(String[] row, int row_index){
+      for (String voi : Global.vars_of_interest){
+         //change voi_vals to delta value
+         RawType rawtype = Global.types.get(voi);
+         int index = get_var_index(voi);
+         switch(rawtype){
+            case INTDELTA:
+            case DOUBLEDELTA:{
+               Double d = Double.parseDouble(row[index]);
+               DeltaTracker dt = delta_trackers.get(voi);
+               //update next_values
+               try{
+                  dt.update_next_values(Double.parseDouble((String)csv_array[row_index+((int)Math.round(dt.delta))][index]));
+               }catch(ArrayIndexOutOfBoundsException e){
+                  dt.update_next_values(d);
+               }
+               //update last_values
+               dt.update_last_values(d);
+               
+               break;}
+         }
+      }
+      print_delta_trackers();
+   }
+      
    
    public void update_cumulative_probabilites(String voi_name, String val, int i){
       HashMap<String, Double[]> cumulative_probability = null;
@@ -491,14 +632,16 @@ public class TypedBayesianEngine extends BasicEngine {
                   break;
                case STRING: //no comparative eq for strings
                   break;
-               case INTEXP:{
+               case INTEXP:
+               case DOUBLEEXP:{
                   Predicate<Double> tester = Global.bound_ids.get(voi_name).get(key);
                   if(tester.test(Double.valueOf(val))){
                      found = true;
                      closest_match_key = key;
                   }
                   break;}
-               case DOUBLEEXP:{
+               case INTDELTA:
+               case DOUBLEDELTA: {
                   Predicate<Double> tester = Global.bound_ids.get(voi_name).get(key);
                   if(tester.test(Double.valueOf(val))){
                      found = true;
@@ -566,6 +709,7 @@ public class TypedBayesianEngine extends BasicEngine {
             }
          }
          //use cumulative_probabilities keys so as not to miss bins
+         print_cumulative_probabilities();
          Set<String> keys1 = cumulative_probabilities.keySet();
          for(String key1 : keys1){
             if(!key1.equals(voi)){
@@ -640,6 +784,16 @@ public class TypedBayesianEngine extends BasicEngine {
       }
       str+= "}";
       return str;
+   }
+   
+   
+   public void print_delta_trackers(){
+      out.print("DELTA TRACKERS:");
+      Set<String> keys1 = delta_trackers.keySet();
+      for(String key1 : keys1){
+         out.println(key1+":"+delta_trackers.get(key1)+" ");
+      }
+      out.println();
    }
    
 }

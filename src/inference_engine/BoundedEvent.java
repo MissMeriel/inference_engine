@@ -63,12 +63,13 @@ public class BoundedEvent<T> extends BayesianEvent<T>{
             //if(debug) out.format("%.2f / %.2f %n", A_arr[0], A_arr[1]);
             if(debug) Driver.print_priors(Global.priors);
             //double pB = A_arr[0].doubleValue() / A_arr[1].doubleValue();
+            out.format("total_probabilities.get(%s).get(%s)%n",key1,key2);
             double pB = total_probabilities.get(key1).get(key2);
             if(debug) out.format("pB = %.3f / %.3f = %.3f%n", A_arr[0].doubleValue(), A_arr[1].doubleValue(), pB);
             double pA = (double) get_prior(var_name, id)[0];
             if(debug) {
-               out.format("calculating probability for P(%s=%s|%s=%s)%n",var_name, val.toString(), key1, key2);
-               out.format("pA = get_prior(%s, %s) = %.2f%n", var_name, val.toString(), pA);
+               out.format("calculating probability for P(%s=%s|%s=%s)%n",var_name, id, key1, key2);
+               out.format("pA = get_prior(%s, %s) = %.2f%n", var_name, id, pA);
             }
             double actual_pA = ((double)num_samples) / A_arr[1].doubleValue();
             if(debug) out.format("actual_pA = %.3f / %.3f = %.3f%n", ((double)num_samples), A_arr[1].doubleValue(), actual_pA);

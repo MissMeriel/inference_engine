@@ -57,6 +57,9 @@ public class BayesianEvent<T> extends TypedEvent{
    }
 
    
+   /**
+    * TODO: update to include INTDELTA,DOUBLEDELTA
+    **/
    public void update_conditionals(ArrayList event_values, boolean debug){
       int i = 0;
       Double d;
@@ -78,17 +81,10 @@ public class BayesianEvent<T> extends TypedEvent{
                   case STRING:
                      temp = get_pBA(voi, event_values.get(i).toString());
                      break;
-                  case INTEXP:{
-                     HashMap<String, Predicate<Double>> id_map = Global.bound_ids.get(voi);
-                     Set<String> keys = id_map.keySet();
-                     for(String key : keys){
-                        if(id_map.get(key).test(Double.valueOf(temp[1].toString()))){
-                           temp = get_pBA(voi, key);
-                           temp_found = true;
-                        }
-                     }
-                     break;}
-                  case DOUBLEEXP:{
+                  case INTEXP:
+                  case DOUBLEEXP:
+                  case INTDELTA:
+                  case DOUBLEDELTA:{
                      HashMap<String, Predicate<Double>> id_map = Global.bound_ids.get(voi);
                      Set<String> keys = id_map.keySet();
                      for(String key : keys){
@@ -125,20 +121,10 @@ public class BayesianEvent<T> extends TypedEvent{
                   case STRING:
                      pBA.put(temp[1].toString(), dbl); //change later
                      break;
-                  case INTEXP:{
-                     if(!temp_found){
-                        HashMap<String, Predicate<Double>> id_map = Global.bound_ids.get(voi);
-                        Set<String> keys = id_map.keySet();
-                        for(String key : keys){
-                           if(id_map.get(key).test(Double.valueOf(temp[1].toString()))){
-                              pBA.put(key, dbl); //change later
-                           }
-                        }   
-                     } else {
-                        pBA.put(temp[1].toString(), dbl); //change later
-                     }
-                     break;}
-                  case DOUBLEEXP:{
+                  case INTEXP:
+                  case DOUBLEEXP:
+                  case INTDELTA:
+                  case DOUBLEDELTA:{
                      if(!temp_found){
                         HashMap<String, Predicate<Double>> id_map = Global.bound_ids.get(voi);
                         Set<String> keys = id_map.keySet();

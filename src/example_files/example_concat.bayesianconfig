@@ -1,5 +1,4 @@
 GIVENS
-Speed_Machine,DOUBLEEXP,Speed_Machine>12,Speed_Machine<=12
-CurrentWheel_Machine,DOUBLE,threshold:=15
+CurrentWheel_Machine,DOUBLEDELTA,delta:=2,CurrentWheel_Machine<10,CurrentWheel_Machine>=10
 EVENTS
 Trust_Human,INTEXP,Trust_Human<3,Trust_Human>=3

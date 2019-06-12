@@ -145,6 +145,7 @@ public class Driver {
          print_thresholds();
          print_types();
          print_bounds();
+         print_bound_ids();
          print_deltas();
       }
       build_vars_of_interest();
@@ -301,6 +302,23 @@ public class Driver {
       return return_string;
    }
    
+   public static String print_bound_ids(){
+      String return_string = "";
+      Set<String> keys1 = Global.bound_ids.keySet();
+      out.format("%nBOUND IDS:%n");
+      for(String key1 : keys1){
+         HashMap<String, Predicate<Double>> val = Global.bound_ids.get(key1);
+         String val_str = "{";
+         Set<String> keys2 = Global.bound_ids.get(key1).keySet();
+         for(String key2 : keys2){
+            val_str += key2 + " ";
+         }
+         out.format("%s : %s}%n", key1, val_str);
+         return_string += String.format("%s : %s%n", key1, Global.bound_ids.get(key1));
+      }
+      return return_string;
+   }   
+   
    
    public static String print_deltas(){
       String return_string = "";
@@ -312,6 +330,7 @@ public class Driver {
          out.format("%s : %s%n", str, val_str);
          return_string += String.format("%s : %s%n", str, Global.deltas.get(str));
       }
+      out.println();
       return return_string;
    }
    

@@ -20,6 +20,19 @@ public class DeltaEvent<T> extends BoundedEvent<T>{
       this.delta = delta;
    }
    
-
+   /** equals checks class, varname, and delta
+    *
+    **/
+   @Override
+   public boolean equals(Object o){
+      if(o instanceof DeltaEvent){
+         DeltaEvent temp = (DeltaEvent) o;
+         if(temp.delta == this.delta && temp.var_name.equals(this.var_name)){
+            return true;
+         }
+      }
+      return false;
+   }
+   
 
 }

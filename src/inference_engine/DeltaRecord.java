@@ -9,7 +9,7 @@ import java.util.function.Predicate;
 import static java.lang.System.out;
 import static java.lang.Math.abs;
 
-/** Container for all invariants holding for a particular variable at a given time
+/** Container for all invariants that hold for a given variable at a given time
  *
  */
 public class DeltaRecord{

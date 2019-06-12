@@ -12,6 +12,8 @@ public class PolynomialDriver{
       obs.add(-0.97, 2.0211192647627025);
       // ... Lots of lines omitted ...
       obs.add(0.99, -2.4345814727089854);*/
+      double[] x = new double[]{1.0, 2.0, 3.0, 4.0, 5.0};
+      double[] y = new double[]{0.0, 1.1, 3.0, 4.3, 4.3};
       obs.add(1.0,0.0);
       obs.add(2.0,1.1);
       obs.add(3.0,3.0);
@@ -25,7 +27,10 @@ public class PolynomialDriver{
       for(int i = 0; i < coeff.length; i++){
          System.out.println(coeff[i]);
       }
-      
+      String appTitle = "test";
+      PolynomialXYPlot plt = new PolynomialXYPlot(appTitle, x, y, coeff);
+      plt.pack();
+      plt.setVisible(true);
    }
 
 }

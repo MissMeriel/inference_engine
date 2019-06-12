@@ -120,7 +120,7 @@ vars ::=
 var ::=
 		variable:v COMMA rawtype:t
 		{:
-				System.out.println("Handling rawtype "+t.lexeme);
+				//System.out.println("Handling rawtype "+t.lexeme);
 				RawType rt = RawType.valueOf(t.lexeme);
 				//System.out.println("rt == null? "+(rt==null));
 				Global.types.put(v.lexeme, rt);
@@ -128,7 +128,7 @@ var ::=
 		:}
 		| variable:v COMMA rawtype:t COMMA stmts:s
 		{:
-				System.out.println("Handling rawtype "+t.lexeme);
+				//System.out.println("Handling rawtype "+t.lexeme);
 				RawType rt = RawType.valueOf(t.lexeme);
 				Global.types.put(v.lexeme, rt);
 				Global.bounds.put(v.lexeme, s.tester_list);
@@ -137,30 +137,30 @@ var ::=
 		:}
 		| variable:v COMMA rawtype:t COMMA threshold_stmt:th
 		{:
-				System.out.println("Handling rawtype "+t.lexeme);
+				//System.out.println("Handling rawtype "+t.lexeme);
 				RawType rt = RawType.valueOf(t.lexeme);
 				Global.types.put(v.lexeme, rt);
-				System.out.println("threshold_stmt "+ th.toString());
+				//System.out.println("threshold_stmt "+ th.toString());
 				Double dbl = Double.valueOf(th.lexeme);
 				Global.thresholds.put(v.lexeme, dbl);
 				RESULT = v.lexeme;
 		:}
 		| variable:v COMMA rawtype:t COMMA delta_stmt:d
 		{:
-				System.out.println("Handling rawtype "+t.lexeme);
+				//System.out.println("Handling rawtype "+t.lexeme);
 				RawType rt = RawType.valueOf(t.lexeme);
 				Global.types.put(v.lexeme, rt);
-				System.out.println("delta_stmt "+ d.toString());
+				//System.out.println("delta_stmt "+ d.toString());
 				Double dbl = Double.valueOf(d.lexeme);
 				Global.deltas.put(v.lexeme, dbl);
 				RESULT = v.lexeme;
 		:}
 		| variable:v COMMA rawtype:t COMMA threshold_stmt:th COMMA delta_stmt:d
 		{:
-				System.out.println("Handling rawtype "+t.lexeme);
+				//System.out.println("Handling rawtype "+t.lexeme);
 				RawType rt = RawType.valueOf(t.lexeme);
 				Global.types.put(v.lexeme, rt);
-				System.out.println("delta_stmt "+ d.toString());
+				//System.out.println("delta_stmt "+ d.toString());
 				Double th_dbl = Double.valueOf(th.lexeme);
 				Global.thresholds.put(v.lexeme, th_dbl);
 				Double delta_dbl = Double.valueOf(d.lexeme);
@@ -169,10 +169,10 @@ var ::=
 		:}
 		| variable:v COMMA rawtype:t COMMA delta_stmt:d COMMA stmts:s
 		{:
-				System.out.println("Handling rawtype "+t.lexeme);
+				//System.out.println("Handling rawtype "+t.lexeme);
 				RawType rt = RawType.valueOf(t.lexeme);
 				Global.types.put(v.lexeme, rt);
-				System.out.println("delta_stmt "+ d.toString());
+				//System.out.println("delta_stmt "+ d.toString());
 				Double dbl = Double.valueOf(d.lexeme);
 				Global.deltas.put(v.lexeme, dbl);
 				Global.bounds.put(v.lexeme, s.tester_list);
@@ -210,7 +210,7 @@ exp ::=
 				variable:a LT:op int:b
 				{:
 							String id = a.toString()+ "<" + b.toString();
-							System.out.println(id);
+							//System.out.println(id);
 							Predicate<Double> tester = (Predicate<Double>) (Double d) -> {return d < Double.valueOf(b.lexeme);};
 							Bound bound = new Bound(id, tester);
 							RESULT = bound;
@@ -218,7 +218,7 @@ exp ::=
 				|	variable:a LTEQ:op int:b
 				{:
 						String id = a.toString()+"<=" + b.toString();
-						System.out.println(id);
+						//System.out.println(id);
 						Predicate<Double> tester = (Predicate<Double>) (Double d) -> {return d <= Double.valueOf(b.lexeme);};
 						Bound bound = new Bound(id, tester);
 						RESULT = bound;
@@ -226,7 +226,7 @@ exp ::=
 				|	variable:a GT:op int:b
 				{:
 						String id = a.toString() +">" + b.toString();
-						System.out.println(id);
+						//System.out.println(id);
 						Predicate<Double> tester = (Predicate<Double>) (Double d) -> {return d > Double.valueOf(b.lexeme);};
 						Bound bound = new Bound(id, tester);
 						RESULT = bound;
@@ -234,7 +234,7 @@ exp ::=
 				|	variable:a GTEQ:op int:b
 				{:
 						String id = a.toString() +">=" + b.toString();
-						System.out.println(id);
+						//System.out.println(id);
 						Predicate<Double> tester = (Predicate<Double>) (Double d) -> {return d >= Double.valueOf(b.lexeme);};
 						Bound bound = new Bound(id, tester);
 						RESULT = bound;
@@ -242,7 +242,7 @@ exp ::=
 				| variable:a EQ:op NUMBER:n
 				{:
 						String id = a.toString() + op.lexeme + n.lexeme;
-						System.out.println(id);
+						//System.out.println(id);
 						Predicate<Double> tester = (Predicate<Double>) (Double d) -> {return Math.abs(d-Double.valueOf(n.lexeme))<1;};
 						Bound bound = new Bound(id, tester);
 						RESULT = bound;
@@ -250,7 +250,7 @@ exp ::=
 				| variable:a NOTEQ:op NUMBER:n
 				{:
 						String id = a.toString() + op.lexeme + n.lexeme;
-						System.out.println(id);
+						//System.out.println(id);
 						Predicate<Double> tester = (Predicate<Double>) (Double d) -> {return Math.abs(d-Double.valueOf(n.lexeme))>1;};
 						Bound bound = new Bound(id, tester);
 						RESULT = bound;
