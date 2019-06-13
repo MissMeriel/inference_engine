@@ -230,16 +230,18 @@ public class TypedBayesianEngine extends BasicEngine {
                //delta_trackers.put(voi_name, new HashMap<String, DeltaTracker>());
                double delta = Global.deltas.get(voi_name);
                //out.println("initialize_delta_trackers(): delta: "+delta);
-               Set<String> keys = cumulative_probabilities.get(voi_name).keySet();
+               //Set<String> keys = cumulative_probabilities.get(voi_name).keySet();
                //out.println("initialize_delta_trackers(): # keys: "+keys.size());
-               for(String key : keys){
+               //for(String key : keys){
                   DeltaTracker dt = new DeltaTracker(voi_name, delta, 0.0);
                   delta_trackers.put(voi_name, dt);
                   //initialize next_values with the next delta values
                   int index = get_var_index(voi_name);
                   double[] next_values = new double[(int) Math.round(delta)];
+                  out.println("delta="+delta);
                   for(int i = 1; i <= delta; i++){
                      next_values[i-1] = Double.parseDouble((String)csv_array[i][index]);
+                     out.format("next_values[%s] = %.2f;%n",i-1,Double.parseDouble((String)csv_array[i][index]));
                   }
                   //initialize last_values with delta iterations of the first value
                   double first_value = Double.parseDouble((String)csv_array[1][index]);
@@ -249,7 +251,7 @@ public class TypedBayesianEngine extends BasicEngine {
                   }
                   dt.set_next_values(next_values);
                   dt.set_last_values(last_values);
-               }
+               //}
                break;}
          }
       }
@@ -728,8 +730,8 @@ public class TypedBayesianEngine extends BasicEngine {
                      HashMap<String, Double> total_probability_map = (HashMap<String, Double>) be.total_probabilities.get(key1);
                      total_probability_map.put(key2, total_probability);
                      out.println(be.toString());
-                     out.format("total probability for %s:%s = %.3f%n", key1, key2, total_probability);
-                     out.format("getting total_probability for %s %s=%.3f%n%n", key1,key2,be.get_total_probability(key1,key2));
+                     out.format("total probability for %s:%s = %.3f%n%n", key1, key2, total_probability);
+                     //out.format("getting total_probability for %s %s=%.3f%n%n", key1,key2,be.get_total_probability(key1,key2));
                   } // end for voi-specific events
                } // end for keys2
             }

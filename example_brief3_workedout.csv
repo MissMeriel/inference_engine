@@ -1,7 +1,7 @@
-Time,Trust_Human,Alarm_M2H,Mode_H2M,PupilChange_Human,Speed_Machine,P
-0,n/a,n/a,n/a,n/a,n/a,
-1,3,,autonomous,0.1,0,
-2,3,,autonomous,0.01,1.1,
-3,1,cyclist alarm,autonomous,0,3,
-4,1,cyclist alarm,autonomous,0,4.3,
-5,1,,autonomous,-0.2,4.3,
+Time,Trust_Human,Alarm_M2H,Mode_H2M,PupilChange_Human,Speed_Machine,P(Trust=3),P(Speed=0),P()
+0,n/a,n/a,n/a,n/a,n/a,,,
+1,3,,autonomous,0.1,0,,,
+2,3,,autonomous,0.01,1.1,,,
+3,1,cyclist alarm,autonomous,0,3,,,
+4,1,cyclist alarm,autonomous,0,4.3,,,
+5,1,,autonomous,-0.2,4.3,,,

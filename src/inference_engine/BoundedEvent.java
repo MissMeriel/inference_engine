@@ -45,7 +45,7 @@ public class BoundedEvent<T> extends BayesianEvent<T>{
    @Override
    public String generate_bayesian_probability(HashMap<String, HashMap<String, Double[]>> cumulative_probabilities){
       debug = false;
-      if(debug) out.format("%nENTER generate_bayesian_probability: for %s %s",var_name, id);
+      if(true) out.format("%nENTER generate_bayesian_probability: for %s %s",var_name, id);
       String str = "";
       Set<String> keys1 = pBAs.keySet();
       for(String key1 : keys1){
@@ -63,7 +63,7 @@ public class BoundedEvent<T> extends BayesianEvent<T>{
             //if(debug) out.format("%.2f / %.2f %n", A_arr[0], A_arr[1]);
             if(debug) Driver.print_priors(Global.priors);
             //double pB = A_arr[0].doubleValue() / A_arr[1].doubleValue();
-            out.format("total_probabilities.get(%s).get(%s)%n",key1,key2);
+            if(debug) out.format("total_probabilities.get(%s).get(%s)%n",key1,key2);
             double pB = total_probabilities.get(key1).get(key2);
             if(debug) out.format("pB = %.3f / %.3f = %.3f%n", A_arr[0].doubleValue(), A_arr[1].doubleValue(), pB);
             double pA = (double) get_prior(var_name, id)[0];
@@ -81,16 +81,36 @@ public class BoundedEvent<T> extends BayesianEvent<T>{
                out.format("pBA = (%.3f / %.3f) / %.3f = %.3f%n", val_map.get(key2), (double) A_arr[1].doubleValue(), actual_pA, pBA);
             }
             double pAB = (pA * pBA) / pB;
-            RawType rawtype = Global.types.get(key1);
-            switch(rawtype){
+            RawType rawtype1 = Global.types.get(var_name);
+            switch(rawtype1){
                case INT:
                case DOUBLE:
                case STRING:{
-                  str += String.format("\nP(%s|%s=%s) ", id, key1, key2);
+                  str += String.format("\nP(%s|", id);
                   break;}
                case INTEXP:
                case DOUBLEEXP:{
-                  str += String.format("\nP(%s|%s) ", id, key2);
+                  str += String.format("\nP(%s|", id);
+                  break;}
+               case INTDELTA:
+               case DOUBLEDELTA: {
+                  str += String.format("\nP(rate of change of %s|", id);
+                  break;}
+            }
+            RawType rawtype2 = Global.types.get(key1);
+            switch(rawtype2){
+               case INT:
+               case DOUBLE:
+               case STRING:{
+                  str += String.format("%s=%s) ",key1,key2);
+                  break;}
+               case INTEXP:
+               case DOUBLEEXP:{
+                  str += String.format("%s) ", key2);
+                  break;}
+               case INTDELTA:
+               case DOUBLEDELTA: {
+                  str += String.format("rate of change of %s) ", key2);
                   break;}
             }
             if(true)  str += String.format("= (%.3f * %.3f) / %.3f ", pA, pBA, pB);
