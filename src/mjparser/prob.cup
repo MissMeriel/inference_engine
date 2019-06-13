@@ -80,6 +80,8 @@ terminal SymbolValue LT;
 terminal SymbolValue LTEQ;
 terminal SymbolValue GT;
 terminal SymbolValue GTEQ;
+terminal SymbolValue LOGICAL_AND;
+terminal SymbolValue LOGICAL_OR;
 terminal SymbolValue SEMI;
 terminal SymbolValue COMMA;
 terminal SymbolValue COMMENT;
@@ -96,7 +98,7 @@ non terminal SymbolValue int;
 non terminal SymbolValue variable;
 non terminal comments;
 
-precedence left LT, LTEQ, GT, GTEQ;
+precedence left LT, LTEQ, GT, GTEQ, LOGICAL_AND, LOGICAL_OR;
 
 program	::=	
 	GIVENS vars:gv EVENTS vars:ev
@@ -203,6 +205,14 @@ stmt	::=
 						//System.out.println("exp "+ e.toString());
 						RESULT = e;
 				:}
+				| exp:e LOGICAL_OR:lo stmt:s
+				{:
+						String id = e.id + lo.lexeme + s.id;
+						System.out.println(id);
+						Predicate<Double> tester = (Predicate<Double>) (Double d) -> {return e.tester.test(d) || s.tester.test(d);};
+						Bound bound = new Bound(id, tester);
+						RESULT = bound;
+				:}
     ;
 
 
@@ -252,6 +262,14 @@ exp ::=
 						String id = a.toString() + op.lexeme + n.lexeme;
 						//System.out.println(id);
 						Predicate<Double> tester = (Predicate<Double>) (Double d) -> {return Math.abs(d-Double.valueOf(n.lexeme))>1;};
+						Bound bound = new Bound(id, tester);
+						RESULT = bound;
+				:}
+				| exp:e1 LOGICAL_AND:la exp:e2
+				{:
+						String id = e1.id + la.lexeme + e2.id;
+						System.out.println(id);
+						Predicate<Double> tester = (Predicate<Double>) (Double d) -> {return e1.tester.test(d) && e2.tester.test(d);};
 						Bound bound = new Bound(id, tester);
 						RESULT = bound;
 				:}

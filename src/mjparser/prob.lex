@@ -36,6 +36,8 @@ import java_cup.runtime.Symbol;
 "<=" { return new Symbol(sym.LTEQ, new SymbolValue(yyline+1, yychar+1, yytext()));}
 ">" { return new Symbol(sym.GT, new SymbolValue(yyline+1, yychar+1, yytext()));}
 ">=" { return new Symbol(sym.GTEQ, new SymbolValue(yyline+1, yychar+1, yytext()));}
+"&&" { return new Symbol(sym.LOGICAL_AND, new SymbolValue(yyline+1, yychar+1, yytext()));}
+"||" { return new Symbol(sym.LOGICAL_OR, new SymbolValue(yyline+1, yychar+1, yytext()));}
 "INT" { return new Symbol(sym.RAWTYPE, new SymbolValue(yyline+1, yychar+1, yytext())); }
 "DOUBLE" { return new Symbol(sym.RAWTYPE, new SymbolValue(yyline+1, yychar+1, yytext())); }
 "STRING" { return new Symbol(sym.RAWTYPE, new SymbolValue(yyline+1, yychar+1, yytext())); }

@@ -314,27 +314,21 @@ public class TypedBayesianEngine extends BasicEngine {
                   be_test = new BoundedEvent<Double>(voi_name, tester_id, prior, tester);
                   break;}
                case INTDELTA:{
+                  DeltaTracker dt = delta_trackers.get(voi_name);
+                  try{
+                     event_val = new Double(dt.compute_last_delta()).toString();
+                  } catch(DeltaException de){
+                     out.println(de.getMessage());
+                     event_val = "0.0";
+                  }
                   //make new DeltaEvent
                   Predicate<Double> tester = get_tester(voi_name, Double.parseDouble(event_val));
                   String tester_id = get_tester_id(voi_name, Double.parseDouble(event_val));
                   if(debug) out.format("Got tester %s%n", tester_id);
                   double delta = Global.deltas.get(voi_name);
                   be_test = new DeltaEvent<Integer>(voi_name, tester_id, prior, tester, delta);
-                  DeltaTracker dt = delta_trackers.get(voi_name);
-                  try{
-                     event_val = new Double(dt.compute_last_delta()).toString();
-                  } catch(DeltaException de){
-                     out.println(de.getMessage());
-                     event_val = "0.0";
-                  }
                   break;}
                case DOUBLEDELTA:{
-                  //make new DeltaEvent
-                  Predicate<Double> tester = get_tester(voi_name, Double.parseDouble(event_val));
-                  String tester_id = get_tester_id(voi_name, Double.parseDouble(event_val));
-                  if(debug) out.format("Got tester %s%n", tester_id);
-                  double delta = Global.deltas.get(voi_name);
-                  be_test = new DeltaEvent<Double>(voi_name, tester_id, prior, tester, delta);
                   DeltaTracker dt = delta_trackers.get(voi_name);
                   try{
                      event_val = new Double(dt.compute_last_delta()).toString();
@@ -342,10 +336,19 @@ public class TypedBayesianEngine extends BasicEngine {
                      out.println(de.getMessage());
                      event_val = "0.0";
                   }
+                  //make new DeltaEvent
+                  out.format("voi_name=%s event_val=%s%n",voi_name,event_val);
+                  Predicate<Double> tester = get_tester(voi_name, Double.parseDouble(event_val));
+                  out.format("get_tester_id(%s, %s);%n",voi_name,Double.parseDouble(event_val));
+                  String tester_id = get_tester_id(voi_name, Double.parseDouble(event_val));
+                  if(true) out.format("Got tester %s%n", tester_id);
+                  if(tester_id == null){ System.exit(0);}
+                  double delta = Global.deltas.get(voi_name);
+                  be_test = new DeltaEvent<Double>(voi_name, tester_id, prior, tester, delta);
                   break;}
             }
             // update frequency count for voi
-            if(true) out.format("update_cumulative_probabilites(%s, %s, %s)%n", voi_name, event_val, i);
+            if(debug) out.format("update_cumulative_probabilites(%s, %s, %s)%n", voi_name, event_val, i);
             update_cumulative_probabilites(voi_name, event_val, i);
             if(true) {
                out.print("Updated cumulative probabilities:");
@@ -366,6 +369,8 @@ public class TypedBayesianEngine extends BasicEngine {
             while(iter_be.hasNext()){
                be = iter_be.next();
                if(debug) {
+                  out.format("be null? %s%n",(be == null));
+                  out.format("be_test null? %s%n",(be_test == null));
                   out.format("be EQUALS be_test: %s%n", be.equals(be_test));
                   out.println("\tbe:"+be.toString()+"\n\tbe_test:"+be_test.toString());
                }

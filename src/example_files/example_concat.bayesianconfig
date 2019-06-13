@@ -1,4 +1,4 @@
 GIVENS
-CurrentWheel_Machine,DOUBLEDELTA,delta:=2,CurrentWheel_Machine<10,CurrentWheel_Machine>=10
+CurrentWheel_Machine,DOUBLEDELTA,delta:=2,CurrentWheel_Machine<10&&CurrentWheel_Machine>-10,CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10
 EVENTS
 Trust_Human,INTEXP,Trust_Human<3,Trust_Human>=3
