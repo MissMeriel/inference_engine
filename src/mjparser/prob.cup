@@ -87,7 +87,7 @@ terminal SymbolValue COMMA;
 terminal SymbolValue COMMENT;
 non terminal program;
 non terminal ArrayList<String> vars;
-non terminal String var;
+non terminal SymbolValue var;
 non terminal BoundList stmts;
 non terminal Bound stmt;
 non terminal SymbolValue rawtype;
@@ -98,7 +98,7 @@ non terminal SymbolValue int;
 non terminal SymbolValue variable;
 non terminal comments;
 
-precedence left LT, LTEQ, GT, GTEQ, LOGICAL_AND, LOGICAL_OR;
+precedence left LT, LTEQ, GT, GTEQ, LOGICAL_AND, LOGICAL_OR, COMMENT;
 
 program	::=	
 	GIVENS vars:gv EVENTS vars:ev
@@ -114,7 +114,14 @@ program	::=
 
 vars ::=
 		vars:vs var:v
-		{: vs.add(v); RESULT = vs; :}
+		{:
+				System.out.println("lexeme="+v.lexeme+", value="+v.value+", sym==COMMENT? "+(v.value == sym.COMMENT));
+				System.out.println();
+				if(v.value != sym.COMMENT){
+						vs.add(v.lexeme);
+				}
+				RESULT = vs;
+		:}
 		|
 		{: RESULT = new ArrayList<String>(); :}
 		;
@@ -126,7 +133,7 @@ var ::=
 				RawType rt = RawType.valueOf(t.lexeme);
 				//System.out.println("rt == null? "+(rt==null));
 				Global.types.put(v.lexeme, rt);
-				RESULT = v.lexeme;
+				RESULT = v;
 		:}
 		| variable:v COMMA rawtype:t COMMA stmts:s
 		{:
@@ -135,7 +142,7 @@ var ::=
 				Global.types.put(v.lexeme, rt);
 				Global.bounds.put(v.lexeme, s.tester_list);
 				Global.bound_ids.put(v.lexeme, s.id_map);
-				RESULT = v.lexeme;
+				RESULT = v;
 		:}
 		| variable:v COMMA rawtype:t COMMA threshold_stmt:th
 		{:
@@ -145,7 +152,7 @@ var ::=
 				//System.out.println("threshold_stmt "+ th.toString());
 				Double dbl = Double.valueOf(th.lexeme);
 				Global.thresholds.put(v.lexeme, dbl);
-				RESULT = v.lexeme;
+				RESULT = v;
 		:}
 		| variable:v COMMA rawtype:t COMMA delta_stmt:d
 		{:
@@ -155,7 +162,7 @@ var ::=
 				//System.out.println("delta_stmt "+ d.toString());
 				Double dbl = Double.valueOf(d.lexeme);
 				Global.deltas.put(v.lexeme, dbl);
-				RESULT = v.lexeme;
+				RESULT = v;
 		:}
 		| variable:v COMMA rawtype:t COMMA threshold_stmt:th COMMA delta_stmt:d
 		{:
@@ -167,7 +174,7 @@ var ::=
 				Global.thresholds.put(v.lexeme, th_dbl);
 				Double delta_dbl = Double.valueOf(d.lexeme);
 				Global.deltas.put(v.lexeme, delta_dbl);
-				RESULT = v.lexeme;
+				RESULT = v;
 		:}
 		| variable:v COMMA rawtype:t COMMA delta_stmt:d COMMA stmts:s
 		{:
@@ -179,7 +186,11 @@ var ::=
 				Global.deltas.put(v.lexeme, dbl);
 				Global.bounds.put(v.lexeme, s.tester_list);
 				Global.bound_ids.put(v.lexeme, s.id_map);
-				RESULT = v.lexeme;
+				RESULT = v;
+		:}
+		| COMMENT:c
+		{:
+				RESULT = c;
 		:}
 		;
 	

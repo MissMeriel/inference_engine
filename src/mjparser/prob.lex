@@ -49,5 +49,5 @@ import java_cup.runtime.Symbol;
 [ \t\r\n\f] { /* ignore white space. */ }
 -*[0-9]+\.?[0-9]* {return new Symbol(sym.NUMBER, new SymbolValue(yyline+1, yychar+1, yytext())); }
 . { System.err.println("Illegal character: "+yytext()); }
-(/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+/)|(//.*)*)    { return new Symbol(sym.COMMENT, new SymbolValue(yyline+1, yychar+1, yytext())); }
+(/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+/)|(//.*)*)    { return new Symbol(sym.COMMENT, new SymbolValue(yyline+1, yychar+1, yytext(), sym.COMMENT)); }
 

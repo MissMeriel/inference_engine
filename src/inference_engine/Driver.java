@@ -154,6 +154,8 @@ public class Driver {
    }
    
    public static void build_vars_of_interest(){
+      out.println("Global.givens: "+Global.givens);
+      out.println("Global.events: "+Global.events);
       Global.vars_of_interest.addAll(Global.givens);
       Global.vars_of_interest.addAll(Global.events);
       if(debug) out.format("vars_of_interest:%s%n",Global.vars_of_interest);
