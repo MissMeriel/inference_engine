@@ -133,10 +133,10 @@ public class DeltaTracker{
       if(last_values.size() == delta){
          if(delta == 1){
             return 0.0;
-         } else if (delta == 2){
+         } else if (delta == 2 || var_name.equals("Trust_Human")){
             // return slope of secant line
             out.format("compute_last_delta(): (last_values.get(1)=%.2f - last_values.get(0)=%.2f) / timestep=%.2f = ", last_values.get(1), last_values.get(0), timestep, (last_values.getFirst() - last_values.getLast()) / timestep);
-            return (last_values.get(1)-last_values.get(0)) / timestep;
+            return (last_values.getLast()-last_values.getFirst()) / timestep;
          } else if(derivative){
             // fit polynomial function then take derivative
             WeightedObservedPoints obs = new WeightedObservedPoints();

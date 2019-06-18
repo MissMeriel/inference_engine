@@ -45,7 +45,7 @@ public class BoundedEvent<T> extends BayesianEvent<T>{
    @Override
    public String generate_bayesian_probability(HashMap<String, HashMap<String, Double[]>> cumulative_probabilities){
       debug = false;
-      if(true) out.format("%nENTER generate_bayesian_probability: for %s %s",var_name, id);
+      //if(true) out.format("%nENTER generate_bayesian_probability: for %s %s",var_name, id);
       String str = "";
       Set<String> keys1 = pBAs.keySet();
       for(String key1 : keys1){

@@ -424,7 +424,7 @@ public class BayesianEvent<T> extends TypedEvent{
    
    public String generate_bayesian_probability(HashMap<String, HashMap<String, Double[]>> cumulative_probabilities){
       debug = false;
-      if(debug) out.format("%nENTER generate_bayesian_probability: for %s %s",var_name, val.toString());
+      //if(debug) out.format("%nENTER generate_bayesian_probability: for %s %s",var_name, val.toString());
       String str = "";
       Set<String> keys1 = pBAs.keySet();
       for(String key1 : keys1){
