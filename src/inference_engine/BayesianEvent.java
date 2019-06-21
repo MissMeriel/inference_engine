@@ -83,6 +83,7 @@ public class BayesianEvent<T> extends TypedEvent{
                      break;
                   case INTEXP:
                   case DOUBLEEXP:
+                  case STRINGEXP:
                   case INTDELTA:
                   case DOUBLEDELTA:{
                      HashMap<String, Predicate<Object>> id_map = Global.bound_ids.get(voi);
@@ -123,6 +124,7 @@ public class BayesianEvent<T> extends TypedEvent{
                      break;
                   case INTEXP:
                   case DOUBLEEXP:
+                  case STRINGEXP:
                   case INTDELTA:
                   case DOUBLEDELTA:{
                      if(!temp_found){
@@ -161,6 +163,7 @@ public class BayesianEvent<T> extends TypedEvent{
                      }
                      break;
                   case DOUBLEEXP:
+                  case STRINGEXP:
                      break;
                }
                if(debug) out.format("update_conditionals: Caught null ptr inside update_conditionals%nPut %s:1.0 into %s:%s %n", event_values.get(i).toString(),voi, event_values.get(i).toString());
@@ -275,7 +278,8 @@ public class BayesianEvent<T> extends TypedEvent{
                   }
                   break;
                case INTEXP:
-               case DOUBLEEXP:{
+               case DOUBLEEXP:
+               case STRINGEXP: {
                   r[0] = pBA_counts.get(event_val);
                   r[1] = event_val;
                   found = true;
