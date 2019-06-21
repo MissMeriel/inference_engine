@@ -74,6 +74,7 @@ terminal SymbolValue THRESHOLD;
 terminal SymbolValue DELTA;
 terminal SymbolValue DEF;
 terminal SymbolValue NUMBER;
+terminal SymbolValue STRING;
 terminal SymbolValue EQ;
 terminal SymbolValue NOTEQ;
 terminal SymbolValue LT;
@@ -220,7 +221,7 @@ stmt	::=
 				{:
 						String id = e.id + lo.lexeme + s.id;
 						System.out.println(id);
-						Predicate<Double> tester = (Predicate<Double>) (Double d) -> {return e.tester.test(d) || s.tester.test(d);};
+						Predicate<Object> tester = (Predicate<Object>) (Object d) -> {return e.tester.test(d) || s.tester.test(d);};
 						Bound bound = new Bound(id, tester);
 						RESULT = bound;
 				:}
@@ -232,7 +233,8 @@ exp ::=
 				{:
 							String id = a.toString()+ "<" + b.toString();
 							//System.out.println(id);
-							Predicate<Double> tester = (Predicate<Double>) (Double d) -> {return d < Double.valueOf(b.lexeme);};
+							Predicate<Object> tester = (Predicate<Object>) (Object o) -> {Double d = Double.valueOf(o.toString()); return d < Double.valueOf(b.lexeme);};
+							//Predicate<Double> tester = (Predicate<Double>) (Double d) -> {return d < Double.valueOf(b.lexeme);};
 							Bound bound = new Bound(id, tester);
 							RESULT = bound;
 				:}
@@ -240,7 +242,8 @@ exp ::=
 				{:
 						String id = a.toString()+"<=" + b.toString();
 						//System.out.println(id);
-						Predicate<Double> tester = (Predicate<Double>) (Double d) -> {return d <= Double.valueOf(b.lexeme);};
+						//Predicate<Double> tester = (Predicate<Double>) (Double d) -> {return d <= Double.valueOf(b.lexeme);};
+						Predicate<Object> tester = (Predicate<Object>) (Object o) -> {Double d = Double.valueOf(o.toString()); return d <= Double.valueOf(b.lexeme);};
 						Bound bound = new Bound(id, tester);
 						RESULT = bound;
 				:}
@@ -248,7 +251,8 @@ exp ::=
 				{:
 						String id = a.toString() +">" + b.toString();
 						//System.out.println(id);
-						Predicate<Double> tester = (Predicate<Double>) (Double d) -> {return d > Double.valueOf(b.lexeme);};
+						//Predicate<Double> tester = (Predicate<Double>) (Double d) -> {return d > Double.valueOf(b.lexeme);};
+						Predicate<Object> tester = (Predicate<Object>) (Object o) -> {Double d = Double.valueOf(o.toString()); return d > Double.valueOf(b.lexeme);};
 						Bound bound = new Bound(id, tester);
 						RESULT = bound;
 				:}
@@ -256,7 +260,8 @@ exp ::=
 				{:
 						String id = a.toString() +">=" + b.toString();
 						//System.out.println(id);
-						Predicate<Double> tester = (Predicate<Double>) (Double d) -> {return d >= Double.valueOf(b.lexeme);};
+						//Predicate<Double> tester = (Predicate<Double>) (Double d) -> {return d >= Double.valueOf(b.lexeme);};
+						Predicate<Object> tester = (Predicate<Object>) (Object o) -> {Double d = Double.valueOf(o.toString()); return d >= Double.valueOf(b.lexeme);};
 						Bound bound = new Bound(id, tester);
 						RESULT = bound;
 				:}
@@ -264,7 +269,17 @@ exp ::=
 				{:
 						String id = a.toString() + op.lexeme + n.lexeme;
 						//System.out.println(id);
-						Predicate<Double> tester = (Predicate<Double>) (Double d) -> {return Math.abs(d-Double.valueOf(n.lexeme))<1;};
+						//Predicate<Double> tester = (Predicate<Double>) (Double d) -> {return Math.abs(d-Double.valueOf(n.lexeme))<1;};
+						Predicate<Object> tester = (Predicate<Object>) (Object o) -> {Double d = Double.valueOf(o.toString()); return Math.abs(d-Double.valueOf(n.lexeme))<1;};
+						Bound bound = new Bound(id, tester);
+						RESULT = bound;
+				:}
+				| variable:a EQ:op STRING:v
+				{:
+						String id = a.toString() + op.lexeme + v.lexeme;
+						System.out.println(id);
+						//Predicate<String> tester = (Predicate<String>) (String s) -> {return s.equals(v.lexeme);};
+						Predicate<Object> tester = (Predicate<Object>) (Object o) -> {String s = o.toString(); return s.equals(v.lexeme);};
 						Bound bound = new Bound(id, tester);
 						RESULT = bound;
 				:}
@@ -272,7 +287,17 @@ exp ::=
 				{:
 						String id = a.toString() + op.lexeme + n.lexeme;
 						//System.out.println(id);
-						Predicate<Double> tester = (Predicate<Double>) (Double d) -> {return Math.abs(d-Double.valueOf(n.lexeme))>1;};
+						//Predicate<Double> tester = (Predicate<Double>) (Double d) -> {return Math.abs(d-Double.valueOf(n.lexeme))>1;};
+						Predicate<Object> tester = (Predicate<Object>) (Object o) -> {Double d = Double.valueOf(o.toString()); return Math.abs(d-Double.valueOf(n.lexeme))>1;};
+						Bound bound = new Bound(id, tester);
+						RESULT = bound;
+				:}
+				| variable:a NOTEQ:op STRING:v
+				{:
+						String id = a.toString() + op.lexeme + v.lexeme;
+						System.out.println(id);
+						//Predicate<String> tester = (Predicate<String>) (String s) -> {return s.equals(v.lexeme);};
+						Predicate<Object> tester = (Predicate<Object>) (Object o) -> {String s = o.toString(); return !s.equals(v.lexeme);};
 						Bound bound = new Bound(id, tester);
 						RESULT = bound;
 				:}
@@ -280,7 +305,8 @@ exp ::=
 				{:
 						String id = e1.id + la.lexeme + e2.id;
 						System.out.println(id);
-						Predicate<Double> tester = (Predicate<Double>) (Double d) -> {return e1.tester.test(d) && e2.tester.test(d);};
+						//Predicate<Double> tester = (Predicate<Double>) (Double d) -> {return e1.tester.test(d) && e2.tester.test(d);};
+						Predicate<Object> tester = (Predicate<Object>) (Object o) -> {return e1.tester.test(o) && e2.tester.test(o);};
 						Bound bound = new Bound(id, tester);
 						RESULT = bound;
 				:}
@@ -300,7 +326,7 @@ int ::=
 	;
 
 variable ::=
-	VARIABLE:v {: /*System.out.println(v.lexeme);*/ RESULT = v; :}
+	VARIABLE:v {: System.out.println("variable:"+v.lexeme); RESULT = v; :}
 	;
 	
 rawtype ::=

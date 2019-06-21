@@ -160,9 +160,10 @@ public class TypedBayesianEngine extends BasicEngine {
                break;}
             case INTEXP:
             case DOUBLEEXP:
+            case STRINGEXP:
             case INTDELTA:
             case DOUBLEDELTA: {
-               HashMap<String, Predicate<Double>> bound_id_map = Global.bound_ids.get(voi_name);
+               HashMap<String, Predicate<Object>> bound_id_map = Global.bound_ids.get(voi_name);
                Set<String> keys = bound_id_map.keySet();
                for(String key: keys){
                   Double[] d_arr = new Double[]{0.0,0.0};
@@ -238,10 +239,10 @@ public class TypedBayesianEngine extends BasicEngine {
                   //initialize next_values with the next delta values
                   int index = get_var_index(voi_name);
                   double[] next_values = new double[(int) Math.round(delta)];
-                  out.println("delta="+delta);
+                  //out.println("delta="+delta);
                   for(int i = 1; i <= delta; i++){
                      next_values[i-1] = Double.parseDouble((String)csv_array[i][index]);
-                     out.format("next_values[%s] = %.2f;%n",i-1,Double.parseDouble((String)csv_array[i][index]));
+                     //out.format("next_values[%s] = %.2f;%n",i-1,Double.parseDouble((String)csv_array[i][index]));
                   }
                   //initialize last_values with delta iterations of the first value
                   double first_value = Double.parseDouble((String)csv_array[1][index]);
@@ -302,16 +303,22 @@ public class TypedBayesianEngine extends BasicEngine {
                   be_test = new BayesianEvent<String>(voi_name, event_val, prior);
                   break;
                case INTEXP:{
-                  Predicate<Double> tester = get_tester(voi_name, Double.parseDouble(event_val));
+                  Predicate<Object> tester = get_tester(voi_name, Double.parseDouble(event_val));
                   String tester_id = get_tester_id(voi_name, Double.parseDouble(event_val));
                   if(debug) out.format("Got tester %s%n", tester_id);
                   be_test = new BoundedEvent<Integer>(voi_name, tester_id, prior, tester);
                   break;}
                case DOUBLEEXP:{
-                  Predicate<Double> tester = get_tester(voi_name, Double.parseDouble(event_val));
+                  Predicate<Object> tester = get_tester(voi_name, Double.parseDouble(event_val));
                   String tester_id = get_tester_id(voi_name, Double.parseDouble(event_val));
                   if(debug) out.format("Got tester %s%n", tester_id);
                   be_test = new BoundedEvent<Double>(voi_name, tester_id, prior, tester);
+                  break;}
+               case STRINGEXP: {
+                  Predicate<Object> tester = get_tester(voi_name, event_val);
+                  String tester_id = get_tester_id(voi_name, event_val);
+                  if(debug) out.format("Got tester %s%n", tester_id);
+                  be_test = new BoundedEvent<String>(voi_name, tester_id, prior, tester);
                   break;}
                case INTDELTA:{
                   DeltaTracker dt = delta_trackers.get(voi_name);
@@ -322,7 +329,7 @@ public class TypedBayesianEngine extends BasicEngine {
                      event_val = "0.0";
                   }
                   //make new DeltaEvent
-                  Predicate<Double> tester = get_tester(voi_name, Double.parseDouble(event_val));
+                  Predicate<Object> tester = get_tester(voi_name, Double.parseDouble(event_val));
                   String tester_id = get_tester_id(voi_name, Double.parseDouble(event_val));
                   if(debug) out.format("Got tester %s%n", tester_id);
                   double delta = Global.deltas.get(voi_name);
@@ -338,7 +345,7 @@ public class TypedBayesianEngine extends BasicEngine {
                   }
                   //make new DeltaEvent
                   out.format("voi_name=%s event_val=%s%n",voi_name,event_val);
-                  Predicate<Double> tester = get_tester(voi_name, Double.parseDouble(event_val));
+                  Predicate<Object> tester = get_tester(voi_name, Double.parseDouble(event_val));
                   out.format("get_tester_id(%s, %s);%n",voi_name,Double.parseDouble(event_val));
                   String tester_id = get_tester_id(voi_name, Double.parseDouble(event_val));
                   if(true) out.format("Got tester %s%n", tester_id);
@@ -416,10 +423,10 @@ public class TypedBayesianEngine extends BasicEngine {
    } // end loop_through_trace()
    
    
-   public Predicate<Double> get_tester(String voi_name, Double dbl){
-      ArrayList<Predicate<Double>> al = Global.bounds.get(voi_name);
-      for (Predicate<Double> p : al){
-         if(p.test(dbl)){
+   public Predicate<Object> get_tester(String voi_name, Double dbl){
+      ArrayList<Predicate<Object>> al = Global.bounds.get(voi_name);
+      for (Predicate<Object> p : al){
+         if(p.test((Object) dbl)){
             return p;
          }
       }
@@ -428,17 +435,39 @@ public class TypedBayesianEngine extends BasicEngine {
    
    
    public String get_tester_id(String voi_name, Double dbl){
-      HashMap<String, Predicate<Double>> id_map = Global.bound_ids.get(voi_name);
+      HashMap<String, Predicate<Object>> id_map = Global.bound_ids.get(voi_name);
       Set<String> keys = id_map.keySet();
       for (String key : keys){
-         Predicate<Double> p = id_map.get(key);
-         if(p.test(dbl)){
+         Predicate<Object> p = id_map.get(key);
+         if(p.test((Object) dbl)){
             return key;
          }
       }
       return null;
    }
    
+   public Predicate<Object> get_tester(String voi_name, String dbl){
+      ArrayList<Predicate<Object>> al = Global.bounds.get(voi_name);
+      for (Predicate<Object> p : al){
+         if(p.test((Object) dbl)){
+            return p;
+         }
+      }
+      return null;
+   }
+   
+   
+   public String get_tester_id(String voi_name, String dbl){
+      HashMap<String, Predicate<Object>> id_map = Global.bound_ids.get(voi_name);
+      Set<String> keys = id_map.keySet();
+      for (String key : keys){
+         Predicate<Object> p = id_map.get(key);
+         if(p.test((Object) dbl)){
+            return key;
+         }
+      }
+      return null;
+   }
    
    public double get_prior(String voi_name, String event_val){
       double d = 0;
@@ -481,7 +510,8 @@ public class TypedBayesianEngine extends BasicEngine {
             //TODO: change to search through prior keys
             switch(type_enum){
                case INTEXP:
-               case DOUBLEEXP: {
+               case DOUBLEEXP:
+               case STRINGEXP: {
                   ArrayList al = Global.bounds.get(voi_name);
                   d = 1.0 / al.size();
                   break;}
@@ -520,7 +550,8 @@ public class TypedBayesianEngine extends BasicEngine {
             case DOUBLE:
             case STRING:
             case INTEXP:
-            case DOUBLEEXP:{
+            case DOUBLEEXP:
+            case STRINGEXP:{
                al.add(row[index]);
                break;}
             case INTDELTA:
@@ -640,17 +671,18 @@ public class TypedBayesianEngine extends BasicEngine {
                case STRING: //no comparative eq for strings
                   break;
                case INTEXP:
-               case DOUBLEEXP:{
-                  Predicate<Double> tester = Global.bound_ids.get(voi_name).get(key);
-                  if(tester.test(Double.valueOf(val))){
+               case DOUBLEEXP:
+               case STRINGEXP:{
+                  Predicate<Object> tester = Global.bound_ids.get(voi_name).get(key);
+                  if(tester.test((Object)val)){
                      found = true;
                      closest_match_key = key;
                   }
                   break;}
                case INTDELTA:
                case DOUBLEDELTA: {
-                  Predicate<Double> tester = Global.bound_ids.get(voi_name).get(key);
-                  if(tester.test(Double.valueOf(val))){
+                  Predicate<Object> tester = Global.bound_ids.get(voi_name).get(key);
+                  if(tester.test((Object)val)){
                      found = true;
                      closest_match_key = key;
                   }

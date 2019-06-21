@@ -4,7 +4,8 @@ GIVENS
 //Speed_Machine,DOUBLEDELTA,delta:=2,Speed_Machine<0,Speed_Machine>=0
 //Speed_Machine,DOUBLEEXP,Speed_Machine<5,Speed_Machine>=5&&Speed_Machine<10,Speed_Machine>=10&&Speed_Machine<15,Speed_Machine>=15
 //Alarm_M2H,STRING
-EventW_Machine,STRING,EventW_Machine==false alarm,EventW_Machine== ,EventW_Machine!=false alarm&&EventW_Machine!= 
+EventW_Machine,STRINGEXP,EventW_Machine==false alarm,EventW_Machine== ,EventW_Machine!=false alarm&&EventW_Machine!= 
+//EventW_Machine,STRING  
 EVENTS
 //Mode_H2M,STRING
 //Trust_Human,INTEXP,Trust_Human==0,Trust_Human>0&&Trust_Human<3,Trust_Human>=3

@@ -293,7 +293,7 @@ public class Driver {
       Set<String> keys = Global.bounds.keySet();
       out.format("%nBOUNDS:%n");
       for(String str : keys){
-         ArrayList<Predicate<Double>> val = Global.bounds.get(str);
+         ArrayList<Predicate<Object>> val = Global.bounds.get(str);
          String val_str = "[";
          for(Predicate vs : val){
             val_str += vs + " ";
@@ -309,7 +309,7 @@ public class Driver {
       Set<String> keys1 = Global.bound_ids.keySet();
       out.format("%nBOUND IDS:%n");
       for(String key1 : keys1){
-         HashMap<String, Predicate<Double>> val = Global.bound_ids.get(key1);
+         HashMap<String, Predicate<Object>> val = Global.bound_ids.get(key1);
          String val_str = "{";
          Set<String> keys2 = Global.bound_ids.get(key1).keySet();
          for(String key2 : keys2){

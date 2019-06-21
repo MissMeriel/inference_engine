@@ -15,7 +15,7 @@ public class DeltaEvent<T> extends BoundedEvent<T>{
    public LinkedList<T> next_values = new LinkedList<T>();
    public LinkedList<T> last_values = new LinkedList<T>();
    
-   public DeltaEvent(String var_name, String id, double p_A, Predicate<Double> tester, double delta){
+   public DeltaEvent(String var_name, String id, double p_A, Predicate<Object> tester, double delta){
       super(var_name, id, p_A, tester);
       this.delta = delta;
    }
@@ -27,6 +27,7 @@ public class DeltaEvent<T> extends BoundedEvent<T>{
    public boolean equals(Object o){
       if(o instanceof DeltaEvent){
          DeltaEvent temp = (DeltaEvent) o;
+         out.format("DeltaEvent equals: this.equals(be):%n");
          out.println("\tthis: "+this.toString());
          out.println("\ttemp: "+temp.toString());
          //out.format("this.id null? %s%n",(this.id==null));

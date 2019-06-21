@@ -11,7 +11,7 @@ import java.util.function.Predicate;
 public class BoundedEvent<T> extends BayesianEvent<T>{
    double lower_bound = Double.MIN_VALUE;
    double upper_bound = Double.MAX_VALUE;
-   Predicate<Double> tester = (Double x) -> {return x > this.lower_bound && x < this.upper_bound;};
+   Predicate<Object> tester = (Object o) -> {Double x = Double.valueOf(o.toString()); return x > this.lower_bound && x < this.upper_bound;};
    String id = null;
    
    public BoundedEvent(String var_name, T val, double p_A,  double lower_bound, double upper_bound){
@@ -32,14 +32,14 @@ public class BoundedEvent<T> extends BayesianEvent<T>{
       }
    }
    
-   public BoundedEvent(String var_name, String id, double p_A, Predicate<Double> tester){
+   public BoundedEvent(String var_name, String id, double p_A, Predicate<Object> tester){
       super(var_name, null, p_A);
       this.tester = tester;
       this.id = id;
    }
    
-   public boolean check_bounds(double x){
-      return tester.test(Double.valueOf(x));
+   public boolean check_bounds(Object o){
+      return tester.test(o);
    }
    
    @Override
@@ -89,7 +89,8 @@ public class BoundedEvent<T> extends BayesianEvent<T>{
                   str += String.format("\nP(%s|", id);
                   break;}
                case INTEXP:
-               case DOUBLEEXP:{
+               case DOUBLEEXP:
+               case STRINGEXP: {
                   str += String.format("\nP(%s|", id);
                   break;}
                case INTDELTA:
@@ -105,7 +106,8 @@ public class BoundedEvent<T> extends BayesianEvent<T>{
                   str += String.format("%s=%s) ",key1,key2);
                   break;}
                case INTEXP:
-               case DOUBLEEXP:{
+               case DOUBLEEXP:
+               case STRINGEXP: {
                   str += String.format("%s) ", key2);
                   break;}
                case INTDELTA:
@@ -139,8 +141,13 @@ public class BoundedEvent<T> extends BayesianEvent<T>{
    public boolean equals(Object o){
       if(o instanceof BoundedEvent){
          BoundedEvent be = (BoundedEvent) o;
-         //out.format("BoundedEvent equals: this.tester.equals(be.tester)=%s%n", this.tester.equals(be.tester));
-         return (this.var_name.equals(be.var_name)) && this.id.equals(be.id) && lower_bound == be.lower_bound && upper_bound == be.upper_bound ;
+         out.format("BoundedEvent equals: this.equals(be):%n");
+         out.println("\t"+this.toString());
+         out.println("\t"+(be.toString()));
+         boolean nameeq = (this.var_name.equals(be.var_name));
+         boolean ideq = this.id.equals(be.id);
+         boolean boundeq = lower_bound == be.lower_bound && upper_bound == be.upper_bound;
+         return nameeq && ideq && boundeq ;
       } else {
          return false;
       }

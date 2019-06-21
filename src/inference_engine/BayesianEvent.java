@@ -85,10 +85,10 @@ public class BayesianEvent<T> extends TypedEvent{
                   case DOUBLEEXP:
                   case INTDELTA:
                   case DOUBLEDELTA:{
-                     HashMap<String, Predicate<Double>> id_map = Global.bound_ids.get(voi);
+                     HashMap<String, Predicate<Object>> id_map = Global.bound_ids.get(voi);
                      Set<String> keys = id_map.keySet();
                      for(String key : keys){
-                        if(id_map.get(key).test(Double.valueOf(temp[1].toString()))){
+                        if(id_map.get(key).test(temp[1])){
                            temp = get_pBA(voi, key);
                            temp_found = true;
                         }
@@ -126,10 +126,10 @@ public class BayesianEvent<T> extends TypedEvent{
                   case INTDELTA:
                   case DOUBLEDELTA:{
                      if(!temp_found){
-                        HashMap<String, Predicate<Double>> id_map = Global.bound_ids.get(voi);
+                        HashMap<String, Predicate<Object>> id_map = Global.bound_ids.get(voi);
                         Set<String> keys = id_map.keySet();
                         for(String key : keys){
-                           if(id_map.get(key).test(Double.valueOf(temp[1].toString()))){
+                           if(id_map.get(key).test(temp[1])){
                               pBA.put(key, dbl); //change later
                            }
                         }
@@ -178,11 +178,11 @@ public class BayesianEvent<T> extends TypedEvent{
    /** Get id to use as pBAs key
     **/
    public String get_bounded_invariant_id(String voi_name, String event_value){
-      HashMap<String, Predicate<Double>> voi_map = Global.bound_ids.get(voi_name);
+      HashMap<String, Predicate<Object>> voi_map = Global.bound_ids.get(voi_name);
       Set<String> keys = voi_map.keySet();
       for(String key : keys){
-         Predicate<Double> p = voi_map.get(key);
-         boolean b = p.test(Double.valueOf(event_value));
+         Predicate<Object> p = voi_map.get(key);
+         boolean b = p.test((Object)event_value);
          if(b) { return key; }
       }
       return null;

@@ -7,11 +7,11 @@ import java.util.function.Predicate;
 public class BoundList{
    public String var_name;
    //public String id;
-   public HashMap<String, Predicate<Double>> id_map = new HashMap<String, Predicate<Double>>();
+   public HashMap<String, Predicate<Object>> id_map = new HashMap<String, Predicate<Object>>();
    //public Predicate<Double> tester;
-   public ArrayList<Predicate<Double>> tester_list = new ArrayList<Predicate<Double>>();
+   public ArrayList<Predicate<Object>> tester_list = new ArrayList<Predicate<Object>>();
    
-   public BoundList(HashMap<String, Predicate<Double>> id_map, ArrayList<Predicate<Double>> tester_list){
+   public BoundList(HashMap<String, Predicate<Object>> id_map, ArrayList<Predicate<Object>> tester_list){
       this.id_map = id_map;
       this.tester_list = tester_list;
    }

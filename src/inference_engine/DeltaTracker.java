@@ -75,7 +75,7 @@ public class DeltaTracker{
     * @return whether those invariants hold for next_values or last_values or both
     **/
    public DeltaRecord check_invariants(){
-      HashMap<String, Predicate<Double>> predicate_map = Global.bound_ids.get(var_name);
+      HashMap<String, Predicate<Object>> predicate_map = Global.bound_ids.get(var_name);
       DeltaRecord rec = new DeltaRecord(var_name);
       Set<String> keys = predicate_map.keySet();
       try{

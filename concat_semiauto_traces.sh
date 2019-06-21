@@ -1,7 +1,8 @@
 #!/bin/bash
 
-rootdir='./driving_sim_data/backtracking_5/'
+rootdir='./driving_sim_data/PreProcess_PupilChange_0222/'
 outfilebase='./src/subjecttraces/'
+outfile='semiauto_concat.csv'
 echo "outputfilebase="  $outfilebase
 mkdir -p $outfilebase
 for D in `find ${rootdir} -mindepth 1 -maxdepth 1`; do
@@ -11,8 +12,8 @@ for D in `find ${rootdir} -mindepth 1 -maxdepth 1`; do
                	concatfilebase="${D/$rootdir/$outfilebase}"
 		echo "concatfilebase" $concatfilebase
 		mkdir -p $concatfilebase
-		touch $concatfilebase/concat.csv
-		head -1 $D/001.csv > $concatfilebase/concat.csv
+		touch $concatfilebase/$outfile
+		head -1 $D/001.csv > $concatfilebase/$outfile
 		for filename in $D/*.csv; do
 			#echo ""
 			echo "Analyzing "$filename" for semiauto characteristics" #$filename "is directory"
@@ -128,9 +129,9 @@ for D in `find ${rootdir} -mindepth 1 -maxdepth 1`; do
 				#break
 			elif $found ; then
 				# cat current csv to new concat file
-				echo "Adding" $filename "to concatenated csv file" $concatfilebase/concat.csv
+				echo "Adding" $filename "to concatenated csv file" $concatfilebase/semiauto_concat.csv
 				#cat $filename >> $concatfilebase/concat.csv
-				tail -n +2 $filename >> $concatfilebase/concat.csv
+				tail -n +2 $filename >> $concatfilebase/$outfile
 				#echo $filename
 				#cat $concatfilebase/concat.csv
 			fi
