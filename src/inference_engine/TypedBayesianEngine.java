@@ -419,7 +419,7 @@ public class TypedBayesianEngine extends BasicEngine {
       }
       Driver.print_priors(Global.priors);
       out.println("\n\nGENERATE BAYESIAN PROBABILITIES:");
-      generate_bayesian_probabilities();
+      out.println(generate_bayesian_probabilities());
    } // end loop_through_trace()
    
    
@@ -728,14 +728,52 @@ public class TypedBayesianEngine extends BasicEngine {
          switch(be.prior_attribution){
             case PROB_A:
                String temp = be.generate_bayesian_probability(cumulative_probabilities);
-               out.println(temp);
+               //out.println(temp);
                str += temp;
                break;
          } // end switch
       } // end while
-      return str;
+      //return str;
+      return regroup_probabilities_by_given(str);
    }
    
+   
+   public String regroup_probabilities_by_given(String raw_string){
+      //out.println("regroup_probabilities_by_given(): ENTER");
+      String return_str = "";
+      HashMap<String, String> given_map = new HashMap<String, String>();
+      //separate by non-empty newline
+      String[] line_array = raw_string.split("\n");
+      for(String s : line_array){
+         //out.println("regroup_probabilities_by_given(): line "+s);
+         if(!s.equals("")){
+            //get conditions -- string between | and )
+            String[] temp = s.split("\\|");
+            temp = temp[1].split("\\)");
+            String condition = temp[0];
+            //append to string stored in hashmap by key
+            try{
+               //out.println("regroup_probabilities_by_given(): s "+s);
+               String value = given_map.get(condition);
+               if(value.equals("")){
+                  given_map.put(condition, s);
+               } else {
+                  value += "\n"+s;
+                  given_map.put(condition, value);
+               }
+            } catch(Exception e){
+               given_map.put(condition, s);
+            }
+         }
+      }
+      //iterate through keys, appending to return string
+      Set<String> keys = given_map.keySet();
+      for(String key : keys){
+         return_str += given_map.get(key)+"\n\n";
+      }
+      //out.println("regroup_probabilities_by_given(): return_str "+return_str);
+      return return_str;
+   }
    
    public void calculate_total_probabilities(){
       out.println("inside calculate_total_probabilities()");
