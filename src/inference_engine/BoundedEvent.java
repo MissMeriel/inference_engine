@@ -137,48 +137,7 @@ public class BoundedEvent<T> extends BayesianEvent<T>{
       return str;
       //return regroup_probabilities_by_given(str);
    }
-   
-   public String regroup_probabilities_by_given(String raw_string){
-      String return_str = "";
-      HashMap<String, String> given_map = new HashMap<String, String>();
-      //separate by non-empty newline
-      String[] line_array = raw_string.split("\n");
-      for(String s : line_array){
-         if(!s.equals("")){
-            //get conditions -- string between | and )
-            out.println("Processing line: "+s);
-            String[] temp = s.split("\\|");
-            out.print("Processing line segments: ");
-            for(String sp : temp){
-               out.println(sp);
-            }
-            
-            //out.println(temp[0] + " "+temp[1] + " "+ temp.length);
-            temp = temp[1].split("\\)");
-            String condition = temp[0];
-            out.println("regroup_probabilities_by_given(): condition: "+condition);
-            //append to string stored in hashmap by key
-            try{
-               String value = given_map.get(condition);
-               if(value.equals("")){
-                  given_map.put(condition, s);
-               } else {
-                  value += s;
-                  given_map.put(condition, value);
-               }
-            } catch(Exception e){
-               given_map.put(condition, s);
-            }
-         }
-      }
-      
-      //iterate through keys, appending to return string
-      Set<String> keys = given_map.keySet();
-      for(String key : keys){
-         return_str += given_map.get(key);
-      }
-      return return_str;
-   }
+
    
    @Override
    public boolean equals(Object o){

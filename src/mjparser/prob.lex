@@ -25,6 +25,10 @@ import java_cup.runtime.Symbol;
 %%
 "GIVENS" { return new Symbol(sym.GIVENS, new SymbolValue(yyline+1, yychar+1, yytext())); }
 "EVENTS" { return new Symbol(sym.EVENTS, new SymbolValue(yyline+1, yychar+1, yytext())); }
+"CONSTRAINTS" { return new Symbol(sym.CONSTRAINTS, new SymbolValue(yyline+1, yychar+1, yytext())); }
+"P(" { return new Symbol(sym.P_LPAREN, new SymbolValue(yyline+1, yychar+1, yytext())); }
+"|" { return new Symbol(sym.GIVEN, new SymbolValue(yyline+1, yychar+1, yytext())); }
+")" { return new Symbol(sym.RPAREN, new SymbolValue(yyline+1, yychar+1, yytext())); }
 "threshold" { return new Symbol(sym.THRESHOLD, new SymbolValue(yyline+1, yychar+1, yytext())); }
 "delta" { return new Symbol(sym.DELTA, new SymbolValue(yyline+1, yychar+1, yytext())); }
 ":=" { return new Symbol(sym.DEF, new SymbolValue(yyline+1, yychar+1, yytext())); }

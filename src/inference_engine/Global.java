@@ -15,4 +15,5 @@ public class Global{
    public static HashMap<String, ArrayList<Predicate<Object>>> bounds = new HashMap<String, ArrayList<Predicate<Object>>>(); //for vars with bounds e.g. x<3 x>=10 etc.
    public static HashMap<String, HashMap<String, Predicate<Object>>> bound_ids = new HashMap<String, HashMap<String, Predicate<Object>>>();
    public static HashMap<String, Double> deltas = new HashMap<String, Double>();
+   public static HashMap<String, String[]> constraint_ids = new HashMap<String, String[]>(); //map id to array containing variable ids
 }
