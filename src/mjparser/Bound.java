@@ -3,6 +3,7 @@ package mjparser;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.Predicate;
+import java.util.Arrays;
 
 public class Bound{
    public String var_name;
@@ -13,6 +14,7 @@ public class Bound{
    //public ArrayList<Predicate<Double> = new ArrayList<Predicate<Double>>();
    
    public Bound(String var_name, String id, Predicate<Object> tester){
+      this.var_name = var_name;
       this.id = id;
       this.tester = tester;
    }
@@ -21,5 +23,10 @@ public class Bound{
       this.id = id;
       this.tester = tester;
       this.var_names = var_names;
+   }
+   
+   @Override
+   public String toString(){
+      return String.format("Bound %s %s %s", var_name, Arrays.toString(var_names), id);
    }
 }

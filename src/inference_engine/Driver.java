@@ -147,6 +147,7 @@ public class Driver {
          print_bounds();
          print_bound_ids();
          print_deltas();
+         System.out.println("CONSTRAINTS:"+Global.constraint_events);
       }
       build_vars_of_interest();
       out.println("Finished parse_typed_config_file()");

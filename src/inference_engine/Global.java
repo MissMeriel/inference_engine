@@ -16,4 +16,6 @@ public class Global{
    public static HashMap<String, HashMap<String, Predicate<Object>>> bound_ids = new HashMap<String, HashMap<String, Predicate<Object>>>();
    public static HashMap<String, Double> deltas = new HashMap<String, Double>();
    public static HashMap<String, String[]> constraint_ids = new HashMap<String, String[]>(); //map id to array containing variable ids
+   public static HashMap<String, ConstraintEvent> constraints = new HashMap<String, ConstraintEvent>();
+   public static ArrayList<ConstraintEvent> constraint_events = new ArrayList<ConstraintEvent>();
 }

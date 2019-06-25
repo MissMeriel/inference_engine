@@ -320,21 +320,7 @@ public class TypedBayesianEngine extends BasicEngine {
                   if(debug) out.format("Got tester %s%n", tester_id);
                   be_test = new BoundedEvent<String>(voi_name, tester_id, prior, tester);
                   break;}
-               case INTDELTA:{
-                  DeltaTracker dt = delta_trackers.get(voi_name);
-                  try{
-                     event_val = new Double(dt.compute_last_delta()).toString();
-                  } catch(DeltaException de){
-                     out.println(de.getMessage());
-                     event_val = "0.0";
-                  }
-                  //make new DeltaEvent
-                  Predicate<Object> tester = get_tester(voi_name, Double.parseDouble(event_val));
-                  String tester_id = get_tester_id(voi_name, Double.parseDouble(event_val));
-                  if(debug) out.format("Got tester %s%n", tester_id);
-                  double delta = Global.deltas.get(voi_name);
-                  be_test = new DeltaEvent<Integer>(voi_name, tester_id, prior, tester, delta);
-                  break;}
+               case INTDELTA:
                case DOUBLEDELTA:{
                   DeltaTracker dt = delta_trackers.get(voi_name);
                   try{
@@ -348,8 +334,6 @@ public class TypedBayesianEngine extends BasicEngine {
                   Predicate<Object> tester = get_tester(voi_name, Double.parseDouble(event_val));
                   out.format("get_tester_id(%s, %s);%n",voi_name,Double.parseDouble(event_val));
                   String tester_id = get_tester_id(voi_name, Double.parseDouble(event_val));
-                  if(true) out.format("Got tester %s%n", tester_id);
-                  if(tester_id == null){ System.exit(0);}
                   double delta = Global.deltas.get(voi_name);
                   be_test = new DeltaEvent<Double>(voi_name, tester_id, prior, tester, delta);
                   break;}
@@ -409,7 +393,6 @@ public class TypedBayesianEngine extends BasicEngine {
          givens.get(i).set_total(trace_total);
          givens.get(i).set_priors(Global.priors);
          givens.get(i).set_cumulative_probabilities(cumulative_probabilities);
-         //out.println(givens.get(i)+" \n\n");
       }
       out.format("CUMULATIVE PROBABILITIES: "); print_cumulative_probabilities();
       out.println("\nBAYESIAN EVENTS");
@@ -446,6 +429,7 @@ public class TypedBayesianEngine extends BasicEngine {
       return null;
    }
    
+   
    public Predicate<Object> get_tester(String voi_name, String dbl){
       ArrayList<Predicate<Object>> al = Global.bounds.get(voi_name);
       for (Predicate<Object> p : al){
@@ -468,6 +452,7 @@ public class TypedBayesianEngine extends BasicEngine {
       }
       return null;
    }
+   
    
    public double get_prior(String voi_name, String event_val){
       double d = 0;
@@ -774,6 +759,7 @@ public class TypedBayesianEngine extends BasicEngine {
       //out.println("regroup_probabilities_by_given(): return_str "+return_str);
       return return_str;
    }
+   
    
    public void calculate_total_probabilities(){
       out.println("inside calculate_total_probabilities()");
