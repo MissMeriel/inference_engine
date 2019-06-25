@@ -58,7 +58,7 @@ public class BayesianEvent<T> extends TypedEvent{
 
    
    /**
-    * TODO: update to include INTDELTA,DOUBLEDELTA
+    * 
     **/
    public void update_conditionals(ArrayList event_values, boolean debug){
       int i = 0;
@@ -73,14 +73,10 @@ public class BayesianEvent<T> extends TypedEvent{
                RawType rawtype = Global.types.get(voi);
                switch(rawtype){
                   case INT:
-                     temp = get_pBA(voi, event_values.get(i).toString());
-                     break;
                   case DOUBLE:
+                  case STRING:{
                      temp = get_pBA(voi, event_values.get(i).toString());
-                     break;
-                  case STRING:
-                     temp = get_pBA(voi, event_values.get(i).toString());
-                     break;
+                     break;}
                   case INTEXP:
                   case DOUBLEEXP:
                   case STRINGEXP:
@@ -114,14 +110,10 @@ public class BayesianEvent<T> extends TypedEvent{
                RawType rawtype = Global.types.get(voi);
                switch(rawtype){
                   case INT:
-                     pBA.put(temp[1].toString(), dbl); //change later
-                     break;
                   case DOUBLE:
+                  case STRING:{
                      pBA.put(temp[1].toString(), dbl); //change later
-                     break;
-                  case STRING:
-                     pBA.put(temp[1].toString(), dbl); //change later
-                     break;
+                     break;}
                   case INTEXP:
                   case DOUBLEEXP:
                   case STRINGEXP:
@@ -146,14 +138,10 @@ public class BayesianEvent<T> extends TypedEvent{
                RawType type_enum = Global.types.get(voi);
                switch(type_enum){
                   case INT:
-                     pBAs.get(voi).put(event_values.get(i).toString(), 1.0);
-                     break;
                   case DOUBLE:
+                  case STRING: {
                      pBAs.get(voi).put(event_values.get(i).toString(), 1.0);
-                     break;
-                  case STRING:
-                     pBAs.get(voi).put(event_values.get(i).toString(), 1.0);
-                     break;
+                     break; }
                   case INTEXP:
                      //get bound id
                      String new_key = get_bounded_invariant_id(voi, event_values.get(i).toString());
@@ -357,8 +345,7 @@ public class BayesianEvent<T> extends TypedEvent{
                      return total_probabilities.get(key1).get(key);
                   }
                   break;}
-               case STRING:{
-                  break;}
+               case STRING:
                case INTEXP:
                case DOUBLEEXP:{
                   break;}

@@ -17,11 +17,12 @@ public class Bound{
       this.var_name = var_name;
       this.id = id;
       this.tester = tester;
+      testers.put(var_name, tester);
    }
    
    public Bound(String id, HashMap<String, Predicate<Object>> testers, String[] var_names){
       this.id = id;
-      this.tester = tester;
+      this.testers = testers;
       this.var_names = var_names;
    }
    

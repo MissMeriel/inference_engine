@@ -18,4 +18,5 @@ public class Global{
    public static HashMap<String, String[]> constraint_ids = new HashMap<String, String[]>(); //map id to array containing variable ids
    public static HashMap<String, ConstraintEvent> constraints = new HashMap<String, ConstraintEvent>();
    public static ArrayList<ConstraintEvent> constraint_events = new ArrayList<ConstraintEvent>();
+   //public static TreeSet<String> constraint_vois = new TreeSet<String>();
 }

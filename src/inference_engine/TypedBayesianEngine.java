@@ -233,31 +233,27 @@ public class TypedBayesianEngine extends BasicEngine {
                //out.println("initialize_delta_trackers(): delta: "+delta);
                //Set<String> keys = cumulative_probabilities.get(voi_name).keySet();
                //out.println("initialize_delta_trackers(): # keys: "+keys.size());
-               //for(String key : keys){
-                  DeltaTracker dt = new DeltaTracker(voi_name, delta, 0.0);
-                  delta_trackers.put(voi_name, dt);
-                  //initialize next_values with the next delta values
-                  int index = get_var_index(voi_name);
-                  double[] next_values = new double[(int) Math.round(delta)];
-                  //out.println("delta="+delta);
-                  for(int i = 1; i <= delta; i++){
-                     next_values[i-1] = Double.parseDouble((String)csv_array[i][index]);
-                     //out.format("next_values[%s] = %.2f;%n",i-1,Double.parseDouble((String)csv_array[i][index]));
-                  }
-                  //initialize last_values with delta iterations of the first value
-                  double first_value = Double.parseDouble((String)csv_array[1][index]);
-                  double[] last_values = new double[(int) Math.round(delta)];
-                  for(int i = 1; i <= delta; i++){
-                     last_values[i-1] = first_value;
-                  }
-                  dt.set_next_values(next_values);
-                  dt.set_last_values(last_values);
-               //}
+               DeltaTracker dt = new DeltaTracker(voi_name, delta, 0.0);
+               delta_trackers.put(voi_name, dt);
+               //initialize next_values with the next delta values
+               int index = get_var_index(voi_name);
+               double[] next_values = new double[(int) Math.round(delta)];
+               //out.println("delta="+delta);
+               for(int i = 1; i <= delta; i++){
+                  next_values[i-1] = Double.parseDouble((String)csv_array[i][index]);
+                  //out.format("next_values[%s] = %.2f;%n",i-1,Double.parseDouble((String)csv_array[i][index]));
+               }
+               //initialize last_values with delta iterations of the first value
+               double first_value = Double.parseDouble((String)csv_array[1][index]);
+               double[] last_values = new double[(int) Math.round(delta)];
+               for(int i = 1; i <= delta; i++){
+                  last_values[i-1] = first_value;
+               }
+               dt.set_next_values(next_values);
+               dt.set_last_values(last_values);
                break;}
          }
       }
-      //print_delta_trackers();
-      //System.exit(0);
    }
    
    
@@ -274,7 +270,7 @@ public class TypedBayesianEngine extends BasicEngine {
          if(debug) out.println("\n\nLOOP "+i);
          trace_total = i;
          row = csv_array[i];
-         int given_count = 0;
+         //int given_count = 0;
          boolean bin_updated = false;
          //TODO: update delta_trackers
          update_delta_trackers((String[]) csv_array[i], i);
@@ -386,6 +382,12 @@ public class TypedBayesianEngine extends BasicEngine {
                out.println(bev.toString());
             }
          }  // end vars_of_interest iterator
+         //UPDATE CONSTRAINT EVENTS
+         for(ConstraintEvent ce : Global.constraint_events){
+            TreeSet<String> ce_vois = ce.vois;
+            ArrayList<String> al = get_voi_vals((String[])row, ce_vois);
+            ce.update_conditionals(al);
+         }
          //if(i >= 5){System.exit(0);}
       } // end csv loop
       out.println("\nFINISHED TRACE");
@@ -529,6 +531,43 @@ public class TypedBayesianEngine extends BasicEngine {
       for (String voi : Global.vars_of_interest){
          //change voi_vals to delta value
          RawType rawtype = Global.types.get(voi);
+         int index = get_var_index(voi);
+         switch(rawtype){
+            case INT:
+            case DOUBLE:
+            case STRING:
+            case INTEXP:
+            case DOUBLEEXP:
+            case STRINGEXP:{
+               al.add(row[index]);
+               break;}
+            case INTDELTA:
+            case DOUBLEDELTA:{
+               Double d = Double.parseDouble(row[index]);
+               Set<String> keys = Global.bound_ids.get(voi).keySet();
+               DeltaTracker dt = delta_trackers.get(voi);
+               double delta_value = 0.0;
+               try{
+                  delta_value = dt.compute_next_delta();
+                  out.println("get_voi_vals(): "+voi+" delta_value: "+delta_value);
+               } catch(DeltaException de){
+                  out.println("get_voi_vals(): "+de.getMessage());
+               }
+               al.add(Double.toString(delta_value));
+               break;}
+         }
+      }
+      return al;
+   }
+   
+   
+   public ArrayList<String> get_voi_vals(String[] row, TreeSet<String> vois){
+      ArrayList<String> al = new ArrayList<String>();
+      out.println(vois);
+      for (String voi : vois){
+         //change voi_vals to delta value
+         RawType rawtype = Global.types.get(voi);
+         out.println("get_voi_vals():"+voi+" "+rawtype);
          int index = get_var_index(voi);
          switch(rawtype){
             case INT:
