@@ -47,6 +47,7 @@ public class BayesianEvent<T> extends TypedEvent{
       }
    }
    
+   
    public void initialize_total_probabilities(){
       total_probabilities = new HashMap<String, HashMap<String, Double>>();
       for(String voi : Global.vars_of_interest){
@@ -65,6 +66,7 @@ public class BayesianEvent<T> extends TypedEvent{
       Double d;
       boolean temp_found = false;
       //this.debug = debug;
+      out.format("update_conditionals(): event_values:%s%n",event_values);
       out.format("pBAs: "); print_pBAs();
       for(String voi: Global.vars_of_interest){
          Object[] temp = new Object[]{0.0, event_values.get(i)};
@@ -98,7 +100,7 @@ public class BayesianEvent<T> extends TypedEvent{
                temp_found = false;
             }catch(NumberFormatException ex ){
                if(debug) out.format("update_conditionals: Caught NumberFormatException from get_pBA%n");
-               ex.printStackTrace();
+               //ex.printStackTrace();
                temp_found = true;
             }
             try{
@@ -116,7 +118,25 @@ public class BayesianEvent<T> extends TypedEvent{
                      break;}
                   case INTEXP:
                   case DOUBLEEXP:
-                  case STRINGEXP:
+                  case STRINGEXP:{
+                     out.format("type %s, temp_found?%s%n",rawtype,temp_found);
+                     if(!temp_found){
+                        HashMap<String, Predicate<Object>> id_map = Global.bound_ids.get(voi);
+                        Set<String> keys = id_map.keySet();
+                        for(String key : keys){
+                           //if(id_map.get(key).test(temp[1])){
+                           if(id_map.get(key).test(event_values.get(i))){
+                              out.format("id_map.get(key=%s).test(temp[1]=%s) = %s%n",key, temp[1], id_map.get(key).test(temp[1]));
+                              pBA.put(key, dbl); //change later
+                              /*out.format("id_map.get(key=%s).test(temp[1]=%s) = %s%n",key, temp[1], id_map.get(key).test(temp[1]));
+                              out.format("previously: pBA.put(%s,%s)%n", key, dbl);
+                              pBA.put(temp[1].toString(), dbl);*/
+                           }
+                        }
+                     } else {
+                        pBA.put(temp[1].toString(), dbl); //change later
+                     }
+                     break;}
                   case INTDELTA:
                   case DOUBLEDELTA:{
                      if(!temp_found){
@@ -124,10 +144,14 @@ public class BayesianEvent<T> extends TypedEvent{
                         Set<String> keys = id_map.keySet();
                         for(String key : keys){
                            if(id_map.get(key).test(temp[1])){
-                              pBA.put(key, dbl); //change later
+                              //pBA.put(key, dbl); //change later
+                              out.format("id_map.get(key=%s).test(temp[1]=%s) = %s%n",key, temp[1], id_map.get(key).test(temp[1]));
+                              //out.format("previously: pBA.put(%s,%s)%n", key, dbl);
+                              pBA.put(key, dbl);
                            }
                         }
                      } else {
+                        out.format("!temp_found, so pBA.put(%s,%.3f)%n", temp[1].toString(), dbl);
                         pBA.put(temp[1].toString(), dbl); //change later
                      }
                      break;}
@@ -414,7 +438,7 @@ public class BayesianEvent<T> extends TypedEvent{
    
    
    public String generate_bayesian_probability(HashMap<String, HashMap<String, Double[]>> cumulative_probabilities){
-      debug = false;
+      debug = true;
       //if(debug) out.format("%nENTER generate_bayesian_probability: for %s %s",var_name, val.toString());
       String str = "";
       Set<String> keys1 = pBAs.keySet();
@@ -453,7 +477,26 @@ public class BayesianEvent<T> extends TypedEvent{
                out.format("pBA = (%.3f / %.3f) / %.3f = %.3f%n", val_map.get(key2), (double) A_arr[1].doubleValue(), actual_pA, pBA);
             }
             double pAB = (pA * pBA) / pB;
-            str += String.format("\nP(%s=%s|%s=%s) ", var_name, val.toString(), key1, key2);
+            str += String.format("\nP(%s=%s|", var_name, val.toString());
+            RawType rawtype2 = Global.types.get(key1);
+            switch(rawtype2){
+               case INT:
+               case DOUBLE:
+               case STRING:{
+                  str += String.format("%s=%s) ",key1,key2);
+                  break;}
+               case INTEXP:
+               case DOUBLEEXP:
+               case STRINGEXP: {
+                  str += String.format("%s) ", key2);
+                  break;}
+               case INTDELTA:
+               case DOUBLEDELTA: {
+                  str += String.format("rate of change of %s) ", key2);
+                  break;}
+            }
+            //str += String.format("\nP(%s=%s|%s=%s) ", var_name, val.toString(), key1, key2);
+            if(true)  str += String.format("= (%.3f * (%.3f / %.3f)) / %.3f ", pA, val_map.get(key2), ((double)num_samples), pB);
             if(true)  str += String.format("= (%.3f * %.3f) / %.3f ", pA, pBA, pB);
             str += String.format("= %.3f", pAB);
             if(pAB > 1.0){
@@ -546,7 +589,7 @@ public class BayesianEvent<T> extends TypedEvent{
          }
          if(debug) {
             Double[] ret_arr = cumulative_probabilities.get(voi_name).get(closest_match_key);
-            out.format("get_cumulative_probability: returning cumulative_probabilities.get(%s).get(%s)= [%.2f, %.2f] %n", voi_name, closest_match_key, ret_arr[0], ret_arr[1]);
+            //out.format("get_cumulative_probability: returning cumulative_probabilities.get(%s).get(%s)= [%.2f, %.2f] %n", voi_name, closest_match_key, ret_arr[0], ret_arr[1]);
          }         
          return cumulative_probabilities.get(voi_name).get(closest_match_key);
       }

@@ -1,6 +1,7 @@
 package inference_engine;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.TreeSet;
 import java.util.Set;
@@ -267,7 +268,7 @@ public class TypedBayesianEngine extends BasicEngine {
       initialize_delta_trackers();
       // iterate over csv rows
       for (int i = 1; i < csv_array.length; i++) {
-         if(debug) out.println("\n\nLOOP "+i);
+         if(true) out.println("\n\nBEGIN LOOP "+i);
          trace_total = i;
          row = csv_array[i];
          //int given_count = 0;
@@ -320,7 +321,7 @@ public class TypedBayesianEngine extends BasicEngine {
                case DOUBLEDELTA:{
                   DeltaTracker dt = delta_trackers.get(voi_name);
                   try{
-                     event_val = new Double(dt.compute_last_delta()).toString();
+                     event_val = new Double(dt.compute_next_delta()).toString();
                   } catch(DeltaException de){
                      out.println(de.getMessage());
                      event_val = "0.0";
@@ -337,7 +338,7 @@ public class TypedBayesianEngine extends BasicEngine {
             // update frequency count for voi
             if(debug) out.format("update_cumulative_probabilites(%s, %s, %s)%n", voi_name, event_val, i);
             update_cumulative_probabilites(voi_name, event_val, i);
-            if(true) {
+            if(debug) {
                out.print("Updated cumulative probabilities:");
                print_cumulative_probabilities();
             }
@@ -363,9 +364,9 @@ public class TypedBayesianEngine extends BasicEngine {
                }
                if(be.equals(be_test)){
                   //update count of this event and conditioned events
-                  if(debug) out.println("\nbe.update_conditionals("+voi_vals+", true)");
-                  be.update_conditionals(voi_vals, false);
-                  if(debug) out.println("Updated bayesian event: "+be.toString());
+                  if(true) out.println("\nbe.update_conditionals("+voi_vals+", true)");
+                  be.update_conditionals(voi_vals, true);
+                  if(true) out.println("Updated bayesian event: "+be.toString());
                   found = true;
                   break;
                }
@@ -377,18 +378,27 @@ public class TypedBayesianEngine extends BasicEngine {
             } else {
                be.update();
             }
-            out.println("\nBAYESIAN EVENTS at loop "+i+" after updating "+voi_name);
+            /*out.println("\nBAYESIAN EVENTS at loop "+i+" after updating "+voi_name);
             for(BayesianEvent bev : bayesian_events){
-               out.println(bev.toString());
-            }
-         }  // end vars_of_interest iterator
+               out.println("\t"+bev.toString());
+            }*/
+         }  // end vars_of_interest iterator 
+         out.println("\nBAYESIAN EVENTS at loop "+i);
+            for(BayesianEvent bev : bayesian_events){
+               out.println("\t"+bev.toString());
+         }
          //UPDATE CONSTRAINT EVENTS
          for(ConstraintEvent ce : Global.constraint_events){
             TreeSet<String> ce_vois = ce.vois;
             ArrayList<String> al = get_voi_vals((String[])row, ce_vois);
+            out.println("\nUpdating ce conditionals with values "+ce_vois+" "+al);
             ce.update_conditionals(al);
          }
-         //if(i >= 5){System.exit(0);}
+         out.println("\nCONSTRAINT EVENTS at loop "+i);
+         for(ConstraintEvent ce : Global.constraint_events){
+            out.println("\t"+ce.toString());
+         } 
+         //if(i >= 9){System.exit(0);}
       } // end csv loop
       out.println("\nFINISHED TRACE");
       for (int i = 0; i< givens.size(); i++){
@@ -465,8 +475,8 @@ public class TypedBayesianEngine extends BasicEngine {
       } catch(NullPointerException ex) {
          //iterate over priors looking for closest one
          HashMap<String, Double> voi_priors = Global.priors.get(voi_name);
-         System.out.println(voi_name+" priors:");
-         System.out.println(voi_priors);
+         //System.out.println(voi_name+" priors:");
+         //System.out.println(voi_priors);
          RawType type_enum = Global.types.get(voi_name);
          try{
             Set<String> keys = voi_priors.keySet();
@@ -476,7 +486,7 @@ public class TypedBayesianEngine extends BasicEngine {
                   case DOUBLE:
                      double dbl = Double.parseDouble(event_val);
                      double key_val = Double.parseDouble(key);
-                     if(debug/*true*/) out.format("get_prior: threshold for %s = %f%n", voi_name, voi_threshold);
+                     //if(debug/*true*/) out.format("get_prior: threshold for %s = %f%n", voi_name, voi_threshold);
                      if(voi_threshold == null && Math.round(dbl) == Math.round(key_val)){
                         return d;
                      }else if(voi_threshold != null && Fuzzy.eq(dbl, key_val, voi_threshold.doubleValue())){
@@ -511,7 +521,7 @@ public class TypedBayesianEngine extends BasicEngine {
          }
 
       }
-      System.out.println("get_prior(): returning "+d);
+      //System.out.println("get_prior(): returning "+d);
       return d;
    }
    
@@ -548,7 +558,7 @@ public class TypedBayesianEngine extends BasicEngine {
                DeltaTracker dt = delta_trackers.get(voi);
                double delta_value = 0.0;
                try{
-                  delta_value = dt.compute_next_delta();
+                  delta_value = dt.compute_last_delta();
                   out.println("get_voi_vals(): "+voi+" delta_value: "+delta_value);
                } catch(DeltaException de){
                   out.println("get_voi_vals(): "+de.getMessage());
@@ -616,11 +626,15 @@ public class TypedBayesianEngine extends BasicEngine {
                }
                //update last_values
                dt.update_last_values(d);
-               
                break;}
          }
       }
-      print_delta_trackers();
+      out.println();
+      ArrayList<String> al = new ArrayList<String>(Arrays.asList(row));
+      if(al.contains("pedestrian alarm")){
+         print_delta_trackers();
+      }
+      
    }
       
    
@@ -738,8 +752,8 @@ public class TypedBayesianEngine extends BasicEngine {
             cumulative_probability.put(k2, d);
          }
       }
-      out.format("CUMULATIVE PROBABILITIES: "); print_cumulative_probabilities();
-      out.format("end of TypedBayesianEngine.update_cumulative_probabilities()%n%n");
+      //out.format("CUMULATIVE PROBABILITIES: "); print_cumulative_probabilities();
+      //out.format("end of TypedBayesianEngine.update_cumulative_probabilities()%n%n");
    } //end update_cumulative_probabilities()
    
    
@@ -753,7 +767,7 @@ public class TypedBayesianEngine extends BasicEngine {
             case PROB_A:
                String temp = be.generate_bayesian_probability(cumulative_probabilities);
                //out.println(temp);
-               str += temp;
+               str += temp + "\n\n";
                break;
          } // end switch
       } // end while
@@ -821,7 +835,8 @@ public class TypedBayesianEngine extends BasicEngine {
                   for(BayesianEvent be : events){
                      try{
                         HashMap<String, Double> pBA_val_map = (HashMap<String, Double>) be.pBAs.get(key1);
-                        total_probability += pBA_val_map.get(key2) / be.num_samples;
+                        double prior =  get_prior(be.var_name, key2); //get_prior(key1, key2);
+                        total_probability += ((pBA_val_map.get(key2) / be.num_samples) * prior); //multiply by prior
                      } catch(NullPointerException ex){
                         total_probability += 0.0;
                      }
@@ -831,7 +846,6 @@ public class TypedBayesianEngine extends BasicEngine {
                      total_probability_map.put(key2, total_probability);
                      out.println(be.toString());
                      out.format("total probability for %s:%s = %.3f%n%n", key1, key2, total_probability);
-                     //out.format("getting total_probability for %s %s=%.3f%n%n", key1,key2,be.get_total_probability(key1,key2));
                   } // end for voi-specific events
                } // end for keys2
             }
@@ -890,7 +904,7 @@ public class TypedBayesianEngine extends BasicEngine {
    
    
    public void print_delta_trackers(){
-      out.print("DELTA TRACKERS:");
+      out.println("DELTA TRACKERS:");
       Set<String> keys1 = delta_trackers.keySet();
       for(String key1 : keys1){
          out.println(key1+":"+delta_trackers.get(key1)+" ");

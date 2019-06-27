@@ -23,7 +23,7 @@ public class DeltaTracker{
    public double timestep = 1.0; //how many seconds a delta step is worth
    public LinkedList<Double> next_values = new LinkedList<Double>(); //goes [future values, ..., current val]
    public LinkedList<Double> last_values = new LinkedList<Double>(); //goes [current val, ..., future values]
-   public boolean derivative = false;
+   public boolean derivative = true;
    
    public DeltaTracker(String var_name, double delta, double timestep){
       this.var_name = var_name;
@@ -98,14 +98,14 @@ public class DeltaTracker{
       if(next_values.size() == delta){
          if(delta == 1){
             return 0.0;
-         } else if (delta == 2){
+         } else if (delta == 2 || var_name.equals("Trust_Human")){
             // return slope of secant line
             out.format("compute_next_delta(): (next_values.get(1)=%.2f - next_values.get(0)=%.2f) / timestep=%.2f = ", next_values.get(1), next_values.get(0), timestep, (next_values.get(1) - next_values.get(0))/(timestep));
-            return (next_values.get(1)-next_values.get(0))/(timestep);
+            return (last_values.getLast()-last_values.getFirst())/(timestep);
          } else if(derivative){
             // fit polynomial function then take derivative
             WeightedObservedPoints obs = new WeightedObservedPoints();
-            Iterator<Double> iter = last_values.iterator();
+            Iterator<Double> iter = next_values.iterator();
             int i = 0;
             while(iter.hasNext()){
                obs.add(timestep * i++, iter.next());
@@ -114,11 +114,14 @@ public class DeltaTracker{
             final PolynomialCurveFitter fitter = PolynomialCurveFitter.create(2);            
             // Retrieve fitted parameters (coefficients of the polynomial function).
             final double[] coeff = fitter.fit(obs.toList());
-            double slope = coeff[2] * 2 * last_values.getLast() + coeff[1];
+            out.format("compute_next_delta(): coeffs: [%s, %s]%n", coeff[1], coeff[2]);
+            //out.println("compute_next_delta(): observations: "+obs.toList().toString());
+            double slope = coeff[1] * 2 * next_values.getLast() + coeff[2];
+            out.format("compute_next_delta(): slope: %.3f * 2 * %.3f + %.3f = %.3f%n", coeff[1], next_values.getLast(), coeff[2], slope);
             return slope;
          } else if(!derivative){
             // take rate of change over first and last
-            return (last_values.getFirst() - last_values.getLast()) / timestep;
+            return (next_values.getLast() - next_values.getFirst()) / timestep; // i think this should be switched around (last - first)
          }
       } else {
          throw new DeltaException(String.format("Exception encountered computing %s next delta; delta %s; timestep %s; next_values.size()=%s; next_values:%s%n", var_name, delta, timestep, next_values.size(), next_values));
@@ -127,7 +130,7 @@ public class DeltaTracker{
    }
    
    /** @return rate of change or Double.MIN_VALUE upon error
-    *
+    * last values = [value_farthest in the past, ..., most_recent_value (current val)]
     **/
    public double compute_last_delta() throws DeltaException{
       if(last_values.size() == delta){
@@ -149,11 +152,12 @@ public class DeltaTracker{
             final PolynomialCurveFitter fitter = PolynomialCurveFitter.create(2);            
             // Retrieve fitted parameters (coefficients of the polynomial function).
             final double[] coeff = fitter.fit(obs.toList());
-            double slope = coeff[2] * 2 * last_values.getLast() + coeff[1];
+            double slope = coeff[1] * 2 * last_values.getLast() + coeff[2];
+            out.format("compute_last_delta(): slope: %.3f * 2 * %.3f + %.3f = %.3f%n", coeff[1], next_values.getLast(), coeff[2], slope);
             return slope;
          } else if(!derivative){
             // take rate of change over first and last
-            return (last_values.getFirst() - last_values.getLast()) / (delta * timestep);
+            return (last_values.getLast() - last_values.getFirst()) / (delta * timestep);
          }
       } else {
          throw new DeltaException(String.format("Exception encountered computing next delta of delta %s and timestep %s%n", delta, timestep));

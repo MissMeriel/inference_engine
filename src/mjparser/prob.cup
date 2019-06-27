@@ -313,62 +313,62 @@ exp ::=
 							String id = a.toString()+ "<" + b.toString();
 							//System.out.println(id);
 							Predicate<Object> tester = (Predicate<Object>) (Object o) -> {Double d = Double.valueOf(o.toString()); return d < Double.valueOf(b.lexeme);};
-							//Predicate<Double> tester = (Predicate<Double>) (Double d) -> {return d < Double.valueOf(b.lexeme);};
 							Bound bound = new Bound(a.lexeme, id, tester);
+							bound.tester_complement = (Predicate<Object>) (Object o) -> {Double d = Double.valueOf(o.toString()); return d >= Double.valueOf(b.lexeme);};
 							RESULT = bound;
 				:}
 				|	variable:a LTEQ:op int:b
 				{:
 						String id = a.toString()+"<=" + b.toString();
 						//System.out.println(id);
-						//Predicate<Double> tester = (Predicate<Double>) (Double d) -> {return d <= Double.valueOf(b.lexeme);};
 						Predicate<Object> tester = (Predicate<Object>) (Object o) -> {Double d = Double.valueOf(o.toString()); return d <= Double.valueOf(b.lexeme);};
 						Bound bound = new Bound(a.lexeme, id, tester);
+						bound.tester_complement = (Predicate<Object>) (Object o) -> {Double d = Double.valueOf(o.toString()); return d > Double.valueOf(b.lexeme);};
 						RESULT = bound;
 				:}
 				|	variable:a GT:op int:b
 				{:
 						String id = a.toString() +">" + b.toString();
 						//System.out.println(id);
-						//Predicate<Double> tester = (Predicate<Double>) (Double d) -> {return d > Double.valueOf(b.lexeme);};
 						Predicate<Object> tester = (Predicate<Object>) (Object o) -> {Double d = Double.valueOf(o.toString()); return d > Double.valueOf(b.lexeme);};
 						Bound bound = new Bound(a.lexeme, id, tester);
+						bound.tester_complement = (Predicate<Object>) (Object o) -> {Double d = Double.valueOf(o.toString()); return d <= Double.valueOf(b.lexeme);};
 						RESULT = bound;
 				:}
 				|	variable:a GTEQ:op int:b
 				{:
 						String id = a.toString() +">=" + b.toString();
 						//System.out.println(id);
-						//Predicate<Double> tester = (Predicate<Double>) (Double d) -> {return d >= Double.valueOf(b.lexeme);};
 						Predicate<Object> tester = (Predicate<Object>) (Object o) -> {Double d = Double.valueOf(o.toString()); return d >= Double.valueOf(b.lexeme);};
 						Bound bound = new Bound(a.lexeme, id, tester);
+						bound.tester_complement = (Predicate<Object>) (Object o) -> {Double d = Double.valueOf(o.toString()); return d < Double.valueOf(b.lexeme);};
 						RESULT = bound;
 				:}
 				| variable:a EQ:op NUMBER:n
 				{:
 						String id = a.toString() + op.lexeme + n.lexeme;
 						//System.out.println(id);
-						//Predicate<Double> tester = (Predicate<Double>) (Double d) -> {return Math.abs(d-Double.valueOf(n.lexeme))<1;};
 						Predicate<Object> tester = (Predicate<Object>) (Object o) -> {Double d = Double.valueOf(o.toString()); return Math.abs(d-Double.valueOf(n.lexeme))<1;};
 						Bound bound = new Bound(a.lexeme, id, tester);
+						bound.tester_complement = (Predicate<Object>) (Object o) -> {Double d = Double.valueOf(o.toString()); return !(Math.abs(d-Double.valueOf(n.lexeme))<1);};
 						RESULT = bound;
 				:}
 				| variable:a EQ:op STRING:v
 				{:
 						String id = a.toString() + op.lexeme + v.lexeme;
 						System.out.println(id);
-						//Predicate<String> tester = (Predicate<String>) (String s) -> {return s.equals(v.lexeme);};
 						Predicate<Object> tester = (Predicate<Object>) (Object o) -> {String s = o.toString(); return s.equals(v.lexeme);};
 						Bound bound = new Bound(a.lexeme, id, tester);
+						bound.tester_complement = (Predicate<Object>) (Object o) -> {String s = o.toString(); return !s.equals(v.lexeme);};
 						RESULT = bound;
 				:}
 				| variable:a NOTEQ:op NUMBER:n
 				{:
 						String id = a.toString() + op.lexeme + n.lexeme;
 						//System.out.println(id);
-						//Predicate<Double> tester = (Predicate<Double>) (Double d) -> {return Math.abs(d-Double.valueOf(n.lexeme))>1;};
 						Predicate<Object> tester = (Predicate<Object>) (Object o) -> {Double d = Double.valueOf(o.toString()); return Math.abs(d-Double.valueOf(n.lexeme))>1;};
 						Bound bound = new Bound(a.lexeme, id, tester);
+						bound.tester_complement = (Predicate<Object>) (Object o) -> {Double d = Double.valueOf(o.toString()); return !(Math.abs(d-Double.valueOf(n.lexeme))>1);};
 						RESULT = bound;
 				:}
 				| variable:a NOTEQ:op STRING:v
@@ -378,13 +378,13 @@ exp ::=
 						//Predicate<String> tester = (Predicate<String>) (String s) -> {return s.equals(v.lexeme);};
 						Predicate<Object> tester = (Predicate<Object>) (Object o) -> {String s = o.toString(); return !s.equals(v.lexeme);};
 						Bound bound = new Bound(a.lexeme, id, tester);
+						bound.tester_complement = (Predicate<Object>) (Object o) -> {String s = o.toString(); return s.equals(v.lexeme);};
 						RESULT = bound;
 				:}
 				| exp:e1 LOGICAL_AND:la exp:e2
 				{:
 						String id = e1.id + la.lexeme + e2.id;
 						System.out.println(id);
-						//Predicate<Double> tester = (Predicate<Double>) (Double d) -> {return e1.tester.test(d) && e2.tester.test(d);};
 						Predicate<Object> tester = (Predicate<Object>) (Object o) -> {return e1.tester.test(o) && e2.tester.test(o);};
 						// add in var_names and testers hashmap here
 						HashMap<String, Predicate<Object>> testers = new HashMap<String, Predicate<Object>>();
@@ -406,6 +406,26 @@ exp ::=
 						} else {
 								System.out.println("Logical and testers: "+testers.keySet());
 								bound = new Bound(id, testers, var_names);
+						}
+						//set up complement(s)
+						if(e1.var_name.equals(e2.var_name)){
+								bound.tester_complement = (Predicate<Object>) (Object o) -> {return e1.tester_complement.test(o) && e2.tester_complement.test(o);};
+						} else	if(!e1.tester_complements.keySet().isEmpty()){
+								if(!e2.tester_complements.keySet().isEmpty()){
+										Set<String> keys = e1.tester_complements.keySet();
+										for(String key : keys){
+												if(e1.tester_complements.keySet().contains(key)){
+														//combine if necessary
+														Predicate<Object> temp = (Predicate<Object>) (Object o) -> {return e1.tester_complements.get(key).test(o) && e2.tester_complements.get(key).test(o);};
+														e2.tester_complements.put(key, temp);
+												}
+										} 
+								} else {
+												bound.tester_complements = e1.tester_complements;
+								}
+						} else	if(!e2.tester_complements.keySet().isEmpty()){
+								e2.tester_complements.put(e1.var_name, e1.tester_complement);
+								bound.tester_complements = e2.tester_complements;
 						}
 						RESULT = bound;
 				:}

@@ -136,7 +136,10 @@ public class Driver {
    public static void parse_typed_config_file(String config_file) throws IOException {
       try{
          new parser(new Yylex(new FileInputStream(config_file))).parse();
-      } catch(Exception ex){
+      } catch(ParseException ex){
+         ex.printStackTrace();
+         System.exit(0);
+      }catch(Exception ex){
          ex.printStackTrace();
       }
       if(debug){

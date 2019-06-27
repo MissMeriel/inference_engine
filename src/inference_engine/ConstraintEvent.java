@@ -26,6 +26,7 @@ public class ConstraintEvent<T> extends BayesianEvent<T>{
       this.id = id;
       vois.addAll(event_testers.keySet());
       vois.addAll(given_testers.keySet());
+      num_samples = 0;
       out.println("ConstraintEvent "+ var_name + " vois: "+vois.toString());
    }
    
@@ -39,11 +40,14 @@ public class ConstraintEvent<T> extends BayesianEvent<T>{
       boolean event_result = true;
       int i = 0;
       //for(String key : event_keys){
+      out.println("update_conditionals(): event_keys: "+event_keys);
       for(String voi : vois){
+         out.format("update_conditionals(): eventKeys.contains(%s)? %s%n", voi, event_keys.contains(voi));
          if(event_keys.contains(voi)){
             Predicate<Object> tester = event_testers.get(voi);
             boolean result = tester.test(event_values.get(i));
             event_result = event_result && result;
+            out.println("update_conditionals(): result:"+result + " event_result:"+event_result);
          }
          i++;
       }
@@ -58,11 +62,12 @@ public class ConstraintEvent<T> extends BayesianEvent<T>{
       //iter = event_values.iterator();
       i = 0;
       boolean given_result = true;
+      out.println("update_conditionals(): given_keys: "+given_keys);
       for(String voi : vois){
-         if(event_keys.contains(voi)){
+         if(given_keys.contains(voi)){
             Predicate<Object> tester = given_testers.get(voi);
             boolean result = tester.test(event_values.get(i));
-            event_result = event_result && result;
+            given_result = given_result && result;
          }
          i++;
       }
@@ -94,6 +99,10 @@ public class ConstraintEvent<T> extends BayesianEvent<T>{
    
    @Override
    public String toString(){
-      return String.format("ConstraintEvent:%s",var_name);
+      String str =  String.format("ConstraintEvent:%s",var_name);
+      str+= " pBA: " + pBA;
+      str += " num_samples: " +num_samples;
+      //str += " tester: "+tester.toString();
+      return str;
    }
 }

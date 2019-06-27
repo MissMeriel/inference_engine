@@ -10,7 +10,9 @@ public class Bound{
    public String[] var_names;
    public String id;
    public HashMap<String, Predicate<Object>> testers = new HashMap<String, Predicate<Object>>();
+   public HashMap<String, Predicate<Object>> tester_complements = new HashMap<String, Predicate<Object>>();
    public Predicate<Object> tester;
+   public Predicate<Object> tester_complement;
    //public ArrayList<Predicate<Double> = new ArrayList<Predicate<Double>>();
    
    public Bound(String var_name, String id, Predicate<Object> tester){
