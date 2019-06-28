@@ -242,9 +242,9 @@ public class TypedBayesianEngine extends BasicEngine {
                //out.println("delta="+delta);
                for(int i = 1; i <= delta; i++){
                   next_values[i-1] = Double.parseDouble((String)csv_array[i][index]);
-                  //out.format("next_values[%s] = %.2f;%n",i-1,Double.parseDouble((String)csv_array[i][index]));
+                  if(debug) out.format("next_values[%s] = %.2f;%n",i-1,Double.parseDouble((String)csv_array[i][index]));
                }
-               //initialize last_values with delta iterations of the first value
+               //initialize last_values with delta # iterations of the first value
                double first_value = Double.parseDouble((String)csv_array[1][index]);
                double[] last_values = new double[(int) Math.round(delta)];
                for(int i = 1; i <= delta; i++){
@@ -255,6 +255,7 @@ public class TypedBayesianEngine extends BasicEngine {
                break;}
          }
       }
+      //System.exit(0);
    }
    
    
@@ -271,7 +272,6 @@ public class TypedBayesianEngine extends BasicEngine {
          if(true) out.println("\n\nBEGIN LOOP "+i);
          trace_total = i;
          row = csv_array[i];
-         //int given_count = 0;
          boolean bin_updated = false;
          //TODO: update delta_trackers
          update_delta_trackers((String[]) csv_array[i], i);
@@ -349,6 +349,7 @@ public class TypedBayesianEngine extends BasicEngine {
                out.println("be_test == null?"+(be_test == null));
                out.println("\nbe_test.update_conditionals("+voi_vals+", true)");
             }
+            if(true) out.println("\nbe_test.update_conditionals("+voi_vals+", false)");
             be_test.update_conditionals(voi_vals, false);
             //check that bayesian_events does not already contain this event
             boolean found = false;
@@ -362,6 +363,8 @@ public class TypedBayesianEngine extends BasicEngine {
                   out.format("be EQUALS be_test: %s%n", be.equals(be_test));
                   out.println("\tbe:"+be.toString()+"\n\tbe_test:"+be_test.toString());
                }
+               out.format("be.equals(be_test)=%s%n", be.equals(be_test));
+               out.println("\tbe: "+be+"\n\tbe_test: "+be_test);
                if(be.equals(be_test)){
                   //update count of this event and conditioned events
                   if(true) out.println("\nbe.update_conditionals("+voi_vals+", true)");
@@ -398,7 +401,7 @@ public class TypedBayesianEngine extends BasicEngine {
          for(ConstraintEvent ce : Global.constraint_events){
             out.println("\t"+ce.toString());
          } 
-         //if(i >= 9){System.exit(0);}
+         //if(i >= 10){System.exit(0);}
       } // end csv loop
       out.println("\nFINISHED TRACE");
       for (int i = 0; i< givens.size(); i++){
@@ -558,7 +561,11 @@ public class TypedBayesianEngine extends BasicEngine {
                DeltaTracker dt = delta_trackers.get(voi);
                double delta_value = 0.0;
                try{
-                  delta_value = dt.compute_last_delta();
+                  if(Global.givens.contains(voi)){
+                     delta_value = dt.compute_last_delta();
+                  } else {
+                     delta_value = dt.compute_next_delta();//dt.compute_last_delta();
+                  }
                   out.println("get_voi_vals(): "+voi+" delta_value: "+delta_value);
                } catch(DeltaException de){
                   out.println("get_voi_vals(): "+de.getMessage());
@@ -620,7 +627,7 @@ public class TypedBayesianEngine extends BasicEngine {
                DeltaTracker dt = delta_trackers.get(voi);
                //update next_values
                try{
-                  dt.update_next_values(Double.parseDouble((String)csv_array[row_index+((int)Math.round(dt.delta))][index]));
+                  dt.update_next_values(Double.parseDouble((String)csv_array[row_index-1+((int)Math.round(dt.delta))][index]));
                }catch(ArrayIndexOutOfBoundsException e){
                   dt.update_next_values(d);
                }
@@ -631,9 +638,9 @@ public class TypedBayesianEngine extends BasicEngine {
       }
       out.println();
       ArrayList<String> al = new ArrayList<String>(Arrays.asList(row));
-      if(al.contains("pedestrian alarm")){
+      //if(al.contains("pedestrian alarm")){
          print_delta_trackers();
-      }
+      //}
       
    }
       

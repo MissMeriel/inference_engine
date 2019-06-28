@@ -100,8 +100,8 @@ public class DeltaTracker{
             return 0.0;
          } else if (delta == 2 || var_name.equals("Trust_Human")){
             // return slope of secant line
-            out.format("compute_next_delta(): (next_values.get(1)=%.2f - next_values.get(0)=%.2f) / timestep=%.2f = ", next_values.get(1), next_values.get(0), timestep, (next_values.get(1) - next_values.get(0))/(timestep));
-            return (last_values.getLast()-last_values.getFirst())/(timestep);
+            out.format("compute_next_delta(): (next_values.getLast()=%.2f - next_values.getFirst()=%.2f) / timestep=%.2f = ", next_values.getLast(), next_values.getFirst(), timestep, (next_values.getLast() - next_values.getFirst())/(timestep));
+            return (next_values.getLast()-next_values.getFirst())/(timestep);
          } else if(derivative){
             // fit polynomial function then take derivative
             WeightedObservedPoints obs = new WeightedObservedPoints();
@@ -138,7 +138,7 @@ public class DeltaTracker{
             return 0.0;
          } else if (delta == 2 || var_name.equals("Trust_Human")){
             // return slope of secant line
-            out.format("compute_last_delta(): (last_values.get(1)=%.2f - last_values.get(0)=%.2f) / timestep=%.2f = ", last_values.get(1), last_values.get(0), timestep, (last_values.getFirst() - last_values.getLast()) / timestep);
+            out.format("compute_last_delta(): (last_values.getLast()=%.2f - last_values.getFirst()=%.2f) / timestep=%.2f = ", last_values.getLast(), last_values.getFirst(), timestep, (last_values.getLast()-last_values.getFirst()) / timestep);
             return (last_values.getLast()-last_values.getFirst()) / timestep;
          } else if(derivative){
             // fit polynomial function then take derivative
