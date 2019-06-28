@@ -825,6 +825,7 @@ public class TypedBayesianEngine extends BasicEngine {
       out.println("inside calculate_total_probabilities()");
       out.println("Global vars of interest: "+Global.vars_of_interest);
       for(String voi : Global.vars_of_interest){
+         //collect all events with same var
          ArrayList<BayesianEvent> events = new ArrayList<BayesianEvent>();
          for(BayesianEvent be : bayesian_events){
             if(be.var_name.equals(voi)){
@@ -832,6 +833,7 @@ public class TypedBayesianEngine extends BasicEngine {
             }
          }
          //use cumulative_probabilities keys so as not to miss bins
+         out.println("calculate_total_probabilities(): calculating total probability for "+voi);
          print_cumulative_probabilities();
          Set<String> keys1 = cumulative_probabilities.keySet();
          for(String key1 : keys1){
@@ -843,7 +845,10 @@ public class TypedBayesianEngine extends BasicEngine {
                      try{
                         HashMap<String, Double> pBA_val_map = (HashMap<String, Double>) be.pBAs.get(key1);
                         double prior =  get_prior(be.var_name, key2); //get_prior(key1, key2);
+                        out.println("calculate_total_probabilities(): pulling probability from "+be);
+                        out.format("calculate_total_probabilities(): be.pBAs.get.(%s).get(%s)=",key1,key2,pBA_val_map.get(key2));
                         total_probability += ((pBA_val_map.get(key2) / be.num_samples) * prior); //multiply by prior
+                        out.format("total_probability += ((pBA_val_map.get(key2)=%.3f / be.num_samples=%s) * prior=%.3f) = %.3f%n",pBA_val_map.get(key2),be.num_samples, prior, total_probability);
                      } catch(NullPointerException ex){
                         total_probability += 0.0;
                      }

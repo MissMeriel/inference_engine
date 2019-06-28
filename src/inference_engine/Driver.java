@@ -66,7 +66,6 @@ public class Driver {
          parse_typed_config_file(config_file);
          if (priors != null) {
             parse_priors_file(priors_file);
-            //out.println("priors: " + priors);
          } else {
             //parse_config_file(config_file);
          }
@@ -177,7 +176,7 @@ public class Driver {
             HashMap<String, Double>  val = new HashMap<String, Double>();
             if(BayesianEngine.debug) print_types();
             for(int i = 1; i < splitLine.length; i++){
-               String[] distSplit = splitLine[i].split("=");
+               String[] distSplit = splitLine[i].split(":=");
                //out.format("key:%s value:%s%n", distSplit[0],distSplit[1]);
                if(Global.types == null){
                   val.put(distSplit[0],  new Double(distSplit[1]));
@@ -193,16 +192,20 @@ public class Driver {
                         case INT:
                         case STRING:
                         case INTEXP:
-                        case DOUBLEEXP:{
+                        case DOUBLEEXP:
+                        case STRINGEXP: 
+                        case INTDELTA:
+                        case DOUBLEDELTA: {
                            val.put(distSplit[0],  new Double(distSplit[1]));
                            break;}
                      }
                   } catch(NullPointerException ex){}
                }
-               //out.format("put %s into key %s%n", distSplit[1], distSplit[0]);
+               out.format("put %s into key %s%n", distSplit[1], distSplit[0]);
+               out.format("val=%s%n",val);
             }
             priors.put(splitLine[0], val);
-            //out.format("parse_priors_file: put %s into key %s%n", val, splitLine[0]);
+            out.format("parse_priors_file: priors.put(%s,%s)%n", splitLine[0],val);
             //System.exit(0);
             /*if(types.get(splitLine[0]) == null) {
                types.put(splitLine[0], RawType.valueOf(splitLine[1]));

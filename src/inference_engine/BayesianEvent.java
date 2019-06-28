@@ -529,7 +529,7 @@ public class BayesianEvent<T> extends TypedEvent{
             }
             //str += String.format("\nP(%s=%s|%s=%s) ", var_name, val.toString(), key1, key2);
             if(true)  str += String.format("= (%.3f * (%.3f / %.3f)) / %.3f ", pA, val_map.get(key2), ((double)num_samples), pB);
-            if(true)  str += String.format("= (%.3f * %.3f) / %.3f ", pA, pBA, pB);
+            if(true)  str += String.format("= %.3f / %.3f ", pA*pBA, pB);
             str += String.format("= %.3f", pAB);
             if(pAB > 1.0){
                out.println(str);
