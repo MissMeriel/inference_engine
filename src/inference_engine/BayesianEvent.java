@@ -486,7 +486,7 @@ public class BayesianEvent<T> extends TypedEvent{
             Double[] A_arr = get_cumulative_probability(key1, key2, cumulative_probabilities);
             if(debug) out.println("A_arr for "+key1+":"+key2+" == null? "+(A_arr == null));
             //if(debug) out.format("%.2f / %.2f %n", A_arr[0], A_arr[1]);
-            if(debug) Driver.print_priors(Global.priors);
+            //if(debug) Driver.print_priors(Global.priors);
             //double pB = A_arr[0].doubleValue() / A_arr[1].doubleValue();
             if(debug) out.format("getting total_probabilities(%s).get(%s)%n", key1, key2);
             /*out.println(total_probabilities.get(key1));

@@ -834,7 +834,8 @@ public class TypedBayesianEngine extends BasicEngine {
          }
          //use cumulative_probabilities keys so as not to miss bins
          out.println("calculate_total_probabilities(): calculating total probability for "+voi);
-         print_cumulative_probabilities();
+         out.println("calculate_total_probabilities(): events="+events.toString());
+         out.print("calculate_total_probabilities(): cumulative_probabilities="); print_cumulative_probabilities();
          Set<String> keys1 = cumulative_probabilities.keySet();
          for(String key1 : keys1){
             if(!key1.equals(voi)){
@@ -844,11 +845,33 @@ public class TypedBayesianEngine extends BasicEngine {
                   for(BayesianEvent be : events){
                      try{
                         HashMap<String, Double> pBA_val_map = (HashMap<String, Double>) be.pBAs.get(key1);
-                        double prior =  get_prior(be.var_name, key2); //get_prior(key1, key2);
-                        out.println("calculate_total_probabilities(): pulling probability from "+be);
-                        out.format("calculate_total_probabilities(): be.pBAs.get.(%s).get(%s)=",key1,key2,pBA_val_map.get(key2));
+                        double prior = 0.0;
+                        switch(Global.types.get(voi)){
+                           case INT:
+                           case DOUBLE:
+                           case STRING:{
+                              prior =  get_prior(be.var_name, be.val.toString());
+                              out.format("calculate_total_probabilities(): get_prior(%s,%s) = %.3f%n",be.var_name, be.val.toString(),prior);
+                           break;}
+                           case INTEXP:
+                           case DOUBLEEXP:
+                           case STRINGEXP:
+                           case INTDELTA:
+                           case DOUBLEDELTA:{
+                              BoundedEvent boundev = (BoundedEvent) be;
+                              prior =  get_prior(boundev.var_name, boundev.id);
+                              out.format("calculate_total_probabilities(): get_prior(%s,%s) = %.3f%n",boundev.var_name, boundev.id,prior);
+                           break;}
+                        }
+                        //double prior =  get_prior(key1, key2); //get_prior(be.var_name, key2); //get_prior(key1, key2);
+                        //double prior =  get_prior(be.var_name, be.id);
+                        /*out.format("calculate_total_probabilities(): get_prior(key1=%s,key2=%s) = %.3f%n",key1,key2,prior);
+                        out.format("calculate_total_probabilities(): alternative get_prior(be.var_name=%s,key2=%s) = %.3f%n",be.var_name,key2,get_prior(be.var_name, key2));
+                        out.format("calculate_total_probabilities(): pulling pBA count from %s%n",be);
+                        out.format("calculate_total_probabilities(): be.pBAs.get.(%s).get(%s)=",key1,key2,pBA_val_map.get(key2));*/
                         total_probability += ((pBA_val_map.get(key2) / be.num_samples) * prior); //multiply by prior
-                        out.format("total_probability += ((pBA_val_map.get(key2)=%.3f / be.num_samples=%s) * prior=%.3f) = %.3f%n",pBA_val_map.get(key2),be.num_samples, prior, total_probability);
+                        out.format("total_probability += ((pBA_val_map.get(key2=%s)=%.3f / be.num_samples=%s) * prior=%.3f) = %.3f%n",key2,pBA_val_map.get(key2),be.num_samples, prior, total_probability);
+                        out.format("total_probability += %.3f = %.3f%n",((pBA_val_map.get(key2) / be.num_samples) * prior), total_probability);
                      } catch(NullPointerException ex){
                         total_probability += 0.0;
                      }
