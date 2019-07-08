@@ -17,7 +17,8 @@ class Probability_To_Csv{
 
    //static String[][] csv_array;
    static HashMap<String, HashMap<String,String>> header_map = new HashMap<String, HashMap<String, String>>();
-   static Pattern subject_pattern = Pattern.compile("[S][0-9]+[\\s]*");
+   //static Pattern subject_pattern = Pattern.compile("[S][0-9]+[\\s]*");
+   static Pattern subject_pattern = Pattern.compile("[sweep_for_target_test][0-9]+[.bag][\\s]*");
    static Pattern whitespace_pattern = Pattern.compile("^\\S+");
    static Pattern double_pattern = Pattern.compile("[0-9]+.[0-9]+");
    //static Pattern whitespace_pattern = Pattern.compile("\p{IsWhite_Space}+");

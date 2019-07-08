@@ -126,7 +126,7 @@ public class BayesianEvent<T> extends TypedEvent{
                         for(String key : keys){
                            //if(id_map.get(key).test(temp[1])){
                            if(id_map.get(key).test(event_values.get(i))){
-                              out.format("id_map.get(key=%s).test(temp[1]=%s) = %s%n",key, temp[1], id_map.get(key).test(temp[1]));
+                              out.format("id_map.get(key=%s).test(temp[1]=%s) = %s%n",key, event_values.get(i), id_map.get(key).test(event_values.get(i)));
                               pBA.put(key, dbl); //change later
                               /*out.format("id_map.get(key=%s).test(temp[1]=%s) = %s%n",key, temp[1], id_map.get(key).test(temp[1]));
                               out.format("previously: pBA.put(%s,%s)%n", key, dbl);

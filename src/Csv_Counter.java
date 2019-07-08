@@ -99,21 +99,54 @@ public class Csv_Counter{
                //CurrentWheel_Machine,DOUBLEDELTA,delta:=10,CurrentWheel_Machine<2.5&&CurrentWheel_Machine>-2.5,CurrentWheel_Machine>=2.5||CurrentWheel_Machine<=-2.5
                //CurrentWheel_Machine,DOUBLEDELTA,delta:=10,CurrentWheel_Machine<5&&CurrentWheel_Machine>-5,CurrentWheel_Machine>=5||CurrentWheel_Machine<=-5
                double dd = Double.parseDouble(csv_array[i][index]);
-               if(Double.parseDouble(csv_array[i][index]) < 2.5 && Double.parseDouble(csv_array[i][index]) > -2.5){
+               String key1 = "CurrentWheel_Machine<25&&CurrentWheel_Machine>-25";
+               String key2 = "CurrentWheel_Machine>=25||CurrentWheel_Machine<=-25";
+               double threshold = 25.0; //rate of change
+               if(dd < threshold && dd > -threshold){
                   try{
-                     double d = count_map.get(var_name).get("CurrentWheel_Machine<2.5&&CurrentWheel_Machine>-2.5");
-                     count_map.get(var_name).put("CurrentWheel_Machine<2.5&&CurrentWheel_Machine>-2.5", ++d);
+                     double d = count_map.get(var_name).get(key1);
+                     count_map.get(var_name).put(key1, ++d);
                   } catch(NullPointerException ex){
-                     count_map.get(var_name).put("CurrentWheel_Machine<2.5&&CurrentWheel_Machine>-2.5", 1.0);
+                     count_map.get(var_name).put(key1, 1.0);
                   }
-               } else if(dd >= 2.5 || dd <= 2.5){
+               } else if(dd >= threshold || dd <= -threshold){
                   try{
-                     double d = count_map.get(var_name).get("CurrentWheel_Machine>=2.5||CurrentWheel_Machine<=-2.5");
-                     count_map.get(var_name).put("CurrentWheel_Machine>=2.5||CurrentWheel_Machine<=-2.5", ++d);
+                     double d = count_map.get(var_name).get(key2);
+                     count_map.get(var_name).put(key2, ++d);
                   } catch(NullPointerException ex){
-                     count_map.get(var_name).put("CurrentWheel_Machine>=2.5||CurrentWheel_Machine<=-2.5", 1.0);
+                     count_map.get(var_name).put(key2, 1.0);
                   }
                }
+            } else if (var_name.equals("PupilChange_Human")) {
+               double dd = Double.parseDouble(csv_array[i][index]);
+               String key1 = "PupilChange_Human>0";
+               String key2 = "PupilChange_Human<0";
+               String key3 = "PupilChange_Human==0";
+               double th1 = 0;
+               double th2 = 1;
+               if(dd > th1){
+                  try{
+                     double d = count_map.get(var_name).get(key1);
+                     count_map.get(var_name).put(key1, ++d);
+                  } catch(NullPointerException ex){
+                     count_map.get(var_name).put(key1, 1.0);
+                  }
+               } else if(dd < th1){
+                  try{
+                     double d = count_map.get(var_name).get(key2);
+                     count_map.get(var_name).put(key2, ++d);
+                  } catch(NullPointerException ex){
+                     count_map.get(var_name).put(key2, 1.0);
+                  }
+               } else {
+                  try{
+                     double d = count_map.get(var_name).get(key3);
+                     count_map.get(var_name).put(key3, ++d);
+                  } catch(NullPointerException ex){
+                     count_map.get(var_name).put(key3, 1.0);
+                  }
+               }
+               
             } else {
                try{
                   double d = count_map.get(var_name).get(csv_array[i][index]);

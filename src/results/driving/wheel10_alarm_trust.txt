@@ -1,0 +1,966 @@
+S6
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine== ) = (0.619 * (1738.000 / 1873.000)) / 0.919 = 0.574 / 0.919 = 0.625
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.619 * (129.000 / 1873.000)) / 0.073 = 0.043 / 0.073 = 0.586
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine==false alarm) = (0.619 * (6.000 / 1873.000)) / 0.008 = 0.002 / 0.008 = 0.255
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human==0) = (0.619 * (1108.000 / 1873.000)) / 0.583 = 0.366 / 0.583 = 0.628
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human>0) = (0.619 * (395.000 / 1873.000)) / 0.226 = 0.131 / 0.226 = 0.577
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human<0) = (0.619 * (370.000 / 1873.000)) / 0.191 = 0.122 / 0.191 = 0.641
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.381 * (78.000 / 985.000)) / 0.073 = 0.030 / 0.073 = 0.414
+P(rate of change of Trust_Human==0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.765 * (81.000 / 1669.000)) / 0.061 = 0.037 / 0.061 = 0.614
+P(rate of change of Trust_Human>0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.115 * (106.000 / 642.000)) / 0.061 = 0.019 / 0.061 = 0.314
+P(rate of change of Trust_Human<0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.120 * (20.000 / 547.000)) / 0.061 = 0.004 / 0.061 = 0.073
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine== ) = (0.381 * (892.000 / 985.000)) / 0.919 = 0.345 / 0.919 = 0.375
+P(rate of change of Trust_Human==0|EventW_Machine== ) = (0.765 * (1575.000 / 1669.000)) / 0.932 = 0.722 / 0.932 = 0.775
+P(rate of change of Trust_Human>0|EventW_Machine== ) = (0.115 * (534.000 / 642.000)) / 0.932 = 0.096 / 0.932 = 0.103
+P(rate of change of Trust_Human<0|EventW_Machine== ) = (0.120 * (521.000 / 547.000)) / 0.932 = 0.114 / 0.932 = 0.123
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine==false alarm) = (0.381 * (15.000 / 985.000)) / 0.008 = 0.006 / 0.008 = 0.745
+P(rate of change of Trust_Human==0|EventW_Machine==false alarm) = (0.765 * (13.000 / 1669.000)) / 0.008 = 0.006 / 0.008 = 0.781
+P(rate of change of Trust_Human>0|EventW_Machine==false alarm) = (0.115 * (2.000 / 642.000)) / 0.008 = 0.000 / 0.008 = 0.047
+P(rate of change of Trust_Human<0|EventW_Machine==false alarm) = (0.120 * (6.000 / 547.000)) / 0.008 = 0.001 / 0.008 = 0.172
+
+P(EventW_Machine== |rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.918 * (906.000 / 2630.000)) / 0.347 = 0.316 / 0.347 = 0.912
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.074 * (69.000 / 207.000)) / 0.347 = 0.025 / 0.347 = 0.071
+P(EventW_Machine==false alarm|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.007 * (18.000 / 21.000)) / 0.347 = 0.006 / 0.347 = 0.017
+P(rate of change of Trust_Human==0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.765 * (633.000 / 1669.000)) / 0.361 = 0.290 / 0.361 = 0.805
+P(rate of change of Trust_Human>0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.115 * (213.000 / 642.000)) / 0.361 = 0.038 / 0.361 = 0.106
+P(rate of change of Trust_Human<0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.120 * (147.000 / 547.000)) / 0.361 = 0.032 / 0.361 = 0.089
+
+P(EventW_Machine== |rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.918 * (1724.000 / 2630.000)) / 0.652 = 0.602 / 0.652 = 0.923
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.074 * (138.000 / 207.000)) / 0.652 = 0.049 / 0.652 = 0.076
+P(EventW_Machine==false alarm|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.007 * (3.000 / 21.000)) / 0.652 = 0.001 / 0.652 = 0.002
+P(rate of change of Trust_Human==0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.765 * (1036.000 / 1669.000)) / 0.639 = 0.475 / 0.639 = 0.743
+P(rate of change of Trust_Human>0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.115 * (429.000 / 642.000)) / 0.639 = 0.077 / 0.639 = 0.120
+P(rate of change of Trust_Human<0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.120 * (400.000 / 547.000)) / 0.639 = 0.088 / 0.639 = 0.137
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human<0) = (0.381 * (177.000 / 985.000)) / 0.191 = 0.068 / 0.191 = 0.359
+P(EventW_Machine== |rate of change of Trust_Human<0) = (0.918 * (521.000 / 2630.000)) / 0.191 = 0.182 / 0.191 = 0.952
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human<0) = (0.074 * (20.000 / 207.000)) / 0.191 = 0.007 / 0.191 = 0.037
+P(EventW_Machine==false alarm|rate of change of Trust_Human<0) = (0.007 * (6.000 / 21.000)) / 0.191 = 0.002 / 0.191 = 0.010
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human==0) = (0.381 * (561.000 / 985.000)) / 0.583 = 0.217 / 0.583 = 0.372
+P(EventW_Machine== |rate of change of Trust_Human==0) = (0.918 * (1575.000 / 2630.000)) / 0.583 = 0.550 / 0.583 = 0.943
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human==0) = (0.074 * (81.000 / 207.000)) / 0.583 = 0.029 / 0.583 = 0.050
+P(EventW_Machine==false alarm|rate of change of Trust_Human==0) = (0.007 * (13.000 / 21.000)) / 0.583 = 0.004 / 0.583 = 0.007
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human>0) = (0.381 * (247.000 / 985.000)) / 0.226 = 0.096 / 0.226 = 0.423
+P(EventW_Machine== |rate of change of Trust_Human>0) = (0.918 * (534.000 / 2630.000)) / 0.225 = 0.186 / 0.225 = 0.829
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human>0) = (0.074 * (106.000 / 207.000)) / 0.225 = 0.038 / 0.225 = 0.168
+P(EventW_Machine==false alarm|rate of change of Trust_Human>0) = (0.007 * (2.000 / 21.000)) / 0.225 = 0.001 / 0.225 = 0.003
+
+S7
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine== ) = (0.619 * (1758.000 / 1891.000)) / 0.919 = 0.575 / 0.919 = 0.626
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.619 * (127.000 / 1891.000)) / 0.073 = 0.042 / 0.073 = 0.568
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine==false alarm) = (0.619 * (6.000 / 1891.000)) / 0.008 = 0.002 / 0.008 = 0.254
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human==0) = (0.619 * (1400.000 / 1891.000)) / 0.755 = 0.458 / 0.755 = 0.607
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human>0) = (0.619 * (235.000 / 1891.000)) / 0.124 = 0.077 / 0.124 = 0.619
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human<0) = (0.619 * (256.000 / 1891.000)) / 0.120 = 0.084 / 0.120 = 0.696
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.381 * (82.000 / 989.000)) / 0.073 = 0.032 / 0.073 = 0.432
+P(rate of change of Trust_Human==0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.765 * (146.000 / 2171.000)) / 0.072 = 0.051 / 0.072 = 0.713
+P(rate of change of Trust_Human<0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.120 * (23.000 / 351.000)) / 0.072 = 0.008 / 0.072 = 0.109
+P(rate of change of Trust_Human>0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.115 * (40.000 / 358.000)) / 0.072 = 0.013 / 0.072 = 0.178
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine== ) = (0.381 * (892.000 / 989.000)) / 0.919 = 0.344 / 0.919 = 0.374
+P(rate of change of Trust_Human==0|EventW_Machine== ) = (0.765 * (2005.000 / 2171.000)) / 0.920 = 0.707 / 0.920 = 0.768
+P(rate of change of Trust_Human<0|EventW_Machine== ) = (0.120 * (328.000 / 351.000)) / 0.920 = 0.112 / 0.920 = 0.122
+P(rate of change of Trust_Human>0|EventW_Machine== ) = (0.115 * (317.000 / 358.000)) / 0.920 = 0.102 / 0.920 = 0.111
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine==false alarm) = (0.381 * (15.000 / 989.000)) / 0.008 = 0.006 / 0.008 = 0.746
+P(rate of change of Trust_Human==0|EventW_Machine==false alarm) = (0.765 * (20.000 / 2171.000)) / 0.007 = 0.007 / 0.007 = 0.956
+P(rate of change of Trust_Human>0|EventW_Machine==false alarm) = (0.115 * (1.000 / 358.000)) / 0.007 = 0.000 / 0.007 = 0.044
+
+P(EventW_Machine== |rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.918 * (922.000 / 2650.000)) / 0.345 = 0.319 / 0.345 = 0.927
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.074 * (64.000 / 209.000)) / 0.345 = 0.023 / 0.345 = 0.066
+P(EventW_Machine==false alarm|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.007 * (8.000 / 21.000)) / 0.345 = 0.003 / 0.345 = 0.008
+P(rate of change of Trust_Human==0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.765 * (747.000 / 2171.000)) / 0.345 = 0.263 / 0.345 = 0.762
+P(rate of change of Trust_Human<0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.120 * (135.000 / 351.000)) / 0.345 = 0.046 / 0.345 = 0.134
+P(rate of change of Trust_Human>0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.115 * (112.000 / 358.000)) / 0.345 = 0.036 / 0.345 = 0.104
+
+P(EventW_Machine== |rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.918 * (1728.000 / 2650.000)) / 0.654 = 0.599 / 0.654 = 0.915
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.074 * (145.000 / 209.000)) / 0.654 = 0.051 / 0.654 = 0.078
+P(EventW_Machine==false alarm|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.007 * (13.000 / 21.000)) / 0.654 = 0.004 / 0.654 = 0.007
+P(rate of change of Trust_Human==0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.765 * (1424.000 / 2171.000)) / 0.655 = 0.502 / 0.655 = 0.766
+P(rate of change of Trust_Human<0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.120 * (216.000 / 351.000)) / 0.655 = 0.074 / 0.655 = 0.113
+P(rate of change of Trust_Human>0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.115 * (246.000 / 358.000)) / 0.655 = 0.079 / 0.655 = 0.121
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human<0) = (0.381 * (95.000 / 989.000)) / 0.120 = 0.037 / 0.120 = 0.304
+P(EventW_Machine== |rate of change of Trust_Human<0) = (0.918 * (328.000 / 2650.000)) / 0.122 = 0.114 / 0.122 = 0.933
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human<0) = (0.074 * (23.000 / 209.000)) / 0.122 = 0.008 / 0.122 = 0.067
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human==0) = (0.381 * (771.000 / 989.000)) / 0.755 = 0.297 / 0.755 = 0.393
+P(EventW_Machine== |rate of change of Trust_Human==0) = (0.918 * (2005.000 / 2650.000)) / 0.753 = 0.695 / 0.753 = 0.922
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human==0) = (0.074 * (146.000 / 209.000)) / 0.753 = 0.052 / 0.753 = 0.069
+P(EventW_Machine==false alarm|rate of change of Trust_Human==0) = (0.007 * (20.000 / 21.000)) / 0.753 = 0.007 / 0.753 = 0.009
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human>0) = (0.381 * (123.000 / 989.000)) / 0.124 = 0.047 / 0.124 = 0.381
+P(EventW_Machine== |rate of change of Trust_Human>0) = (0.918 * (317.000 / 2650.000)) / 0.124 = 0.110 / 0.124 = 0.883
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human>0) = (0.074 * (40.000 / 209.000)) / 0.124 = 0.014 / 0.124 = 0.114
+P(EventW_Machine==false alarm|rate of change of Trust_Human>0) = (0.007 * (1.000 / 21.000)) / 0.124 = 0.000 / 0.124 = 0.003
+
+S8
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine== ) = (0.619 * (1682.000 / 1820.000)) / 0.912 = 0.572 / 0.912 = 0.627
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.619 * (132.000 / 1820.000)) / 0.080 = 0.045 / 0.080 = 0.560
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine==false alarm) = (0.619 * (6.000 / 1820.000)) / 0.007 = 0.002 / 0.007 = 0.275
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human==0) = (0.619 * (1379.000 / 1820.000)) / 0.767 = 0.469 / 0.767 = 0.612
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human>0) = (0.619 * (203.000 / 1820.000)) / 0.128 = 0.069 / 0.128 = 0.541
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human<0) = (0.619 * (238.000 / 1820.000)) / 0.106 = 0.081 / 0.106 = 0.765
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.381 * (98.000 / 1060.000)) / 0.080 = 0.035 / 0.080 = 0.440
+P(rate of change of Trust_Human==0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.765 * (109.000 / 2207.000)) / 0.079 = 0.038 / 0.079 = 0.480
+P(rate of change of Trust_Human>0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.115 * (84.000 / 366.000)) / 0.079 = 0.026 / 0.079 = 0.336
+P(rate of change of Trust_Human<0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.120 * (37.000 / 307.000)) / 0.079 = 0.014 / 0.079 = 0.184
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine== ) = (0.381 * (947.000 / 1060.000)) / 0.912 = 0.340 / 0.912 = 0.373
+P(rate of change of Trust_Human==0|EventW_Machine== ) = (0.765 * (2078.000 / 2207.000)) / 0.914 = 0.720 / 0.914 = 0.788
+P(rate of change of Trust_Human>0|EventW_Machine== ) = (0.115 * (282.000 / 366.000)) / 0.914 = 0.089 / 0.914 = 0.097
+P(rate of change of Trust_Human<0|EventW_Machine== ) = (0.120 * (269.000 / 307.000)) / 0.914 = 0.105 / 0.914 = 0.115
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine==false alarm) = (0.381 * (15.000 / 1060.000)) / 0.007 = 0.005 / 0.007 = 0.725
+P(rate of change of Trust_Human==0|EventW_Machine==false alarm) = (0.765 * (20.000 / 2207.000)) / 0.007 = 0.007 / 0.007 = 0.947
+P(rate of change of Trust_Human<0|EventW_Machine==false alarm) = (0.120 * (1.000 / 307.000)) / 0.007 = 0.000 / 0.007 = 0.053
+
+P(EventW_Machine== |rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.918 * (981.000 / 2629.000)) / 0.370 = 0.343 / 0.370 = 0.927
+P(EventW_Machine==false alarm|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.007 * (9.000 / 21.000)) / 0.370 = 0.003 / 0.370 = 0.008
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.074 * (75.000 / 230.000)) / 0.370 = 0.024 / 0.370 = 0.065
+P(rate of change of Trust_Human==0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.765 * (840.000 / 2207.000)) / 0.368 = 0.291 / 0.368 = 0.791
+P(rate of change of Trust_Human>0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.115 * (143.000 / 366.000)) / 0.368 = 0.045 / 0.368 = 0.122
+P(rate of change of Trust_Human<0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.120 * (82.000 / 307.000)) / 0.368 = 0.032 / 0.368 = 0.087
+
+P(EventW_Machine== |rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.918 * (1648.000 / 2629.000)) / 0.629 = 0.575 / 0.629 = 0.914
+P(EventW_Machine==false alarm|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.007 * (12.000 / 21.000)) / 0.629 = 0.004 / 0.629 = 0.006
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.074 * (155.000 / 230.000)) / 0.629 = 0.050 / 0.629 = 0.079
+P(rate of change of Trust_Human==0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.765 * (1367.000 / 2207.000)) / 0.632 = 0.474 / 0.632 = 0.750
+P(rate of change of Trust_Human>0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.115 * (223.000 / 366.000)) / 0.632 = 0.070 / 0.632 = 0.111
+P(rate of change of Trust_Human<0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.120 * (225.000 / 307.000)) / 0.632 = 0.088 / 0.632 = 0.139
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human<0) = (0.381 * (69.000 / 1060.000)) / 0.106 = 0.025 / 0.106 = 0.235
+P(EventW_Machine== |rate of change of Trust_Human<0) = (0.918 * (269.000 / 2629.000)) / 0.106 = 0.094 / 0.106 = 0.885
+P(EventW_Machine==false alarm|rate of change of Trust_Human<0) = (0.007 * (1.000 / 21.000)) / 0.106 = 0.000 / 0.106 = 0.003
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human<0) = (0.074 * (37.000 / 230.000)) / 0.106 = 0.012 / 0.106 = 0.112
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human==0) = (0.381 * (828.000 / 1060.000)) / 0.767 = 0.298 / 0.767 = 0.388
+P(EventW_Machine== |rate of change of Trust_Human==0) = (0.918 * (2078.000 / 2629.000)) / 0.767 = 0.726 / 0.767 = 0.946
+P(EventW_Machine==false alarm|rate of change of Trust_Human==0) = (0.007 * (20.000 / 21.000)) / 0.767 = 0.007 / 0.767 = 0.009
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human==0) = (0.074 * (109.000 / 230.000)) / 0.767 = 0.035 / 0.767 = 0.046
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human>0) = (0.381 * (163.000 / 1060.000)) / 0.128 = 0.059 / 0.128 = 0.459
+P(EventW_Machine== |rate of change of Trust_Human>0) = (0.918 * (282.000 / 2629.000)) / 0.125 = 0.098 / 0.125 = 0.785
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human>0) = (0.074 * (84.000 / 230.000)) / 0.125 = 0.027 / 0.125 = 0.215
+
+S9
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine== ) = (0.619 * (1852.000 / 1979.000)) / 0.920 = 0.579 / 0.920 = 0.630
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.619 * (117.000 / 1979.000)) / 0.073 = 0.037 / 0.073 = 0.504
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine==false alarm) = (0.619 * (10.000 / 1979.000)) / 0.008 = 0.003 / 0.008 = 0.402
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human==0) = (0.619 * (1449.000 / 1979.000)) / 0.719 = 0.453 / 0.719 = 0.631
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human>0) = (0.619 * (222.000 / 1979.000)) / 0.132 = 0.069 / 0.132 = 0.528
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human<0) = (0.619 * (308.000 / 1979.000)) / 0.150 = 0.096 / 0.150 = 0.644
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.381 * (85.000 / 901.000)) / 0.073 = 0.036 / 0.073 = 0.496
+P(rate of change of Trust_Human==0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.765 * (100.000 / 2077.000)) / 0.066 = 0.037 / 0.066 = 0.556
+P(rate of change of Trust_Human<0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.120 * (68.000 / 434.000)) / 0.066 = 0.019 / 0.066 = 0.284
+P(rate of change of Trust_Human>0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.115 * (34.000 / 369.000)) / 0.066 = 0.011 / 0.066 = 0.160
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine== ) = (0.381 * (805.000 / 901.000)) / 0.920 = 0.340 / 0.920 = 0.370
+P(rate of change of Trust_Human==0|EventW_Machine== ) = (0.765 * (1968.000 / 2077.000)) / 0.927 = 0.725 / 0.927 = 0.782
+P(rate of change of Trust_Human<0|EventW_Machine== ) = (0.120 * (354.000 / 434.000)) / 0.927 = 0.098 / 0.927 = 0.106
+P(rate of change of Trust_Human>0|EventW_Machine== ) = (0.115 * (335.000 / 369.000)) / 0.927 = 0.104 / 0.927 = 0.113
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine==false alarm) = (0.381 * (11.000 / 901.000)) / 0.008 = 0.005 / 0.008 = 0.598
+P(rate of change of Trust_Human==0|EventW_Machine==false alarm) = (0.765 * (9.000 / 2077.000)) / 0.007 = 0.003 / 0.007 = 0.500
+P(rate of change of Trust_Human<0|EventW_Machine==false alarm) = (0.120 * (12.000 / 434.000)) / 0.007 = 0.003 / 0.007 = 0.500
+
+P(EventW_Machine== |rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.918 * (826.000 / 2657.000)) / 0.315 = 0.285 / 0.315 = 0.906
+P(EventW_Machine==false alarm|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.007 * (11.000 / 21.000)) / 0.315 = 0.004 / 0.315 = 0.012
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.074 * (71.000 / 202.000)) / 0.315 = 0.026 / 0.315 = 0.083
+P(rate of change of Trust_Human==0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.765 * (639.000 / 2077.000)) / 0.314 = 0.235 / 0.314 = 0.748
+P(rate of change of Trust_Human<0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.120 * (134.000 / 434.000)) / 0.314 = 0.037 / 0.314 = 0.118
+P(rate of change of Trust_Human>0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.115 * (135.000 / 369.000)) / 0.314 = 0.042 / 0.314 = 0.134
+
+P(EventW_Machine== |rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.918 * (1831.000 / 2657.000)) / 0.684 = 0.633 / 0.684 = 0.925
+P(EventW_Machine==false alarm|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.007 * (10.000 / 21.000)) / 0.684 = 0.003 / 0.684 = 0.005
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.074 * (131.000 / 202.000)) / 0.684 = 0.048 / 0.684 = 0.070
+P(rate of change of Trust_Human==0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.765 * (1438.000 / 2077.000)) / 0.686 = 0.530 / 0.686 = 0.773
+P(rate of change of Trust_Human<0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.120 * (300.000 / 434.000)) / 0.686 = 0.083 / 0.686 = 0.121
+P(rate of change of Trust_Human>0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.115 * (234.000 / 369.000)) / 0.686 = 0.073 / 0.686 = 0.106
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human<0) = (0.381 * (126.000 / 901.000)) / 0.150 = 0.053 / 0.150 = 0.356
+P(EventW_Machine== |rate of change of Trust_Human<0) = (0.918 * (354.000 / 2657.000)) / 0.151 = 0.122 / 0.151 = 0.809
+P(EventW_Machine==false alarm|rate of change of Trust_Human<0) = (0.007 * (12.000 / 21.000)) / 0.151 = 0.004 / 0.151 = 0.026
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human<0) = (0.074 * (68.000 / 202.000)) / 0.151 = 0.025 / 0.151 = 0.165
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human==0) = (0.381 * (628.000 / 901.000)) / 0.719 = 0.266 / 0.719 = 0.369
+P(EventW_Machine== |rate of change of Trust_Human==0) = (0.918 * (1968.000 / 2657.000)) / 0.720 = 0.680 / 0.720 = 0.945
+P(EventW_Machine==false alarm|rate of change of Trust_Human==0) = (0.007 * (9.000 / 21.000)) / 0.720 = 0.003 / 0.720 = 0.004
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human==0) = (0.074 * (100.000 / 202.000)) / 0.720 = 0.037 / 0.720 = 0.051
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human>0) = (0.381 * (147.000 / 901.000)) / 0.132 = 0.062 / 0.132 = 0.472
+P(EventW_Machine== |rate of change of Trust_Human>0) = (0.918 * (335.000 / 2657.000)) / 0.128 = 0.116 / 0.128 = 0.903
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human>0) = (0.074 * (34.000 / 202.000)) / 0.128 = 0.012 / 0.128 = 0.097
+
+S10
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine== ) = (0.619 * (1707.000 / 1839.000)) / 0.915 = 0.575 / 0.915 = 0.628
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.619 * (127.000 / 1839.000)) / 0.078 = 0.043 / 0.078 = 0.549
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine==false alarm) = (0.619 * (5.000 / 1839.000)) / 0.007 = 0.002 / 0.007 = 0.235
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human==0) = (0.619 * (1213.000 / 1839.000)) / 0.637 = 0.408 / 0.637 = 0.641
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human>0) = (0.619 * (292.000 / 1839.000)) / 0.201 = 0.098 / 0.201 = 0.489
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human<0) = (0.619 * (334.000 / 1839.000)) / 0.162 = 0.112 / 0.162 = 0.695
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.381 * (96.000 / 1041.000)) / 0.078 = 0.035 / 0.078 = 0.451
+P(rate of change of Trust_Human==0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.765 * (91.000 / 1838.000)) / 0.066 = 0.038 / 0.066 = 0.575
+P(rate of change of Trust_Human<0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.120 * (27.000 / 469.000)) / 0.066 = 0.007 / 0.066 = 0.105
+P(rate of change of Trust_Human>0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.115 * (105.000 / 573.000)) / 0.066 = 0.021 / 0.066 = 0.320
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine== ) = (0.381 * (930.000 / 1041.000)) / 0.915 = 0.340 / 0.915 = 0.372
+P(rate of change of Trust_Human==0|EventW_Machine== ) = (0.765 * (1738.000 / 1838.000)) / 0.928 = 0.723 / 0.928 = 0.780
+P(rate of change of Trust_Human<0|EventW_Machine== ) = (0.120 * (432.000 / 469.000)) / 0.928 = 0.111 / 0.928 = 0.119
+P(rate of change of Trust_Human>0|EventW_Machine== ) = (0.115 * (467.000 / 573.000)) / 0.928 = 0.094 / 0.928 = 0.101
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine==false alarm) = (0.381 * (15.000 / 1041.000)) / 0.007 = 0.005 / 0.007 = 0.765
+P(rate of change of Trust_Human==0|EventW_Machine==false alarm) = (0.765 * (9.000 / 1838.000)) / 0.007 = 0.004 / 0.007 = 0.576
+P(rate of change of Trust_Human<0|EventW_Machine==false alarm) = (0.120 * (10.000 / 469.000)) / 0.007 = 0.003 / 0.007 = 0.393
+P(rate of change of Trust_Human>0|EventW_Machine==false alarm) = (0.115 * (1.000 / 573.000)) / 0.007 = 0.000 / 0.007 = 0.031
+
+P(EventW_Machine== |rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.918 * (965.000 / 2637.000)) / 0.362 = 0.336 / 0.362 = 0.928
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.074 * (67.000 / 223.000)) / 0.362 = 0.022 / 0.362 = 0.061
+P(EventW_Machine==false alarm|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.007 * (11.000 / 20.000)) / 0.362 = 0.004 / 0.362 = 0.011
+P(rate of change of Trust_Human==0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.765 * (669.000 / 1838.000)) / 0.362 = 0.278 / 0.362 = 0.769
+P(rate of change of Trust_Human<0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.120 * (159.000 / 469.000)) / 0.362 = 0.041 / 0.362 = 0.112
+P(rate of change of Trust_Human>0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.115 * (215.000 / 573.000)) / 0.362 = 0.043 / 0.362 = 0.119
+
+P(EventW_Machine== |rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.918 * (1672.000 / 2637.000)) / 0.637 = 0.582 / 0.637 = 0.914
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.074 * (156.000 / 223.000)) / 0.637 = 0.052 / 0.637 = 0.081
+P(EventW_Machine==false alarm|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.007 * (9.000 / 20.000)) / 0.637 = 0.003 / 0.637 = 0.005
+P(rate of change of Trust_Human==0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.765 * (1169.000 / 1838.000)) / 0.638 = 0.487 / 0.638 = 0.763
+P(rate of change of Trust_Human<0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.120 * (310.000 / 469.000)) / 0.638 = 0.079 / 0.638 = 0.124
+P(rate of change of Trust_Human>0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.115 * (358.000 / 573.000)) / 0.638 = 0.072 / 0.638 = 0.113
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human<0) = (0.381 * (135.000 / 1041.000)) / 0.162 = 0.049 / 0.162 = 0.305
+P(EventW_Machine== |rate of change of Trust_Human<0) = (0.918 * (432.000 / 2637.000)) / 0.163 = 0.150 / 0.163 = 0.923
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human<0) = (0.074 * (27.000 / 223.000)) / 0.163 = 0.009 / 0.163 = 0.055
+P(EventW_Machine==false alarm|rate of change of Trust_Human<0) = (0.007 * (10.000 / 20.000)) / 0.163 = 0.004 / 0.163 = 0.021
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human==0) = (0.381 * (625.000 / 1041.000)) / 0.637 = 0.229 / 0.637 = 0.359
+P(EventW_Machine== |rate of change of Trust_Human==0) = (0.918 * (1738.000 / 2637.000)) / 0.638 = 0.605 / 0.638 = 0.948
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human==0) = (0.074 * (91.000 / 223.000)) / 0.638 = 0.030 / 0.638 = 0.047
+P(EventW_Machine==false alarm|rate of change of Trust_Human==0) = (0.007 * (9.000 / 20.000)) / 0.638 = 0.003 / 0.638 = 0.005
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human>0) = (0.381 * (281.000 / 1041.000)) / 0.201 = 0.103 / 0.201 = 0.511
+P(EventW_Machine== |rate of change of Trust_Human>0) = (0.918 * (467.000 / 2637.000)) / 0.198 = 0.163 / 0.198 = 0.822
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human>0) = (0.074 * (105.000 / 223.000)) / 0.198 = 0.035 / 0.198 = 0.176
+P(EventW_Machine==false alarm|rate of change of Trust_Human>0) = (0.007 * (1.000 / 20.000)) / 0.198 = 0.000 / 0.198 = 0.002
+
+S11
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine== ) = (0.619 * (1774.000 / 1907.000)) / 0.915 = 0.576 / 0.915 = 0.629
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.619 * (127.000 / 1907.000)) / 0.077 = 0.041 / 0.077 = 0.534
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine==false alarm) = (0.619 * (6.000 / 1907.000)) / 0.008 = 0.002 / 0.008 = 0.249
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human==0) = (0.619 * (1623.000 / 1907.000)) / 0.862 = 0.527 / 0.862 = 0.611
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human>0) = (0.619 * (161.000 / 1907.000)) / 0.080 = 0.052 / 0.080 = 0.656
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human<0) = (0.619 * (123.000 / 1907.000)) / 0.059 = 0.040 / 0.059 = 0.680
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.381 * (92.000 / 973.000)) / 0.077 = 0.036 / 0.077 = 0.466
+P(rate of change of Trust_Human==0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.765 * (161.000 / 2478.000)) / 0.085 = 0.050 / 0.085 = 0.585
+P(rate of change of Trust_Human>0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.115 * (27.000 / 231.000)) / 0.085 = 0.013 / 0.085 = 0.158
+P(rate of change of Trust_Human<0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.120 * (31.000 / 171.000)) / 0.085 = 0.022 / 0.085 = 0.256
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine== ) = (0.381 * (866.000 / 973.000)) / 0.915 = 0.339 / 0.915 = 0.371
+P(rate of change of Trust_Human==0|EventW_Machine== ) = (0.765 * (2297.000 / 2478.000)) / 0.908 = 0.709 / 0.908 = 0.781
+P(rate of change of Trust_Human>0|EventW_Machine== ) = (0.115 * (203.000 / 231.000)) / 0.908 = 0.101 / 0.908 = 0.111
+P(rate of change of Trust_Human<0|EventW_Machine== ) = (0.120 * (140.000 / 171.000)) / 0.908 = 0.098 / 0.908 = 0.108
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine==false alarm) = (0.381 * (15.000 / 973.000)) / 0.008 = 0.006 / 0.008 = 0.751
+P(rate of change of Trust_Human==0|EventW_Machine==false alarm) = (0.765 * (20.000 / 2478.000)) / 0.007 = 0.006 / 0.007 = 0.925
+P(rate of change of Trust_Human>0|EventW_Machine==false alarm) = (0.115 * (1.000 / 231.000)) / 0.007 = 0.000 / 0.007 = 0.075
+
+P(EventW_Machine== |rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.918 * (895.000 / 2640.000)) / 0.340 = 0.311 / 0.340 = 0.916
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.074 * (72.000 / 219.000)) / 0.340 = 0.024 / 0.340 = 0.072
+P(EventW_Machine==false alarm|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.007 * (13.000 / 21.000)) / 0.340 = 0.004 / 0.340 = 0.013
+P(rate of change of Trust_Human==0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.765 * (834.000 / 2478.000)) / 0.343 = 0.257 / 0.343 = 0.751
+P(rate of change of Trust_Human>0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.115 * (83.000 / 231.000)) / 0.343 = 0.041 / 0.343 = 0.120
+P(rate of change of Trust_Human<0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.120 * (63.000 / 171.000)) / 0.343 = 0.044 / 0.343 = 0.129
+
+P(EventW_Machine== |rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.918 * (1745.000 / 2640.000)) / 0.659 = 0.607 / 0.659 = 0.921
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.074 * (147.000 / 219.000)) / 0.659 = 0.050 / 0.659 = 0.075
+P(EventW_Machine==false alarm|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.007 * (8.000 / 21.000)) / 0.659 = 0.003 / 0.659 = 0.004
+P(rate of change of Trust_Human==0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.765 * (1644.000 / 2478.000)) / 0.657 = 0.508 / 0.657 = 0.772
+P(rate of change of Trust_Human>0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.115 * (148.000 / 231.000)) / 0.657 = 0.074 / 0.657 = 0.112
+P(rate of change of Trust_Human<0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.120 * (108.000 / 171.000)) / 0.657 = 0.076 / 0.657 = 0.115
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human<0) = (0.381 * (48.000 / 973.000)) / 0.059 = 0.019 / 0.059 = 0.320
+P(EventW_Machine== |rate of change of Trust_Human<0) = (0.918 * (140.000 / 2640.000)) / 0.059 = 0.049 / 0.059 = 0.823
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human<0) = (0.074 * (31.000 / 219.000)) / 0.059 = 0.010 / 0.059 = 0.177
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human==0) = (0.381 * (855.000 / 973.000)) / 0.862 = 0.335 / 0.862 = 0.389
+P(EventW_Machine== |rate of change of Trust_Human==0) = (0.918 * (2297.000 / 2640.000)) / 0.860 = 0.799 / 0.860 = 0.929
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human==0) = (0.074 * (161.000 / 219.000)) / 0.860 = 0.054 / 0.860 = 0.063
+P(EventW_Machine==false alarm|rate of change of Trust_Human==0) = (0.007 * (20.000 / 21.000)) / 0.860 = 0.007 / 0.860 = 0.008
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human>0) = (0.381 * (70.000 / 973.000)) / 0.080 = 0.027 / 0.080 = 0.344
+P(EventW_Machine== |rate of change of Trust_Human>0) = (0.918 * (203.000 / 2640.000)) / 0.080 = 0.071 / 0.080 = 0.882
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human>0) = (0.074 * (27.000 / 219.000)) / 0.080 = 0.009 / 0.080 = 0.114
+P(EventW_Machine==false alarm|rate of change of Trust_Human>0) = (0.007 * (1.000 / 21.000)) / 0.080 = 0.000 / 0.080 = 0.004
+
+S12
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine== ) = (0.619 * (1768.000 / 1900.000)) / 0.914 = 0.576 / 0.914 = 0.630
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.619 * (126.000 / 1900.000)) / 0.078 = 0.041 / 0.078 = 0.526
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine==false alarm) = (0.619 * (6.000 / 1900.000)) / 0.008 = 0.002 / 0.008 = 0.251
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human==0) = (0.619 * (1673.000 / 1900.000)) / 0.906 = 0.545 / 0.906 = 0.602
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human>0) = (0.619 * (112.000 / 1900.000)) / 0.052 = 0.036 / 0.052 = 0.696
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human<0) = (0.619 * (115.000 / 1900.000)) / 0.042 = 0.037 / 0.042 = 0.898
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.381 * (95.000 / 980.000)) / 0.078 = 0.037 / 0.078 = 0.474
+P(rate of change of Trust_Human==0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.765 * (179.000 / 2601.000)) / 0.086 = 0.053 / 0.086 = 0.611
+P(rate of change of Trust_Human<0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.120 * (10.000 / 126.000)) / 0.086 = 0.010 / 0.086 = 0.110
+P(rate of change of Trust_Human>0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.115 * (32.000 / 153.000)) / 0.086 = 0.024 / 0.086 = 0.279
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine== ) = (0.381 * (870.000 / 980.000)) / 0.914 = 0.338 / 0.914 = 0.370
+P(rate of change of Trust_Human==0|EventW_Machine== ) = (0.765 * (2401.000 / 2601.000)) / 0.908 = 0.706 / 0.908 = 0.778
+P(rate of change of Trust_Human<0|EventW_Machine== ) = (0.120 * (116.000 / 126.000)) / 0.908 = 0.110 / 0.908 = 0.122
+P(rate of change of Trust_Human>0|EventW_Machine== ) = (0.115 * (121.000 / 153.000)) / 0.908 = 0.091 / 0.908 = 0.100
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine==false alarm) = (0.381 * (15.000 / 980.000)) / 0.008 = 0.006 / 0.008 = 0.749
+P(rate of change of Trust_Human==0|EventW_Machine==false alarm) = (0.765 * (21.000 / 2601.000)) / 0.006 = 0.006 / 0.006 = 1.000
+
+P(EventW_Machine== |rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.918 * (905.000 / 2638.000)) / 0.342 = 0.315 / 0.342 = 0.922
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.074 * (68.000 / 221.000)) / 0.342 = 0.023 / 0.342 = 0.067
+P(EventW_Machine==false alarm|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.007 * (12.000 / 21.000)) / 0.342 = 0.004 / 0.342 = 0.012
+P(rate of change of Trust_Human==0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.765 * (884.000 / 2601.000)) / 0.344 = 0.260 / 0.344 = 0.757
+P(rate of change of Trust_Human<0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.120 * (38.000 / 126.000)) / 0.344 = 0.036 / 0.344 = 0.105
+P(rate of change of Trust_Human>0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.115 * (63.000 / 153.000)) / 0.344 = 0.047 / 0.344 = 0.138
+
+P(EventW_Machine== |rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.918 * (1733.000 / 2638.000)) / 0.657 = 0.603 / 0.657 = 0.917
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.074 * (153.000 / 221.000)) / 0.657 = 0.051 / 0.657 = 0.078
+P(EventW_Machine==false alarm|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.007 * (9.000 / 21.000)) / 0.657 = 0.003 / 0.657 = 0.005
+P(rate of change of Trust_Human==0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.765 * (1717.000 / 2601.000)) / 0.656 = 0.505 / 0.656 = 0.769
+P(rate of change of Trust_Human<0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.120 * (88.000 / 126.000)) / 0.656 = 0.084 / 0.656 = 0.128
+P(rate of change of Trust_Human>0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.115 * (90.000 / 153.000)) / 0.656 = 0.068 / 0.656 = 0.103
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human<0) = (0.381 * (11.000 / 980.000)) / 0.042 = 0.004 / 0.042 = 0.102
+P(EventW_Machine== |rate of change of Trust_Human<0) = (0.918 * (116.000 / 2638.000)) / 0.044 = 0.040 / 0.044 = 0.923
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human<0) = (0.074 * (10.000 / 221.000)) / 0.044 = 0.003 / 0.044 = 0.077
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human==0) = (0.381 * (928.000 / 980.000)) / 0.906 = 0.361 / 0.906 = 0.398
+P(EventW_Machine== |rate of change of Trust_Human==0) = (0.918 * (2401.000 / 2638.000)) / 0.902 = 0.836 / 0.902 = 0.926
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human==0) = (0.074 * (179.000 / 221.000)) / 0.902 = 0.060 / 0.902 = 0.066
+P(EventW_Machine==false alarm|rate of change of Trust_Human==0) = (0.007 * (21.000 / 21.000)) / 0.902 = 0.007 / 0.902 = 0.008
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human>0) = (0.381 * (41.000 / 980.000)) / 0.052 = 0.016 / 0.052 = 0.304
+P(EventW_Machine== |rate of change of Trust_Human>0) = (0.918 * (121.000 / 2638.000)) / 0.053 = 0.042 / 0.053 = 0.797
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human>0) = (0.074 * (32.000 / 221.000)) / 0.053 = 0.011 / 0.053 = 0.203
+
+S13
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine== ) = (0.619 * (1758.000 / 1885.000)) / 0.916 = 0.577 / 0.916 = 0.630
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.619 * (118.000 / 1885.000)) / 0.077 = 0.039 / 0.077 = 0.503
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine==false alarm) = (0.619 * (9.000 / 1885.000)) / 0.007 = 0.003 / 0.007 = 0.412
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human==0) = (0.619 * (1710.000 / 1885.000)) / 0.879 = 0.562 / 0.879 = 0.639
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human>0) = (0.619 * (92.000 / 1885.000)) / 0.064 = 0.030 / 0.064 = 0.473
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human<0) = (0.619 * (83.000 / 1885.000)) / 0.057 = 0.027 / 0.057 = 0.477
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.381 * (100.000 / 995.000)) / 0.077 = 0.038 / 0.077 = 0.497
+P(rate of change of Trust_Human==0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.765 * (195.000 / 2539.000)) / 0.075 = 0.059 / 0.075 = 0.787
+P(rate of change of Trust_Human>0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.115 * (12.000 / 180.000)) / 0.075 = 0.008 / 0.075 = 0.103
+P(rate of change of Trust_Human<0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.120 * (11.000 / 161.000)) / 0.075 = 0.008 / 0.075 = 0.110
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine== ) = (0.381 * (884.000 / 995.000)) / 0.916 = 0.338 / 0.916 = 0.370
+P(rate of change of Trust_Human==0|EventW_Machine== ) = (0.765 * (2331.000 / 2539.000)) / 0.916 = 0.702 / 0.916 = 0.766
+P(rate of change of Trust_Human>0|EventW_Machine== ) = (0.115 * (167.000 / 180.000)) / 0.916 = 0.107 / 0.916 = 0.116
+P(rate of change of Trust_Human<0|EventW_Machine== ) = (0.120 * (144.000 / 161.000)) / 0.916 = 0.107 / 0.916 = 0.117
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine==false alarm) = (0.381 * (11.000 / 995.000)) / 0.007 = 0.004 / 0.007 = 0.588
+P(rate of change of Trust_Human==0|EventW_Machine==false alarm) = (0.765 * (13.000 / 2539.000)) / 0.009 = 0.004 / 0.009 = 0.434
+P(rate of change of Trust_Human>0|EventW_Machine==false alarm) = (0.115 * (1.000 / 180.000)) / 0.009 = 0.001 / 0.009 = 0.071
+P(rate of change of Trust_Human<0|EventW_Machine==false alarm) = (0.120 * (6.000 / 161.000)) / 0.009 = 0.004 / 0.009 = 0.495
+
+P(EventW_Machine== |rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.918 * (909.000 / 2642.000)) / 0.345 = 0.316 / 0.345 = 0.916
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.074 * (73.000 / 218.000)) / 0.345 = 0.025 / 0.345 = 0.072
+P(EventW_Machine==false alarm|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.007 * (12.000 / 20.000)) / 0.345 = 0.004 / 0.345 = 0.012
+P(rate of change of Trust_Human==0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.765 * (843.000 / 2539.000)) / 0.359 = 0.254 / 0.359 = 0.708
+P(rate of change of Trust_Human>0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.115 * (73.000 / 180.000)) / 0.359 = 0.047 / 0.359 = 0.130
+P(rate of change of Trust_Human<0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.120 * (78.000 / 161.000)) / 0.359 = 0.058 / 0.359 = 0.162
+
+P(EventW_Machine== |rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.918 * (1733.000 / 2642.000)) / 0.654 = 0.602 / 0.654 = 0.920
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.074 * (145.000 / 218.000)) / 0.654 = 0.049 / 0.654 = 0.075
+P(EventW_Machine==false alarm|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.007 * (8.000 / 20.000)) / 0.654 = 0.003 / 0.654 = 0.004
+P(rate of change of Trust_Human==0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.765 * (1696.000 / 2539.000)) / 0.641 = 0.511 / 0.641 = 0.797
+P(rate of change of Trust_Human>0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.115 * (107.000 / 180.000)) / 0.641 = 0.068 / 0.641 = 0.107
+P(rate of change of Trust_Human<0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.120 * (83.000 / 161.000)) / 0.641 = 0.062 / 0.641 = 0.096
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human<0) = (0.381 * (78.000 / 995.000)) / 0.057 = 0.030 / 0.057 = 0.523
+P(EventW_Machine== |rate of change of Trust_Human<0) = (0.918 * (144.000 / 2642.000)) / 0.056 = 0.050 / 0.056 = 0.896
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human<0) = (0.074 * (11.000 / 218.000)) / 0.056 = 0.004 / 0.056 = 0.067
+P(EventW_Machine==false alarm|rate of change of Trust_Human<0) = (0.007 * (6.000 / 20.000)) / 0.056 = 0.002 / 0.056 = 0.038
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human==0) = (0.381 * (829.000 / 995.000)) / 0.879 = 0.317 / 0.879 = 0.361
+P(EventW_Machine== |rate of change of Trust_Human==0) = (0.918 * (2331.000 / 2642.000)) / 0.881 = 0.810 / 0.881 = 0.920
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human==0) = (0.074 * (195.000 / 218.000)) / 0.881 = 0.066 / 0.881 = 0.075
+P(EventW_Machine==false alarm|rate of change of Trust_Human==0) = (0.007 * (13.000 / 20.000)) / 0.881 = 0.005 / 0.881 = 0.005
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human>0) = (0.381 * (88.000 / 995.000)) / 0.064 = 0.034 / 0.064 = 0.527
+P(EventW_Machine== |rate of change of Trust_Human>0) = (0.918 * (167.000 / 2642.000)) / 0.062 = 0.058 / 0.062 = 0.929
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human>0) = (0.074 * (12.000 / 218.000)) / 0.062 = 0.004 / 0.062 = 0.065
+P(EventW_Machine==false alarm|rate of change of Trust_Human>0) = (0.007 * (1.000 / 20.000)) / 0.062 = 0.000 / 0.062 = 0.006
+
+S14
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine== ) = (0.619 * (1780.000 / 1908.000)) / 0.912 = 0.577 / 0.912 = 0.633
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.619 * (122.000 / 1908.000)) / 0.080 = 0.040 / 0.080 = 0.497
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine==false alarm) = (0.619 * (6.000 / 1908.000)) / 0.008 = 0.002 / 0.008 = 0.237
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human==0) = (0.619 * (1582.000 / 1908.000)) / 0.792 = 0.513 / 0.792 = 0.648
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human>0) = (0.619 * (134.000 / 1908.000)) / 0.105 = 0.043 / 0.105 = 0.416
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human<0) = (0.619 * (192.000 / 1908.000)) / 0.103 = 0.062 / 0.103 = 0.602
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.381 * (102.000 / 972.000)) / 0.080 = 0.040 / 0.080 = 0.503
+P(rate of change of Trust_Human>0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.115 * (19.000 / 290.000)) / 0.079 = 0.008 / 0.079 = 0.095
+P(rate of change of Trust_Human==0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.765 * (160.000 / 2293.000)) / 0.079 = 0.053 / 0.079 = 0.675
+P(rate of change of Trust_Human<0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.120 * (45.000 / 297.000)) / 0.079 = 0.018 / 0.079 = 0.230
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine== ) = (0.381 * (854.000 / 972.000)) / 0.912 = 0.335 / 0.912 = 0.367
+P(rate of change of Trust_Human>0|EventW_Machine== ) = (0.115 * (270.000 / 290.000)) / 0.913 = 0.107 / 0.913 = 0.117
+P(rate of change of Trust_Human==0|EventW_Machine== ) = (0.765 * (2114.000 / 2293.000)) / 0.913 = 0.705 / 0.913 = 0.772
+P(rate of change of Trust_Human<0|EventW_Machine== ) = (0.120 * (250.000 / 297.000)) / 0.913 = 0.101 / 0.913 = 0.111
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine==false alarm) = (0.381 * (16.000 / 972.000)) / 0.008 = 0.006 / 0.008 = 0.763
+P(rate of change of Trust_Human>0|EventW_Machine==false alarm) = (0.115 * (1.000 / 290.000)) / 0.008 = 0.000 / 0.008 = 0.053
+P(rate of change of Trust_Human==0|EventW_Machine==false alarm) = (0.765 * (19.000 / 2293.000)) / 0.008 = 0.006 / 0.008 = 0.840
+P(rate of change of Trust_Human<0|EventW_Machine==false alarm) = (0.120 * (2.000 / 297.000)) / 0.008 = 0.001 / 0.008 = 0.107
+
+P(EventW_Machine== |rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.918 * (877.000 / 2634.000)) / 0.338 = 0.306 / 0.338 = 0.903
+P(EventW_Machine==false alarm|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.007 * (16.000 / 22.000)) / 0.338 = 0.005 / 0.338 = 0.015
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.074 * (84.000 / 224.000)) / 0.338 = 0.028 / 0.338 = 0.082
+P(rate of change of Trust_Human>0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.115 * (109.000 / 290.000)) / 0.340 = 0.043 / 0.340 = 0.127
+P(rate of change of Trust_Human==0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.765 * (763.000 / 2293.000)) / 0.340 = 0.255 / 0.340 = 0.748
+P(rate of change of Trust_Human<0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.120 * (105.000 / 297.000)) / 0.340 = 0.042 / 0.340 = 0.125
+
+P(EventW_Machine== |rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.918 * (1757.000 / 2634.000)) / 0.661 = 0.612 / 0.661 = 0.927
+P(EventW_Machine==false alarm|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.007 * (6.000 / 22.000)) / 0.661 = 0.002 / 0.661 = 0.003
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.074 * (140.000 / 224.000)) / 0.661 = 0.046 / 0.661 = 0.070
+P(rate of change of Trust_Human>0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.115 * (181.000 / 290.000)) / 0.660 = 0.072 / 0.660 = 0.109
+P(rate of change of Trust_Human==0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.765 * (1530.000 / 2293.000)) / 0.660 = 0.510 / 0.660 = 0.774
+P(rate of change of Trust_Human<0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.120 * (192.000 / 297.000)) / 0.660 = 0.078 / 0.660 = 0.118
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human<0) = (0.381 * (105.000 / 972.000)) / 0.103 = 0.041 / 0.103 = 0.398
+P(EventW_Machine== |rate of change of Trust_Human<0) = (0.918 * (250.000 / 2634.000)) / 0.103 = 0.087 / 0.103 = 0.849
+P(EventW_Machine==false alarm|rate of change of Trust_Human<0) = (0.007 * (2.000 / 22.000)) / 0.103 = 0.001 / 0.103 = 0.006
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human<0) = (0.074 * (45.000 / 224.000)) / 0.103 = 0.015 / 0.103 = 0.145
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human==0) = (0.381 * (711.000 / 972.000)) / 0.792 = 0.279 / 0.792 = 0.352
+P(EventW_Machine== |rate of change of Trust_Human==0) = (0.918 * (2114.000 / 2634.000)) / 0.796 = 0.737 / 0.796 = 0.926
+P(EventW_Machine==false alarm|rate of change of Trust_Human==0) = (0.007 * (19.000 / 22.000)) / 0.796 = 0.006 / 0.796 = 0.008
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human==0) = (0.074 * (160.000 / 224.000)) / 0.796 = 0.053 / 0.796 = 0.066
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human>0) = (0.381 * (156.000 / 972.000)) / 0.105 = 0.061 / 0.105 = 0.584
+P(EventW_Machine== |rate of change of Trust_Human>0) = (0.918 * (270.000 / 2634.000)) / 0.101 = 0.094 / 0.101 = 0.935
+P(EventW_Machine==false alarm|rate of change of Trust_Human>0) = (0.007 * (1.000 / 22.000)) / 0.101 = 0.000 / 0.101 = 0.003
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human>0) = (0.074 * (19.000 / 224.000)) / 0.101 = 0.006 / 0.101 = 0.062
+
+S15
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine== ) = (0.619 * (1953.000 / 2075.000)) / 0.921 = 0.583 / 0.921 = 0.633
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.619 * (117.000 / 2075.000)) / 0.072 = 0.035 / 0.072 = 0.486
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine==false alarm) = (0.619 * (5.000 / 2075.000)) / 0.008 = 0.001 / 0.008 = 0.195
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human==0) = (0.619 * (1530.000 / 2075.000)) / 0.714 = 0.456 / 0.714 = 0.639
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human>0) = (0.619 * (279.000 / 2075.000)) / 0.155 = 0.083 / 0.155 = 0.536
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human<0) = (0.619 * (266.000 / 2075.000)) / 0.130 = 0.079 / 0.130 = 0.608
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.381 * (78.000 / 805.000)) / 0.072 = 0.037 / 0.072 = 0.514
+P(rate of change of Trust_Human==0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.765 * (123.000 / 2075.000)) / 0.066 = 0.045 / 0.066 = 0.690
+P(rate of change of Trust_Human>0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.115 * (51.000 / 431.000)) / 0.066 = 0.014 / 0.066 = 0.207
+P(rate of change of Trust_Human<0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.120 * (21.000 / 374.000)) / 0.066 = 0.007 / 0.066 = 0.103
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine== ) = (0.381 * (714.000 / 805.000)) / 0.921 = 0.338 / 0.921 = 0.367
+P(rate of change of Trust_Human==0|EventW_Machine== ) = (0.765 * (1949.000 / 2075.000)) / 0.929 = 0.719 / 0.929 = 0.774
+P(rate of change of Trust_Human>0|EventW_Machine== ) = (0.115 * (376.000 / 431.000)) / 0.929 = 0.100 / 0.929 = 0.108
+P(rate of change of Trust_Human<0|EventW_Machine== ) = (0.120 * (342.000 / 374.000)) / 0.929 = 0.110 / 0.929 = 0.118
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine==false alarm) = (0.381 * (13.000 / 805.000)) / 0.008 = 0.006 / 0.008 = 0.805
+P(rate of change of Trust_Human==0|EventW_Machine==false alarm) = (0.765 * (3.000 / 2075.000)) / 0.006 = 0.001 / 0.006 = 0.194
+P(rate of change of Trust_Human>0|EventW_Machine==false alarm) = (0.115 * (4.000 / 431.000)) / 0.006 = 0.001 / 0.006 = 0.187
+P(rate of change of Trust_Human<0|EventW_Machine==false alarm) = (0.120 * (11.000 / 374.000)) / 0.006 = 0.004 / 0.006 = 0.619
+
+P(EventW_Machine== |rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.918 * (744.000 / 2667.000)) / 0.280 = 0.256 / 0.280 = 0.914
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.074 * (56.000 / 195.000)) / 0.280 = 0.021 / 0.280 = 0.076
+P(EventW_Machine==false alarm|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.007 * (7.000 / 18.000)) / 0.280 = 0.003 / 0.280 = 0.010
+P(rate of change of Trust_Human==0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.765 * (560.000 / 2075.000)) / 0.279 = 0.206 / 0.279 = 0.739
+P(rate of change of Trust_Human>0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.115 * (117.000 / 431.000)) / 0.279 = 0.031 / 0.279 = 0.112
+P(rate of change of Trust_Human<0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.120 * (130.000 / 374.000)) / 0.279 = 0.042 / 0.279 = 0.149
+
+P(EventW_Machine== |rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.918 * (1923.000 / 2667.000)) / 0.719 = 0.662 / 0.719 = 0.921
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.074 * (139.000 / 195.000)) / 0.719 = 0.053 / 0.719 = 0.073
+P(EventW_Machine==false alarm|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.007 * (11.000 / 18.000)) / 0.719 = 0.004 / 0.719 = 0.006
+P(rate of change of Trust_Human==0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.765 * (1515.000 / 2075.000)) / 0.721 = 0.559 / 0.721 = 0.775
+P(rate of change of Trust_Human>0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.115 * (314.000 / 431.000)) / 0.721 = 0.084 / 0.721 = 0.116
+P(rate of change of Trust_Human<0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.120 * (244.000 / 374.000)) / 0.721 = 0.078 / 0.721 = 0.109
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human<0) = (0.381 * (108.000 / 805.000)) / 0.130 = 0.051 / 0.130 = 0.392
+P(EventW_Machine== |rate of change of Trust_Human<0) = (0.918 * (342.000 / 2667.000)) / 0.130 = 0.118 / 0.130 = 0.906
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human<0) = (0.074 * (21.000 / 195.000)) / 0.130 = 0.008 / 0.130 = 0.061
+P(EventW_Machine==false alarm|rate of change of Trust_Human<0) = (0.007 * (11.000 / 18.000)) / 0.130 = 0.004 / 0.130 = 0.033
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human==0) = (0.381 * (545.000 / 805.000)) / 0.714 = 0.258 / 0.714 = 0.361
+P(EventW_Machine== |rate of change of Trust_Human==0) = (0.918 * (1949.000 / 2667.000)) / 0.719 = 0.671 / 0.719 = 0.933
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human==0) = (0.074 * (123.000 / 195.000)) / 0.719 = 0.047 / 0.719 = 0.065
+P(EventW_Machine==false alarm|rate of change of Trust_Human==0) = (0.007 * (3.000 / 18.000)) / 0.719 = 0.001 / 0.719 = 0.002
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human>0) = (0.381 * (152.000 / 805.000)) / 0.155 = 0.072 / 0.155 = 0.464
+P(EventW_Machine== |rate of change of Trust_Human>0) = (0.918 * (376.000 / 2667.000)) / 0.150 = 0.129 / 0.150 = 0.861
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human>0) = (0.074 * (51.000 / 195.000)) / 0.150 = 0.019 / 0.150 = 0.129
+P(EventW_Machine==false alarm|rate of change of Trust_Human>0) = (0.007 * (4.000 / 18.000)) / 0.150 = 0.002 / 0.150 = 0.010
+
+S16
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine== ) = (0.619 * (1812.000 / 1938.000)) / 0.917 = 0.579 / 0.917 = 0.631
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.619 * (116.000 / 1938.000)) / 0.075 = 0.037 / 0.075 = 0.494
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine==false alarm) = (0.619 * (10.000 / 1938.000)) / 0.008 = 0.003 / 0.008 = 0.418
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human==0) = (0.619 * (1168.000 / 1938.000)) / 0.607 = 0.373 / 0.607 = 0.614
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human>0) = (0.619 * (330.000 / 1938.000)) / 0.207 = 0.105 / 0.207 = 0.510
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human<0) = (0.619 * (440.000 / 1938.000)) / 0.186 = 0.141 / 0.186 = 0.755
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.381 * (94.000 / 942.000)) / 0.075 = 0.038 / 0.075 = 0.506
+P(rate of change of Trust_Human>0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.115 * (63.000 / 580.000)) / 0.070 = 0.012 / 0.070 = 0.178
+P(rate of change of Trust_Human==0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.765 * (117.000 / 1747.000)) / 0.070 = 0.051 / 0.070 = 0.729
+P(rate of change of Trust_Human<0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.120 * (30.000 / 553.000)) / 0.070 = 0.007 / 0.070 = 0.093
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine== ) = (0.381 * (837.000 / 942.000)) / 0.917 = 0.339 / 0.917 = 0.369
+P(rate of change of Trust_Human>0|EventW_Machine== ) = (0.115 * (508.000 / 580.000)) / 0.923 = 0.101 / 0.923 = 0.109
+P(rate of change of Trust_Human==0|EventW_Machine== ) = (0.765 * (1620.000 / 1747.000)) / 0.923 = 0.709 / 0.923 = 0.768
+P(rate of change of Trust_Human<0|EventW_Machine== ) = (0.120 * (521.000 / 553.000)) / 0.923 = 0.113 / 0.923 = 0.122
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine==false alarm) = (0.381 * (11.000 / 942.000)) / 0.008 = 0.004 / 0.008 = 0.582
+P(rate of change of Trust_Human>0|EventW_Machine==false alarm) = (0.115 * (9.000 / 580.000)) / 0.007 = 0.002 / 0.007 = 0.270
+P(rate of change of Trust_Human==0|EventW_Machine==false alarm) = (0.765 * (10.000 / 1747.000)) / 0.007 = 0.004 / 0.007 = 0.664
+P(rate of change of Trust_Human<0|EventW_Machine==false alarm) = (0.120 * (2.000 / 553.000)) / 0.007 = 0.000 / 0.007 = 0.066
+
+P(EventW_Machine== |rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.918 * (869.000 / 2649.000)) / 0.329 = 0.301 / 0.329 = 0.915
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.074 * (68.000 / 210.000)) / 0.329 = 0.024 / 0.329 = 0.073
+P(EventW_Machine==false alarm|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.007 * (12.000 / 21.000)) / 0.329 = 0.004 / 0.329 = 0.012
+P(rate of change of Trust_Human>0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.115 * (105.000 / 580.000)) / 0.337 = 0.021 / 0.337 = 0.062
+P(rate of change of Trust_Human==0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.765 * (604.000 / 1747.000)) / 0.337 = 0.264 / 0.337 = 0.784
+P(rate of change of Trust_Human<0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.120 * (240.000 / 553.000)) / 0.337 = 0.052 / 0.337 = 0.154
+
+P(EventW_Machine== |rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.918 * (1780.000 / 2649.000)) / 0.670 = 0.617 / 0.670 = 0.921
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.074 * (142.000 / 210.000)) / 0.670 = 0.050 / 0.670 = 0.075
+P(EventW_Machine==false alarm|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.007 * (9.000 / 21.000)) / 0.670 = 0.003 / 0.670 = 0.004
+P(rate of change of Trust_Human>0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.115 * (475.000 / 580.000)) / 0.663 = 0.094 / 0.663 = 0.142
+P(rate of change of Trust_Human==0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.765 * (1143.000 / 1747.000)) / 0.663 = 0.501 / 0.663 = 0.755
+P(rate of change of Trust_Human<0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.120 * (313.000 / 553.000)) / 0.663 = 0.068 / 0.663 = 0.103
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human<0) = (0.381 * (113.000 / 942.000)) / 0.186 = 0.046 / 0.186 = 0.245
+P(EventW_Machine== |rate of change of Trust_Human<0) = (0.918 * (521.000 / 2649.000)) / 0.192 = 0.181 / 0.192 = 0.941
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human<0) = (0.074 * (30.000 / 210.000)) / 0.192 = 0.011 / 0.192 = 0.055
+P(EventW_Machine==false alarm|rate of change of Trust_Human<0) = (0.007 * (2.000 / 21.000)) / 0.192 = 0.001 / 0.192 = 0.003
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human==0) = (0.381 * (579.000 / 942.000)) / 0.607 = 0.234 / 0.607 = 0.386
+P(EventW_Machine== |rate of change of Trust_Human==0) = (0.918 * (1620.000 / 2649.000)) / 0.606 = 0.561 / 0.606 = 0.926
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human==0) = (0.074 * (117.000 / 210.000)) / 0.606 = 0.041 / 0.606 = 0.068
+P(EventW_Machine==false alarm|rate of change of Trust_Human==0) = (0.007 * (10.000 / 21.000)) / 0.606 = 0.003 / 0.606 = 0.006
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human>0) = (0.381 * (250.000 / 942.000)) / 0.207 = 0.101 / 0.207 = 0.490
+P(EventW_Machine== |rate of change of Trust_Human>0) = (0.918 * (508.000 / 2649.000)) / 0.201 = 0.176 / 0.201 = 0.875
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human>0) = (0.074 * (63.000 / 210.000)) / 0.201 = 0.022 / 0.201 = 0.110
+P(EventW_Machine==false alarm|rate of change of Trust_Human>0) = (0.007 * (9.000 / 21.000)) / 0.201 = 0.003 / 0.201 = 0.015
+
+S17
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine== ) = (0.619 * (1731.000 / 1871.000)) / 0.911 = 0.573 / 0.911 = 0.628
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.619 * (135.000 / 1871.000)) / 0.081 = 0.045 / 0.081 = 0.552
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine==false alarm) = (0.619 * (5.000 / 1871.000)) / 0.008 = 0.002 / 0.008 = 0.215
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human==0) = (0.619 * (1533.000 / 1871.000)) / 0.818 = 0.507 / 0.818 = 0.620
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human>0) = (0.619 * (183.000 / 1871.000)) / 0.094 = 0.061 / 0.094 = 0.643
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human<0) = (0.619 * (155.000 / 1871.000)) / 0.088 = 0.051 / 0.088 = 0.583
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.381 * (96.000 / 1009.000)) / 0.081 = 0.036 / 0.081 = 0.448
+P(rate of change of Trust_Human==0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.765 * (132.000 / 2356.000)) / 0.087 = 0.043 / 0.087 = 0.491
+P(rate of change of Trust_Human<0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.120 * (48.000 / 252.000)) / 0.087 = 0.023 / 0.087 = 0.262
+P(rate of change of Trust_Human>0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.115 * (51.000 / 272.000)) / 0.087 = 0.022 / 0.087 = 0.247
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine== ) = (0.381 * (897.000 / 1009.000)) / 0.911 = 0.339 / 0.911 = 0.372
+P(rate of change of Trust_Human==0|EventW_Machine== ) = (0.765 * (2204.000 / 2356.000)) / 0.906 = 0.716 / 0.906 = 0.790
+P(rate of change of Trust_Human<0|EventW_Machine== ) = (0.120 * (203.000 / 252.000)) / 0.906 = 0.097 / 0.906 = 0.107
+P(rate of change of Trust_Human>0|EventW_Machine== ) = (0.115 * (221.000 / 272.000)) / 0.906 = 0.093 / 0.906 = 0.103
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine==false alarm) = (0.381 * (16.000 / 1009.000)) / 0.008 = 0.006 / 0.008 = 0.785
+P(rate of change of Trust_Human==0|EventW_Machine==false alarm) = (0.765 * (20.000 / 2356.000)) / 0.007 = 0.006 / 0.007 = 0.932
+P(rate of change of Trust_Human<0|EventW_Machine==false alarm) = (0.120 * (1.000 / 252.000)) / 0.007 = 0.000 / 0.007 = 0.068
+
+P(EventW_Machine== |rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.918 * (931.000 / 2628.000)) / 0.353 = 0.325 / 0.353 = 0.922
+P(EventW_Machine==false alarm|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.007 * (10.000 / 21.000)) / 0.353 = 0.003 / 0.353 = 0.009
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.074 * (75.000 / 231.000)) / 0.353 = 0.024 / 0.353 = 0.068
+P(rate of change of Trust_Human==0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.765 * (876.000 / 2356.000)) / 0.347 = 0.284 / 0.347 = 0.820
+P(rate of change of Trust_Human<0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.120 * (64.000 / 252.000)) / 0.347 = 0.030 / 0.347 = 0.088
+P(rate of change of Trust_Human>0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.115 * (76.000 / 272.000)) / 0.347 = 0.032 / 0.347 = 0.093
+
+P(EventW_Machine== |rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.918 * (1697.000 / 2628.000)) / 0.646 = 0.593 / 0.646 = 0.917
+P(EventW_Machine==false alarm|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.007 * (11.000 / 21.000)) / 0.646 = 0.004 / 0.646 = 0.006
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.074 * (156.000 / 231.000)) / 0.646 = 0.050 / 0.646 = 0.077
+P(rate of change of Trust_Human==0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.765 * (1480.000 / 2356.000)) / 0.653 = 0.481 / 0.653 = 0.736
+P(rate of change of Trust_Human<0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.120 * (188.000 / 252.000)) / 0.653 = 0.090 / 0.653 = 0.137
+P(rate of change of Trust_Human>0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.115 * (196.000 / 272.000)) / 0.653 = 0.083 / 0.653 = 0.127
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human<0) = (0.381 * (97.000 / 1009.000)) / 0.088 = 0.037 / 0.088 = 0.417
+P(EventW_Machine== |rate of change of Trust_Human<0) = (0.918 * (203.000 / 2628.000)) / 0.087 = 0.071 / 0.087 = 0.819
+P(EventW_Machine==false alarm|rate of change of Trust_Human<0) = (0.007 * (1.000 / 21.000)) / 0.087 = 0.000 / 0.087 = 0.004
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human<0) = (0.074 * (48.000 / 231.000)) / 0.087 = 0.015 / 0.087 = 0.178
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human==0) = (0.381 * (823.000 / 1009.000)) / 0.818 = 0.311 / 0.818 = 0.380
+P(EventW_Machine== |rate of change of Trust_Human==0) = (0.918 * (2204.000 / 2628.000)) / 0.819 = 0.770 / 0.819 = 0.940
+P(EventW_Machine==false alarm|rate of change of Trust_Human==0) = (0.007 * (20.000 / 21.000)) / 0.819 = 0.007 / 0.819 = 0.008
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human==0) = (0.074 * (132.000 / 231.000)) / 0.819 = 0.042 / 0.819 = 0.052
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human>0) = (0.381 * (89.000 / 1009.000)) / 0.094 = 0.034 / 0.094 = 0.357
+P(EventW_Machine== |rate of change of Trust_Human>0) = (0.918 * (221.000 / 2628.000)) / 0.094 = 0.077 / 0.094 = 0.825
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human>0) = (0.074 * (51.000 / 231.000)) / 0.094 = 0.016 / 0.094 = 0.175
+
+S21
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine== ) = (0.619 * (1775.000 / 1906.000)) / 0.910 = 0.576 / 0.910 = 0.633
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.619 * (125.000 / 1906.000)) / 0.082 = 0.041 / 0.082 = 0.495
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine==false alarm) = (0.619 * (6.000 / 1906.000)) / 0.008 = 0.002 / 0.008 = 0.249
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human==0) = (0.619 * (1225.000 / 1906.000)) / 0.635 = 0.398 / 0.635 = 0.626
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human>0) = (0.619 * (332.000 / 1906.000)) / 0.193 = 0.108 / 0.193 = 0.557
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human<0) = (0.619 * (349.000 / 1906.000)) / 0.171 = 0.113 / 0.171 = 0.662
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.381 * (106.000 / 974.000)) / 0.082 = 0.041 / 0.082 = 0.505
+P(rate of change of Trust_Human>0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.115 * (113.000 / 551.000)) / 0.069 = 0.024 / 0.069 = 0.340
+P(rate of change of Trust_Human==0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.765 * (98.000 / 1832.000)) / 0.069 = 0.041 / 0.069 = 0.590
+P(rate of change of Trust_Human<0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.120 * (20.000 / 497.000)) / 0.069 = 0.005 / 0.069 = 0.070
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine== ) = (0.381 * (853.000 / 974.000)) / 0.910 = 0.334 / 0.910 = 0.367
+P(rate of change of Trust_Human>0|EventW_Machine== ) = (0.115 * (437.000 / 551.000)) / 0.924 = 0.091 / 0.924 = 0.099
+P(rate of change of Trust_Human==0|EventW_Machine== ) = (0.765 * (1723.000 / 1832.000)) / 0.924 = 0.719 / 0.924 = 0.779
+P(rate of change of Trust_Human<0|EventW_Machine== ) = (0.120 * (468.000 / 497.000)) / 0.924 = 0.113 / 0.924 = 0.122
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine==false alarm) = (0.381 * (15.000 / 974.000)) / 0.008 = 0.006 / 0.008 = 0.751
+P(rate of change of Trust_Human>0|EventW_Machine==false alarm) = (0.115 * (1.000 / 551.000)) / 0.007 = 0.000 / 0.007 = 0.030
+P(rate of change of Trust_Human==0|EventW_Machine==false alarm) = (0.765 * (11.000 / 1832.000)) / 0.007 = 0.005 / 0.007 = 0.659
+P(rate of change of Trust_Human<0|EventW_Machine==false alarm) = (0.120 * (9.000 / 497.000)) / 0.007 = 0.002 / 0.007 = 0.312
+
+P(EventW_Machine== |rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.918 * (882.000 / 2628.000)) / 0.336 = 0.308 / 0.336 = 0.918
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.074 * (79.000 / 231.000)) / 0.336 = 0.025 / 0.336 = 0.075
+P(EventW_Machine==false alarm|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.007 * (7.000 / 21.000)) / 0.336 = 0.002 / 0.336 = 0.007
+P(rate of change of Trust_Human>0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.115 * (199.000 / 551.000)) / 0.333 = 0.042 / 0.333 = 0.125
+P(rate of change of Trust_Human==0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.765 * (599.000 / 1832.000)) / 0.333 = 0.250 / 0.333 = 0.752
+P(rate of change of Trust_Human<0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.120 * (170.000 / 497.000)) / 0.333 = 0.041 / 0.333 = 0.123
+
+P(EventW_Machine== |rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.918 * (1746.000 / 2628.000)) / 0.663 = 0.610 / 0.663 = 0.920
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.074 * (152.000 / 231.000)) / 0.663 = 0.049 / 0.663 = 0.073
+P(EventW_Machine==false alarm|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.007 * (14.000 / 21.000)) / 0.663 = 0.005 / 0.663 = 0.007
+P(rate of change of Trust_Human>0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.115 * (352.000 / 551.000)) / 0.667 = 0.073 / 0.667 = 0.110
+P(rate of change of Trust_Human==0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.765 * (1233.000 / 1832.000)) / 0.667 = 0.515 / 0.667 = 0.772
+P(rate of change of Trust_Human<0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.120 * (327.000 / 497.000)) / 0.667 = 0.079 / 0.667 = 0.118
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human<0) = (0.381 * (148.000 / 974.000)) / 0.171 = 0.058 / 0.171 = 0.338
+P(EventW_Machine== |rate of change of Trust_Human<0) = (0.918 * (468.000 / 2628.000)) / 0.173 = 0.163 / 0.173 = 0.946
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human<0) = (0.074 * (20.000 / 231.000)) / 0.173 = 0.006 / 0.173 = 0.037
+P(EventW_Machine==false alarm|rate of change of Trust_Human<0) = (0.007 * (9.000 / 21.000)) / 0.173 = 0.003 / 0.173 = 0.017
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human==0) = (0.381 * (607.000 / 974.000)) / 0.635 = 0.237 / 0.635 = 0.374
+P(EventW_Machine== |rate of change of Trust_Human==0) = (0.918 * (1723.000 / 2628.000)) / 0.637 = 0.602 / 0.637 = 0.945
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human==0) = (0.074 * (98.000 / 231.000)) / 0.637 = 0.031 / 0.637 = 0.049
+P(EventW_Machine==false alarm|rate of change of Trust_Human==0) = (0.007 * (11.000 / 21.000)) / 0.637 = 0.004 / 0.637 = 0.006
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human>0) = (0.381 * (219.000 / 974.000)) / 0.193 = 0.086 / 0.193 = 0.443
+P(EventW_Machine== |rate of change of Trust_Human>0) = (0.918 * (437.000 / 2628.000)) / 0.189 = 0.153 / 0.189 = 0.807
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human>0) = (0.074 * (113.000 / 231.000)) / 0.189 = 0.036 / 0.189 = 0.191
+P(EventW_Machine==false alarm|rate of change of Trust_Human>0) = (0.007 * (1.000 / 21.000)) / 0.189 = 0.000 / 0.189 = 0.002
+
+S22
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine== ) = (0.619 * (1948.000 / 2087.000)) / 0.920 = 0.578 / 0.920 = 0.628
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.619 * (131.000 / 2087.000)) / 0.072 = 0.039 / 0.072 = 0.540
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine==false alarm) = (0.619 * (8.000 / 2087.000)) / 0.008 = 0.002 / 0.008 = 0.292
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human==0) = (0.619 * (1741.000 / 2087.000)) / 0.795 = 0.516 / 0.795 = 0.650
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human>0) = (0.619 * (153.000 / 2087.000)) / 0.108 = 0.045 / 0.108 = 0.419
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human<0) = (0.619 * (193.000 / 2087.000)) / 0.097 = 0.057 / 0.097 = 0.589
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.381 * (69.000 / 793.000)) / 0.072 = 0.033 / 0.072 = 0.460
+P(rate of change of Trust_Human<0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.120 * (23.000 / 276.000)) / 0.070 = 0.010 / 0.070 = 0.143
+P(rate of change of Trust_Human==0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.765 * (158.000 / 2320.000)) / 0.070 = 0.052 / 0.070 = 0.746
+P(rate of change of Trust_Human>0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.115 * (19.000 / 284.000)) / 0.070 = 0.008 / 0.070 = 0.110
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine== ) = (0.381 * (712.000 / 793.000)) / 0.920 = 0.342 / 0.920 = 0.372
+P(rate of change of Trust_Human<0|EventW_Machine== ) = (0.120 * (242.000 / 276.000)) / 0.922 = 0.105 / 0.922 = 0.114
+P(rate of change of Trust_Human==0|EventW_Machine== ) = (0.765 * (2155.000 / 2320.000)) / 0.922 = 0.711 / 0.922 = 0.770
+P(rate of change of Trust_Human>0|EventW_Machine== ) = (0.115 * (263.000 / 284.000)) / 0.922 = 0.106 / 0.922 = 0.115
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine==false alarm) = (0.381 * (12.000 / 793.000)) / 0.008 = 0.006 / 0.008 = 0.708
+P(rate of change of Trust_Human<0|EventW_Machine==false alarm) = (0.120 * (11.000 / 276.000)) / 0.008 = 0.005 / 0.008 = 0.605
+P(rate of change of Trust_Human==0|EventW_Machine==false alarm) = (0.765 * (7.000 / 2320.000)) / 0.008 = 0.002 / 0.008 = 0.292
+P(rate of change of Trust_Human>0|EventW_Machine==false alarm) = (0.115 * (2.000 / 284.000)) / 0.008 = 0.001 / 0.008 = 0.103
+
+P(EventW_Machine== |rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.918 * (709.000 / 2660.000)) / 0.275 = 0.245 / 0.275 = 0.890
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.074 * (74.000 / 200.000)) / 0.275 = 0.027 / 0.275 = 0.100
+P(EventW_Machine==false alarm|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.007 * (8.000 / 20.000)) / 0.275 = 0.003 / 0.275 = 0.010
+P(rate of change of Trust_Human<0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.120 * (122.000 / 276.000)) / 0.281 = 0.053 / 0.281 = 0.188
+P(rate of change of Trust_Human==0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.765 * (565.000 / 2320.000)) / 0.281 = 0.186 / 0.281 = 0.662
+P(rate of change of Trust_Human>0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.115 * (104.000 / 284.000)) / 0.281 = 0.042 / 0.281 = 0.150
+
+P(EventW_Machine== |rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.918 * (1951.000 / 2660.000)) / 0.724 = 0.673 / 0.724 = 0.930
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.074 * (126.000 / 200.000)) / 0.724 = 0.047 / 0.724 = 0.064
+P(EventW_Machine==false alarm|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.007 * (12.000 / 20.000)) / 0.724 = 0.004 / 0.724 = 0.006
+P(rate of change of Trust_Human<0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.120 * (154.000 / 276.000)) / 0.719 = 0.067 / 0.719 = 0.093
+P(rate of change of Trust_Human==0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.765 * (1755.000 / 2320.000)) / 0.719 = 0.579 / 0.719 = 0.805
+P(rate of change of Trust_Human>0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.115 * (180.000 / 284.000)) / 0.719 = 0.073 / 0.719 = 0.101
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human<0) = (0.381 * (83.000 / 793.000)) / 0.097 = 0.040 / 0.097 = 0.411
+P(EventW_Machine== |rate of change of Trust_Human<0) = (0.918 * (242.000 / 2660.000)) / 0.096 = 0.084 / 0.096 = 0.871
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human<0) = (0.074 * (23.000 / 200.000)) / 0.096 = 0.009 / 0.096 = 0.089
+P(EventW_Machine==false alarm|rate of change of Trust_Human<0) = (0.007 * (11.000 / 20.000)) / 0.096 = 0.004 / 0.096 = 0.040
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human==0) = (0.381 * (579.000 / 793.000)) / 0.795 = 0.278 / 0.795 = 0.350
+P(EventW_Machine== |rate of change of Trust_Human==0) = (0.918 * (2155.000 / 2660.000)) / 0.805 = 0.744 / 0.805 = 0.924
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human==0) = (0.074 * (158.000 / 200.000)) / 0.805 = 0.058 / 0.805 = 0.073
+P(EventW_Machine==false alarm|rate of change of Trust_Human==0) = (0.007 * (7.000 / 20.000)) / 0.805 = 0.002 / 0.805 = 0.003
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human>0) = (0.381 * (131.000 / 793.000)) / 0.108 = 0.063 / 0.108 = 0.581
+P(EventW_Machine== |rate of change of Trust_Human>0) = (0.918 * (263.000 / 2660.000)) / 0.098 = 0.091 / 0.098 = 0.922
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human>0) = (0.074 * (19.000 / 200.000)) / 0.098 = 0.007 / 0.098 = 0.071
+P(EventW_Machine==false alarm|rate of change of Trust_Human>0) = (0.007 * (2.000 / 20.000)) / 0.098 = 0.001 / 0.098 = 0.007
+
+S23
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine== ) = (0.619 * (1729.000 / 1868.000)) / 0.916 = 0.573 / 0.916 = 0.626
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.619 * (133.000 / 1868.000)) / 0.076 = 0.044 / 0.076 = 0.580
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine==false alarm) = (0.619 * (6.000 / 1868.000)) / 0.008 = 0.002 / 0.008 = 0.240
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human==0) = (0.619 * (1681.000 / 1868.000)) / 0.904 = 0.557 / 0.904 = 0.616
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human>0) = (0.619 * (74.000 / 1868.000)) / 0.040 = 0.025 / 0.040 = 0.609
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human<0) = (0.619 * (113.000 / 1868.000)) / 0.056 = 0.037 / 0.056 = 0.674
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.381 * (81.000 / 968.000)) / 0.076 = 0.032 / 0.076 = 0.420
+P(rate of change of Trust_Human==0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.765 * (171.000 / 2563.000)) / 0.090 = 0.051 / 0.090 = 0.570
+P(rate of change of Trust_Human<0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.120 * (19.000 / 159.000)) / 0.090 = 0.014 / 0.090 = 0.160
+P(rate of change of Trust_Human>0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.115 * (24.000 / 114.000)) / 0.090 = 0.024 / 0.090 = 0.270
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine== ) = (0.381 * (871.000 / 968.000)) / 0.916 = 0.343 / 0.916 = 0.374
+P(rate of change of Trust_Human==0|EventW_Machine== ) = (0.765 * (2376.000 / 2563.000)) / 0.901 = 0.709 / 0.901 = 0.787
+P(rate of change of Trust_Human<0|EventW_Machine== ) = (0.120 * (135.000 / 159.000)) / 0.901 = 0.102 / 0.901 = 0.113
+P(rate of change of Trust_Human>0|EventW_Machine== ) = (0.115 * (89.000 / 114.000)) / 0.901 = 0.090 / 0.901 = 0.100
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine==false alarm) = (0.381 * (16.000 / 968.000)) / 0.008 = 0.006 / 0.008 = 0.760
+P(rate of change of Trust_Human==0|EventW_Machine==false alarm) = (0.765 * (16.000 / 2563.000)) / 0.010 = 0.005 / 0.010 = 0.500
+P(rate of change of Trust_Human<0|EventW_Machine==false alarm) = (0.120 * (5.000 / 159.000)) / 0.010 = 0.004 / 0.010 = 0.395
+P(rate of change of Trust_Human>0|EventW_Machine==false alarm) = (0.115 * (1.000 / 114.000)) / 0.010 = 0.001 / 0.010 = 0.106
+
+P(EventW_Machine== |rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.918 * (872.000 / 2600.000)) / 0.343 = 0.308 / 0.343 = 0.898
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.074 * (86.000 / 214.000)) / 0.343 = 0.030 / 0.343 = 0.087
+P(EventW_Machine==false alarm|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.007 * (16.000 / 22.000)) / 0.343 = 0.005 / 0.343 = 0.015
+P(rate of change of Trust_Human==0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.765 * (909.000 / 2563.000)) / 0.329 = 0.271 / 0.329 = 0.824
+P(rate of change of Trust_Human<0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.120 * (30.000 / 159.000)) / 0.329 = 0.023 / 0.329 = 0.069
+P(rate of change of Trust_Human>0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.115 * (35.000 / 114.000)) / 0.329 = 0.035 / 0.329 = 0.107
+
+P(EventW_Machine== |rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.918 * (1728.000 / 2600.000)) / 0.656 = 0.610 / 0.656 = 0.930
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.074 * (128.000 / 214.000)) / 0.656 = 0.044 / 0.656 = 0.067
+P(EventW_Machine==false alarm|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.007 * (6.000 / 22.000)) / 0.656 = 0.002 / 0.656 = 0.003
+P(rate of change of Trust_Human==0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.765 * (1654.000 / 2563.000)) / 0.671 = 0.494 / 0.671 = 0.736
+P(rate of change of Trust_Human<0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.120 * (129.000 / 159.000)) / 0.671 = 0.097 / 0.671 = 0.145
+P(rate of change of Trust_Human>0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.115 * (79.000 / 114.000)) / 0.671 = 0.080 / 0.671 = 0.119
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human<0) = (0.381 * (46.000 / 968.000)) / 0.056 = 0.018 / 0.056 = 0.326
+P(EventW_Machine== |rate of change of Trust_Human<0) = (0.918 * (135.000 / 2600.000)) / 0.056 = 0.048 / 0.056 = 0.854
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human<0) = (0.074 * (19.000 / 214.000)) / 0.056 = 0.007 / 0.056 = 0.118
+P(EventW_Machine==false alarm|rate of change of Trust_Human<0) = (0.007 * (5.000 / 22.000)) / 0.056 = 0.002 / 0.056 = 0.028
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human==0) = (0.381 * (882.000 / 968.000)) / 0.904 = 0.347 / 0.904 = 0.384
+P(EventW_Machine== |rate of change of Trust_Human==0) = (0.918 * (2376.000 / 2600.000)) / 0.903 = 0.839 / 0.903 = 0.929
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human==0) = (0.074 * (171.000 / 214.000)) / 0.903 = 0.059 / 0.903 = 0.065
+P(EventW_Machine==false alarm|rate of change of Trust_Human==0) = (0.007 * (16.000 / 22.000)) / 0.903 = 0.005 / 0.903 = 0.006
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human>0) = (0.381 * (40.000 / 968.000)) / 0.040 = 0.016 / 0.040 = 0.391
+P(EventW_Machine== |rate of change of Trust_Human>0) = (0.918 * (89.000 / 2600.000)) / 0.040 = 0.031 / 0.040 = 0.785
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human>0) = (0.074 * (24.000 / 214.000)) / 0.040 = 0.008 / 0.040 = 0.207
+P(EventW_Machine==false alarm|rate of change of Trust_Human>0) = (0.007 * (1.000 / 22.000)) / 0.040 = 0.000 / 0.040 = 0.008
+
+S24
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine== ) = (0.619 * (1796.000 / 1920.000)) / 0.918 = 0.579 / 0.918 = 0.631
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.619 * (116.000 / 1920.000)) / 0.074 = 0.037 / 0.074 = 0.506
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine==false alarm) = (0.619 * (8.000 / 1920.000)) / 0.008 = 0.003 / 0.008 = 0.333
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human==0) = (0.619 * (1286.000 / 1920.000)) / 0.668 = 0.415 / 0.668 = 0.621
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human>0) = (0.619 * (330.000 / 1920.000)) / 0.168 = 0.106 / 0.168 = 0.634
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human<0) = (0.619 * (304.000 / 1920.000)) / 0.164 = 0.098 / 0.164 = 0.597
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.381 * (92.000 / 960.000)) / 0.074 = 0.037 / 0.074 = 0.494
+P(rate of change of Trust_Human==0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.765 * (99.000 / 1924.000)) / 0.067 = 0.039 / 0.067 = 0.590
+P(rate of change of Trust_Human>0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.115 * (23.000 / 485.000)) / 0.067 = 0.005 / 0.067 = 0.082
+P(rate of change of Trust_Human<0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.120 * (86.000 / 471.000)) / 0.067 = 0.022 / 0.067 = 0.328
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine== ) = (0.381 * (855.000 / 960.000)) / 0.918 = 0.339 / 0.918 = 0.369
+P(rate of change of Trust_Human==0|EventW_Machine== ) = (0.765 * (1814.000 / 1924.000)) / 0.926 = 0.721 / 0.926 = 0.779
+P(rate of change of Trust_Human>0|EventW_Machine== ) = (0.115 * (457.000 / 485.000)) / 0.926 = 0.108 / 0.926 = 0.117
+P(rate of change of Trust_Human<0|EventW_Machine== ) = (0.120 * (380.000 / 471.000)) / 0.926 = 0.097 / 0.926 = 0.105
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine==false alarm) = (0.381 * (13.000 / 960.000)) / 0.008 = 0.005 / 0.008 = 0.667
+P(rate of change of Trust_Human==0|EventW_Machine==false alarm) = (0.765 * (11.000 / 1924.000)) / 0.007 = 0.004 / 0.007 = 0.640
+P(rate of change of Trust_Human>0|EventW_Machine==false alarm) = (0.115 * (5.000 / 485.000)) / 0.007 = 0.001 / 0.007 = 0.174
+P(rate of change of Trust_Human<0|EventW_Machine==false alarm) = (0.120 * (5.000 / 471.000)) / 0.007 = 0.001 / 0.007 = 0.186
+
+P(EventW_Machine== |rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.918 * (891.000 / 2651.000)) / 0.336 = 0.309 / 0.336 = 0.919
+P(EventW_Machine==false alarm|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.007 * (17.000 / 21.000)) / 0.336 = 0.006 / 0.336 = 0.017
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.074 * (61.000 / 208.000)) / 0.336 = 0.022 / 0.336 = 0.065
+P(rate of change of Trust_Human==0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.765 * (671.000 / 1924.000)) / 0.340 = 0.267 / 0.340 = 0.785
+P(rate of change of Trust_Human>0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.115 * (164.000 / 485.000)) / 0.340 = 0.039 / 0.340 = 0.114
+P(rate of change of Trust_Human<0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.120 * (134.000 / 471.000)) / 0.340 = 0.034 / 0.340 = 0.100
+
+P(EventW_Machine== |rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.918 * (1760.000 / 2651.000)) / 0.663 = 0.609 / 0.663 = 0.919
+P(EventW_Machine==false alarm|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.007 * (4.000 / 21.000)) / 0.663 = 0.001 / 0.663 = 0.002
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.074 * (147.000 / 208.000)) / 0.663 = 0.052 / 0.663 = 0.079
+P(rate of change of Trust_Human==0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.765 * (1253.000 / 1924.000)) / 0.660 = 0.498 / 0.660 = 0.755
+P(rate of change of Trust_Human>0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.115 * (321.000 / 485.000)) / 0.660 = 0.076 / 0.660 = 0.115
+P(rate of change of Trust_Human<0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.120 * (337.000 / 471.000)) / 0.660 = 0.086 / 0.660 = 0.130
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human<0) = (0.381 * (167.000 / 960.000)) / 0.164 = 0.066 / 0.164 = 0.403
+P(EventW_Machine== |rate of change of Trust_Human<0) = (0.918 * (380.000 / 2651.000)) / 0.164 = 0.132 / 0.164 = 0.803
+P(EventW_Machine==false alarm|rate of change of Trust_Human<0) = (0.007 * (5.000 / 21.000)) / 0.164 = 0.002 / 0.164 = 0.010
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human<0) = (0.074 * (86.000 / 208.000)) / 0.164 = 0.031 / 0.164 = 0.187
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human==0) = (0.381 * (638.000 / 960.000)) / 0.668 = 0.253 / 0.668 = 0.379
+P(EventW_Machine== |rate of change of Trust_Human==0) = (0.918 * (1814.000 / 2651.000)) / 0.667 = 0.628 / 0.667 = 0.942
+P(EventW_Machine==false alarm|rate of change of Trust_Human==0) = (0.007 * (11.000 / 21.000)) / 0.667 = 0.004 / 0.667 = 0.005
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human==0) = (0.074 * (99.000 / 208.000)) / 0.667 = 0.035 / 0.667 = 0.053
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human>0) = (0.381 * (155.000 / 960.000)) / 0.168 = 0.062 / 0.168 = 0.366
+P(EventW_Machine== |rate of change of Trust_Human>0) = (0.918 * (457.000 / 2651.000)) / 0.168 = 0.158 / 0.168 = 0.941
+P(EventW_Machine==false alarm|rate of change of Trust_Human>0) = (0.007 * (5.000 / 21.000)) / 0.168 = 0.002 / 0.168 = 0.010
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human>0) = (0.074 * (23.000 / 208.000)) / 0.168 = 0.008 / 0.168 = 0.049
+
+S25
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine== ) = (0.619 * (1689.000 / 1818.000)) / 0.913 = 0.575 / 0.913 = 0.630
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.619 * (124.000 / 1818.000)) / 0.080 = 0.042 / 0.080 = 0.531
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine==false alarm) = (0.619 * (5.000 / 1818.000)) / 0.007 = 0.002 / 0.007 = 0.229
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human==0) = (0.619 * (1371.000 / 1818.000)) / 0.768 = 0.467 / 0.768 = 0.608
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human>0) = (0.619 * (188.000 / 1818.000)) / 0.110 = 0.064 / 0.110 = 0.580
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human<0) = (0.619 * (259.000 / 1818.000)) / 0.122 = 0.088 / 0.122 = 0.723
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.381 * (104.000 / 1062.000)) / 0.080 = 0.037 / 0.080 = 0.469
+P(rate of change of Trust_Human==0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.765 * (133.000 / 2210.000)) / 0.080 = 0.046 / 0.080 = 0.575
+P(rate of change of Trust_Human<0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.120 * (22.000 / 353.000)) / 0.080 = 0.007 / 0.080 = 0.093
+P(rate of change of Trust_Human>0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.115 * (73.000 / 317.000)) / 0.080 = 0.026 / 0.080 = 0.331
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine== ) = (0.381 * (942.000 / 1062.000)) / 0.913 = 0.338 / 0.913 = 0.370
+P(rate of change of Trust_Human==0|EventW_Machine== ) = (0.765 * (2056.000 / 2210.000)) / 0.913 = 0.712 / 0.913 = 0.780
+P(rate of change of Trust_Human<0|EventW_Machine== ) = (0.120 * (331.000 / 353.000)) / 0.913 = 0.113 / 0.913 = 0.123
+P(rate of change of Trust_Human>0|EventW_Machine== ) = (0.115 * (244.000 / 317.000)) / 0.913 = 0.089 / 0.913 = 0.097
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine==false alarm) = (0.381 * (16.000 / 1062.000)) / 0.007 = 0.006 / 0.007 = 0.771
+P(rate of change of Trust_Human==0|EventW_Machine==false alarm) = (0.765 * (21.000 / 2210.000)) / 0.007 = 0.007 / 0.007 = 1.000
+
+P(EventW_Machine== |rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.918 * (975.000 / 2631.000)) / 0.367 = 0.340 / 0.367 = 0.927
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.074 * (74.000 / 228.000)) / 0.367 = 0.024 / 0.367 = 0.065
+P(EventW_Machine==false alarm|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.007 * (8.000 / 21.000)) / 0.367 = 0.003 / 0.367 = 0.007
+P(rate of change of Trust_Human==0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.765 * (813.000 / 2210.000)) / 0.367 = 0.281 / 0.367 = 0.767
+P(rate of change of Trust_Human<0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.120 * (134.000 / 353.000)) / 0.367 = 0.046 / 0.367 = 0.124
+P(rate of change of Trust_Human>0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.115 * (110.000 / 317.000)) / 0.367 = 0.040 / 0.367 = 0.109
+
+P(EventW_Machine== |rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.918 * (1656.000 / 2631.000)) / 0.632 = 0.578 / 0.632 = 0.914
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.074 * (154.000 / 228.000)) / 0.632 = 0.050 / 0.632 = 0.079
+P(EventW_Machine==false alarm|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.007 * (13.000 / 21.000)) / 0.632 = 0.004 / 0.632 = 0.007
+P(rate of change of Trust_Human==0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.765 * (1397.000 / 2210.000)) / 0.633 = 0.484 / 0.633 = 0.764
+P(rate of change of Trust_Human<0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.120 * (219.000 / 353.000)) / 0.633 = 0.074 / 0.633 = 0.118
+P(rate of change of Trust_Human>0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.115 * (207.000 / 317.000)) / 0.633 = 0.075 / 0.633 = 0.119
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human<0) = (0.381 * (94.000 / 1062.000)) / 0.122 = 0.034 / 0.122 = 0.277
+P(EventW_Machine== |rate of change of Trust_Human<0) = (0.918 * (331.000 / 2631.000)) / 0.123 = 0.115 / 0.123 = 0.942
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human<0) = (0.074 * (22.000 / 228.000)) / 0.123 = 0.007 / 0.123 = 0.058
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human==0) = (0.381 * (839.000 / 1062.000)) / 0.768 = 0.301 / 0.768 = 0.392
+P(EventW_Machine== |rate of change of Trust_Human==0) = (0.918 * (2056.000 / 2631.000)) / 0.768 = 0.717 / 0.768 = 0.935
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human==0) = (0.074 * (133.000 / 228.000)) / 0.768 = 0.043 / 0.768 = 0.056
+P(EventW_Machine==false alarm|rate of change of Trust_Human==0) = (0.007 * (21.000 / 21.000)) / 0.768 = 0.007 / 0.768 = 0.009
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human>0) = (0.381 * (129.000 / 1062.000)) / 0.110 = 0.046 / 0.110 = 0.420
+P(EventW_Machine== |rate of change of Trust_Human>0) = (0.918 * (244.000 / 2631.000)) / 0.109 = 0.085 / 0.109 = 0.782
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human>0) = (0.074 * (73.000 / 228.000)) / 0.109 = 0.024 / 0.109 = 0.218
+
+S26
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine== ) = (0.619 * (1673.000 / 1799.000)) / 0.914 = 0.576 / 0.914 = 0.630
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.619 * (122.000 / 1799.000)) / 0.079 = 0.042 / 0.079 = 0.529
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine==false alarm) = (0.619 * (4.000 / 1799.000)) / 0.007 = 0.001 / 0.007 = 0.207
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human==0) = (0.619 * (1717.000 / 1799.000)) / 0.950 = 0.591 / 0.950 = 0.622
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human>0) = (0.619 * (40.000 / 1799.000)) / 0.026 = 0.014 / 0.026 = 0.520
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human<0) = (0.619 * (42.000 / 1799.000)) / 0.024 = 0.014 / 0.024 = 0.612
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.381 * (106.000 / 1081.000)) / 0.079 = 0.037 / 0.079 = 0.471
+P(rate of change of Trust_Human==0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.765 * (209.000 / 2736.000)) / 0.089 = 0.058 / 0.089 = 0.659
+P(rate of change of Trust_Human>0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.115 * (13.000 / 76.000)) / 0.089 = 0.020 / 0.089 = 0.222
+P(rate of change of Trust_Human<0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.120 * (6.000 / 68.000)) / 0.089 = 0.011 / 0.089 = 0.119
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine== ) = (0.381 * (960.000 / 1081.000)) / 0.914 = 0.338 / 0.914 = 0.370
+P(rate of change of Trust_Human==0|EventW_Machine== ) = (0.765 * (2511.000 / 2736.000)) / 0.902 = 0.702 / 0.902 = 0.778
+P(rate of change of Trust_Human>0|EventW_Machine== ) = (0.115 * (60.000 / 76.000)) / 0.902 = 0.091 / 0.902 = 0.101
+P(rate of change of Trust_Human<0|EventW_Machine== ) = (0.120 * (62.000 / 68.000)) / 0.902 = 0.109 / 0.902 = 0.121
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine==false alarm) = (0.381 * (15.000 / 1081.000)) / 0.007 = 0.005 / 0.007 = 0.793
+P(rate of change of Trust_Human==0|EventW_Machine==false alarm) = (0.765 * (16.000 / 2736.000)) / 0.009 = 0.004 / 0.009 = 0.496
+P(rate of change of Trust_Human>0|EventW_Machine==false alarm) = (0.115 * (3.000 / 76.000)) / 0.009 = 0.005 / 0.009 = 0.504
+
+P(EventW_Machine== |rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.918 * (999.000 / 2633.000)) / 0.376 = 0.348 / 0.376 = 0.926
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.074 * (78.000 / 228.000)) / 0.376 = 0.025 / 0.376 = 0.067
+P(EventW_Machine==false alarm|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.007 * (7.000 / 19.000)) / 0.376 = 0.003 / 0.376 = 0.007
+P(rate of change of Trust_Human==0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.765 * (989.000 / 2736.000)) / 0.433 = 0.277 / 0.433 = 0.639
+P(rate of change of Trust_Human>0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.115 * (45.000 / 76.000)) / 0.433 = 0.068 / 0.433 = 0.157
+P(rate of change of Trust_Human<0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.120 * (50.000 / 68.000)) / 0.433 = 0.088 / 0.433 = 0.204
+
+P(EventW_Machine== |rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.918 * (1634.000 / 2633.000)) / 0.623 = 0.570 / 0.623 = 0.915
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.074 * (150.000 / 228.000)) / 0.623 = 0.049 / 0.623 = 0.078
+P(EventW_Machine==false alarm|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.007 * (12.000 / 19.000)) / 0.623 = 0.004 / 0.623 = 0.007
+P(rate of change of Trust_Human==0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.765 * (1747.000 / 2736.000)) / 0.567 = 0.488 / 0.567 = 0.861
+P(rate of change of Trust_Human>0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.115 * (31.000 / 76.000)) / 0.567 = 0.047 / 0.567 = 0.083
+P(rate of change of Trust_Human<0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.120 * (18.000 / 68.000)) / 0.567 = 0.032 / 0.567 = 0.056
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human<0) = (0.381 * (26.000 / 1081.000)) / 0.024 = 0.009 / 0.024 = 0.388
+P(EventW_Machine== |rate of change of Trust_Human<0) = (0.918 * (62.000 / 2633.000)) / 0.024 = 0.022 / 0.024 = 0.917
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human<0) = (0.074 * (6.000 / 228.000)) / 0.024 = 0.002 / 0.024 = 0.083
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human==0) = (0.381 * (1019.000 / 1081.000)) / 0.950 = 0.359 / 0.950 = 0.378
+P(EventW_Machine== |rate of change of Trust_Human==0) = (0.918 * (2511.000 / 2633.000)) / 0.949 = 0.875 / 0.949 = 0.922
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human==0) = (0.074 * (209.000 / 228.000)) / 0.949 = 0.068 / 0.949 = 0.071
+P(EventW_Machine==false alarm|rate of change of Trust_Human==0) = (0.007 * (16.000 / 19.000)) / 0.949 = 0.006 / 0.949 = 0.006
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human>0) = (0.381 * (36.000 / 1081.000)) / 0.026 = 0.013 / 0.026 = 0.480
+P(EventW_Machine== |rate of change of Trust_Human>0) = (0.918 * (60.000 / 2633.000)) / 0.026 = 0.021 / 0.026 = 0.797
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human>0) = (0.074 * (13.000 / 228.000)) / 0.026 = 0.004 / 0.026 = 0.161
+P(EventW_Machine==false alarm|rate of change of Trust_Human>0) = (0.007 * (3.000 / 19.000)) / 0.026 = 0.001 / 0.026 = 0.042
+
+S27
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine== ) = (0.619 * (1892.000 / 1997.000)) / 0.927 = 0.586 / 0.927 = 0.632
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.619 * (99.000 / 1997.000)) / 0.064 = 0.031 / 0.064 = 0.477
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|EventW_Machine==false alarm) = (0.619 * (6.000 / 1997.000)) / 0.008 = 0.002 / 0.008 = 0.223
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human==0) = (0.619 * (1645.000 / 1997.000)) / 0.785 = 0.510 / 0.785 = 0.650
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human>0) = (0.619 * (178.000 / 1997.000)) / 0.106 = 0.055 / 0.106 = 0.520
+P(rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10|rate of change of Trust_Human<0) = (0.619 * (174.000 / 1997.000)) / 0.109 = 0.054 / 0.109 = 0.494
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.381 * (78.000 / 883.000)) / 0.064 = 0.034 / 0.064 = 0.523
+P(rate of change of Trust_Human==0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.765 * (101.000 / 2282.000)) / 0.064 = 0.034 / 0.064 = 0.531
+P(rate of change of Trust_Human<0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.120 * (42.000 / 302.000)) / 0.064 = 0.017 / 0.064 = 0.262
+P(rate of change of Trust_Human>0|EventW_Machine!=false alarm&&EventW_Machine!= ) = (0.115 * (34.000 / 296.000)) / 0.064 = 0.013 / 0.064 = 0.207
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine== ) = (0.381 * (790.000 / 883.000)) / 0.927 = 0.341 / 0.927 = 0.368
+P(rate of change of Trust_Human==0|EventW_Machine== ) = (0.765 * (2174.000 / 2282.000)) / 0.928 = 0.729 / 0.928 = 0.785
+P(rate of change of Trust_Human<0|EventW_Machine== ) = (0.120 * (246.000 / 302.000)) / 0.928 = 0.098 / 0.928 = 0.105
+P(rate of change of Trust_Human>0|EventW_Machine== ) = (0.115 * (262.000 / 296.000)) / 0.928 = 0.102 / 0.928 = 0.110
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|EventW_Machine==false alarm) = (0.381 * (15.000 / 883.000)) / 0.008 = 0.006 / 0.008 = 0.777
+P(rate of change of Trust_Human==0|EventW_Machine==false alarm) = (0.765 * (7.000 / 2282.000)) / 0.008 = 0.002 / 0.008 = 0.297
+P(rate of change of Trust_Human<0|EventW_Machine==false alarm) = (0.120 * (14.000 / 302.000)) / 0.008 = 0.006 / 0.008 = 0.703
+
+P(EventW_Machine== |rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.918 * (816.000 / 2682.000)) / 0.310 = 0.279 / 0.310 = 0.900
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.074 * (66.000 / 177.000)) / 0.310 = 0.028 / 0.310 = 0.089
+P(EventW_Machine==false alarm|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.007 * (10.000 / 21.000)) / 0.310 = 0.003 / 0.310 = 0.011
+P(rate of change of Trust_Human==0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.765 * (693.000 / 2282.000)) / 0.310 = 0.232 / 0.310 = 0.749
+P(rate of change of Trust_Human<0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.120 * (82.000 / 302.000)) / 0.310 = 0.033 / 0.310 = 0.105
+P(rate of change of Trust_Human>0|rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10) = (0.115 * (117.000 / 296.000)) / 0.310 = 0.045 / 0.310 = 0.146
+
+P(EventW_Machine== |rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.918 * (1866.000 / 2682.000)) / 0.689 = 0.639 / 0.689 = 0.927
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.074 * (111.000 / 177.000)) / 0.689 = 0.046 / 0.689 = 0.067
+P(EventW_Machine==false alarm|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.007 * (11.000 / 21.000)) / 0.689 = 0.004 / 0.689 = 0.005
+P(rate of change of Trust_Human==0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.765 * (1589.000 / 2282.000)) / 0.690 = 0.533 / 0.690 = 0.772
+P(rate of change of Trust_Human<0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.120 * (220.000 / 302.000)) / 0.690 = 0.087 / 0.690 = 0.127
+P(rate of change of Trust_Human>0|rate of change of CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10) = (0.115 * (179.000 / 296.000)) / 0.690 = 0.070 / 0.690 = 0.101
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human<0) = (0.381 * (128.000 / 883.000)) / 0.109 = 0.055 / 0.109 = 0.506
+P(EventW_Machine== |rate of change of Trust_Human<0) = (0.918 * (246.000 / 2682.000)) / 0.106 = 0.084 / 0.106 = 0.791
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human<0) = (0.074 * (42.000 / 177.000)) / 0.106 = 0.018 / 0.106 = 0.165
+P(EventW_Machine==false alarm|rate of change of Trust_Human<0) = (0.007 * (14.000 / 21.000)) / 0.106 = 0.005 / 0.106 = 0.044
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human==0) = (0.381 * (637.000 / 883.000)) / 0.785 = 0.275 / 0.785 = 0.350
+P(EventW_Machine== |rate of change of Trust_Human==0) = (0.918 * (2174.000 / 2682.000)) / 0.789 = 0.744 / 0.789 = 0.944
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human==0) = (0.074 * (101.000 / 177.000)) / 0.789 = 0.042 / 0.789 = 0.054
+P(EventW_Machine==false alarm|rate of change of Trust_Human==0) = (0.007 * (7.000 / 21.000)) / 0.789 = 0.002 / 0.789 = 0.003
+
+P(rate of change of CurrentWheel_Machine<10&&CurrentWheel_Machine>-10|rate of change of Trust_Human>0) = (0.381 * (118.000 / 883.000)) / 0.106 = 0.051 / 0.106 = 0.480
+P(EventW_Machine== |rate of change of Trust_Human>0) = (0.918 * (262.000 / 2682.000)) / 0.104 = 0.090 / 0.104 = 0.863
+P(EventW_Machine!=false alarm&&EventW_Machine!= |rate of change of Trust_Human>0) = (0.074 * (34.000 / 177.000)) / 0.104 = 0.014 / 0.104 = 0.137
+

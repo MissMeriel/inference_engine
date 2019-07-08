@@ -29,6 +29,61 @@ public class TypedBayesianEngine extends BasicEngine {
       super(csv_array, Global.givens, Global.events);
    }
    
+       
+   public void initialize_cumulative_var_probabilities(){
+      cumulative_probabilities = new HashMap<String, HashMap<String, Double[]>>();
+      Iterator<String> iter = Global.vars_of_interest.iterator();
+      while(iter.hasNext()){
+         String voi_name = iter.next();
+         cumulative_probabilities.put(voi_name, new HashMap<String, Double[]>());
+      }
+      out.println("Finished initialize_cumulative_var_probabilities()\nCUMULATIVE PROBABILITIES: ");
+      print_cumulative_probabilities();
+      out.println();
+   }
+   
+   
+   public void initialize_delta_trackers(){
+      out.println("begin initialize_delta_trackers()");
+      delta_trackers = new HashMap<String, DeltaTracker>(); //new ArrayList<DeltaTracker>();
+      Iterator<String> iter = Global.vars_of_interest.iterator();
+      while(iter.hasNext()){
+         String voi_name = iter.next();
+         RawType rawtype = Global.types.get(voi_name);
+         switch(rawtype){
+            case INTDELTA:
+            case DOUBLEDELTA:{
+               //out.println("initialize_delta_trackers(): var_name: "+voi_name);
+               //delta_trackers.put(voi_name, new HashMap<String, DeltaTracker>());
+               double delta = Global.deltas.get(voi_name);
+               //out.println("initialize_delta_trackers(): delta: "+delta);
+               //Set<String> keys = cumulative_probabilities.get(voi_name).keySet();
+               //out.println("initialize_delta_trackers(): # keys: "+keys.size());
+               DeltaTracker dt = new DeltaTracker(voi_name, delta, 0.0);
+               delta_trackers.put(voi_name, dt);
+               //initialize next_values with the next delta values
+               int index = get_var_index(voi_name);
+               double[] next_values = new double[(int) Math.round(delta)];
+               //out.println("delta="+delta);
+               for(int i = 1; i <= delta; i++){
+                  next_values[i-1] = Double.parseDouble((String)csv_array[i][index]);
+                  if(debug) out.format("next_values[%s] = %.2f;%n",i-1,Double.parseDouble((String)csv_array[i][index]));
+               }
+               //initialize last_values with delta # iterations of the first value
+               double first_value = Double.parseDouble((String)csv_array[1][index]);
+               double[] last_values = new double[(int) Math.round(delta)];
+               for(int i = 1; i <= delta; i++){
+                  last_values[i-1] = first_value;
+               }
+               dt.set_next_values(next_values);
+               dt.set_last_values(last_values);
+               break;}
+         }
+      }
+      //System.exit(0);
+   }
+   
+   
    /**
     * Setup threshold means
     * Setup uniform prior distribution if none given
@@ -44,9 +99,6 @@ public class TypedBayesianEngine extends BasicEngine {
    public void setup_threshold_means(){
       for(String voi_name : Global.vars_of_interest){
          Double threshold = Global.thresholds.get(voi_name);
-         /*if(threshold == null){
-            continue; //threshold = Double.MAX_VALUE;
-         }*/
          RawType type = Global.types.get(voi_name);
          //System.out.println(voi_name+" type == niull? "+(type == null));
          TreeSet<Double> d_set = new TreeSet<Double>();
@@ -54,16 +106,34 @@ public class TypedBayesianEngine extends BasicEngine {
          TreeSet<String> s_set = new TreeSet<String>();
          for(int i = 1; i< csv_array.length; i++){
             String[] row = (String[]) csv_array[i];
-            switch(type){
-               case DOUBLE:
-                  d_set.add(Double.valueOf(row[get_var_index(voi_name)]));
-                  break;
-               case INT:
-                  i_set.add(Integer.valueOf(row[get_var_index(voi_name)]));
-                  break;
-               case STRING:
-                  s_set.add(row[get_var_index(voi_name)]);
-                  break;
+            try{
+               switch(type){
+                  case DOUBLE:
+                     try{
+                        double val = Double.valueOf(row[get_var_index(voi_name)]);
+                        d_set.add(val);
+                     } catch(NumberFormatException ex){
+                        d_set.add(Double.MIN_VALUE);
+                     }
+                     break;
+                  case INT:
+                     try{
+                        int val =Integer.valueOf(row[get_var_index(voi_name)]);
+                        i_set.add(val);
+                     } catch(NumberFormatException ex){
+                        i_set.add(Integer.MIN_VALUE);
+                     }
+                     break;
+                  case STRING:
+                     s_set.add(row[get_var_index(voi_name)]);
+                     break;
+               }
+            }catch(ArrayIndexOutOfBoundsException ex){
+               ex.printStackTrace();
+               out.format("csv_array size: %s,%s%n",csv_array.length,csv_array[0].length);
+               out.format("get_var_index(%s)=%s%n",voi_name,get_var_index(voi_name));
+               out.format("Row #%s: %s%n",i,Arrays.toString(row));
+               out.format("Row #%s size: %s%n",i,row.length);
             }
          }
          if(debug){
@@ -204,61 +274,7 @@ public class TypedBayesianEngine extends BasicEngine {
       //System.exit(0);
    }
    
-    
-   public void initialize_cumulative_var_probabilities(){
-      cumulative_probabilities = new HashMap<String, HashMap<String, Double[]>>();
-      Iterator<String> iter = Global.vars_of_interest.iterator();
-      while(iter.hasNext()){
-         String voi_name = iter.next();
-         cumulative_probabilities.put(voi_name, new HashMap<String, Double[]>());
-      }
-      out.println("Finished initialize_cumulative_var_probabilities()\nCUMULATIVE PROBABILITIES: ");
-      print_cumulative_probabilities();
-      out.println();
-   }
-   
-   
-   public void initialize_delta_trackers(){
-      out.println("begin initialize_delta_trackers()");
-      delta_trackers = new HashMap<String, DeltaTracker>(); //new ArrayList<DeltaTracker>();
-      Iterator<String> iter = Global.vars_of_interest.iterator();
-      while(iter.hasNext()){
-         String voi_name = iter.next();
-         RawType rawtype = Global.types.get(voi_name);
-         switch(rawtype){
-            case INTDELTA:
-            case DOUBLEDELTA:{
-               //out.println("initialize_delta_trackers(): var_name: "+voi_name);
-               //delta_trackers.put(voi_name, new HashMap<String, DeltaTracker>());
-               double delta = Global.deltas.get(voi_name);
-               //out.println("initialize_delta_trackers(): delta: "+delta);
-               //Set<String> keys = cumulative_probabilities.get(voi_name).keySet();
-               //out.println("initialize_delta_trackers(): # keys: "+keys.size());
-               DeltaTracker dt = new DeltaTracker(voi_name, delta, 0.0);
-               delta_trackers.put(voi_name, dt);
-               //initialize next_values with the next delta values
-               int index = get_var_index(voi_name);
-               double[] next_values = new double[(int) Math.round(delta)];
-               //out.println("delta="+delta);
-               for(int i = 1; i <= delta; i++){
-                  next_values[i-1] = Double.parseDouble((String)csv_array[i][index]);
-                  if(debug) out.format("next_values[%s] = %.2f;%n",i-1,Double.parseDouble((String)csv_array[i][index]));
-               }
-               //initialize last_values with delta # iterations of the first value
-               double first_value = Double.parseDouble((String)csv_array[1][index]);
-               double[] last_values = new double[(int) Math.round(delta)];
-               for(int i = 1; i <= delta; i++){
-                  last_values[i-1] = first_value;
-               }
-               dt.set_next_values(next_values);
-               dt.set_last_values(last_values);
-               break;}
-         }
-      }
-      //System.exit(0);
-   }
-   
-   
+
    public void loop_through_trace(){
       if(debug) debugBayesianEngine.info("Begin looping through trace");
       //debugBayesianEngine.info("Length of trace: "+csv_array.length);
@@ -273,7 +289,7 @@ public class TypedBayesianEngine extends BasicEngine {
          trace_total = i;
          row = csv_array[i];
          boolean bin_updated = false;
-         //TODO: update delta_trackers
+         //update delta_trackers
          update_delta_trackers((String[]) csv_array[i], i);
          //update events in vars of interest
          Iterator<String> iter = Global.vars_of_interest.iterator();
@@ -281,20 +297,26 @@ public class TypedBayesianEngine extends BasicEngine {
             String voi_name = iter.next();
             RawType type_enum = Global.types.get(voi_name);
             int event_index = get_var_index(voi_name);
-            //out.println("RawType: "+type_enum);
             Iterator iter2 = Global.vars_of_interest.iterator();
             BayesianEvent be_test = null;
             String event_val = (String) row[event_index];
             
-            if(debug) { out.format("Get prior for %s:%s%n", voi_name, (String)event_val); }
-            //retreive prior (special retrieval for fuzzy)
+            //if(debug) { out.format("Get prior for %s:%s%n", voi_name, (String)event_val); }
             double prior = get_prior(voi_name, event_val);
             switch(type_enum){
                case INT:
-                  be_test = new BayesianEvent<Integer>(voi_name, Integer.parseInt(event_val), prior);
+                  try{
+                     be_test = new BayesianEvent<Integer>(voi_name, Integer.parseInt(event_val), prior);
+                  } catch(NumberFormatException ex){
+                     be_test = new BayesianEvent<Integer>(voi_name, Integer.MIN_VALUE, prior);
+                  }
                   break;
                case DOUBLE:
-                  be_test = new BayesianEvent<Double>(voi_name, Double.parseDouble(event_val), prior);
+                  try{
+                     be_test = new BayesianEvent<Double>(voi_name, Double.parseDouble(event_val), prior);
+                  } catch(NumberFormatException ex){
+                     be_test = new BayesianEvent<Double>(voi_name, Double.MIN_VALUE, prior);
+                  }
                   break;
                case STRING:
                   be_test = new BayesianEvent<String>(voi_name, event_val, prior);
@@ -302,19 +324,19 @@ public class TypedBayesianEngine extends BasicEngine {
                case INTEXP:{
                   Predicate<Object> tester = get_tester(voi_name, Double.parseDouble(event_val));
                   String tester_id = get_tester_id(voi_name, Double.parseDouble(event_val));
-                  if(debug) out.format("Got tester %s%n", tester_id);
+                  //if(debug) out.format("Got tester %s%n", tester_id);
                   be_test = new BoundedEvent<Integer>(voi_name, tester_id, prior, tester);
                   break;}
                case DOUBLEEXP:{
                   Predicate<Object> tester = get_tester(voi_name, Double.parseDouble(event_val));
                   String tester_id = get_tester_id(voi_name, Double.parseDouble(event_val));
-                  if(debug) out.format("Got tester %s%n", tester_id);
+                  //if(debug) out.format("Got tester %s%n", tester_id);
                   be_test = new BoundedEvent<Double>(voi_name, tester_id, prior, tester);
                   break;}
                case STRINGEXP: {
                   Predicate<Object> tester = get_tester(voi_name, event_val);
                   String tester_id = get_tester_id(voi_name, event_val);
-                  if(debug) out.format("Got tester %s%n", tester_id);
+                  //if(debug) out.format("Got tester %s%n", tester_id);
                   be_test = new BoundedEvent<String>(voi_name, tester_id, prior, tester);
                   break;}
                case INTDELTA:
@@ -521,6 +543,13 @@ public class TypedBayesianEngine extends BasicEngine {
                   d = 1.0 / al.size();
                   break;}
             }
+         } catch(NumberFormatException ex3){
+            switch(type_enum){
+               case DOUBLE:
+                  break; 
+               case INT:
+                  break;
+            }
          }
 
       }
@@ -544,6 +573,7 @@ public class TypedBayesianEngine extends BasicEngine {
       for (String voi : Global.vars_of_interest){
          //change voi_vals to delta value
          RawType rawtype = Global.types.get(voi);
+         out.println("get_var_index("+voi+");");
          int index = get_var_index(voi);
          switch(rawtype){
             case INT:
@@ -638,10 +668,7 @@ public class TypedBayesianEngine extends BasicEngine {
       }
       out.println();
       ArrayList<String> al = new ArrayList<String>(Arrays.asList(row));
-      //if(al.contains("pedestrian alarm")){
-         print_delta_trackers();
-      //}
-      
+      print_delta_trackers();
    }
       
    
@@ -813,7 +840,10 @@ public class TypedBayesianEngine extends BasicEngine {
       }
       //iterate through keys, appending to return string
       Set<String> keys = given_map.keySet();
-      for(String key : keys){
+      //String[] temp_arr = keys.toArray();
+      //ArrayList<String> temp_al =
+      TreeSet<String> treeset = new TreeSet(keys);
+      for(String key : treeset){
          return_str += given_map.get(key)+"\n\n";
       }
       //out.println("regroup_probabilities_by_given(): return_str "+return_str);

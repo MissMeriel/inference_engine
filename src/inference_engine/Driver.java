@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.function.Predicate;
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
 import static java.lang.System.out;
 import mjparser.*;
 
@@ -66,8 +67,6 @@ public class Driver {
          parse_typed_config_file(config_file);
          if (priors != null) {
             parse_priors_file(priors_file);
-         } else {
-            //parse_config_file(config_file);
          }
       } catch(IOException e){
          e.printStackTrace();
@@ -79,7 +78,6 @@ public class Driver {
    
    public static void build_inference_engine(Object[][] csv_array, HashMap<String, HashMap<String, Double>> priors){
       if(config_file.contains(".bayesianconfig") && Global.types != null){
-         //print_types();
          //pass in null priors --> build uniform dist in preprocess_trace()
          out.format("build_inference_engine: priors == null? %s%n", (priors == null));
          engine = new TypedBayesianEngine(csv_array);
@@ -227,7 +225,15 @@ public class Driver {
       Object[][] csv_array = new Object [dims[0]][dims[1]];
       int row_count = 0;
       while ((thisLine = dis.readLine()) != null){
-         String[] cols = thisLine.split(",");
+         //String[] cols = thisLine.split(",");
+         String[] cols = StringUtils.splitPreserveAllTokens(thisLine, ",");
+         if(cols.length < dims[1]){
+            out.println("occurrences of ,:"+StringUtils.countMatches(thisLine,","));
+            out.println("row count:"+row_count);
+            out.println("cols.length:"+cols.length);
+            out.println("dims[1]:"+dims[1]);
+            System.exit(0);
+         }
          csv_array[row_count]= cols;
          row_count++;
       }
@@ -242,9 +248,13 @@ public class Driver {
       String thisLine;
       // rows x columns
       int[] dims = {0, 0};
+      int row_count = 0;
       while((thisLine = dis.readLine()) != null){
          dims[0] += 1;
-         dims[1] = (thisLine.split(",").length);
+         if(row_count == 0){
+            dims[1] = (thisLine.split(",").length);
+         }
+         row_count++;
       }
       return dims;
    }
@@ -294,7 +304,6 @@ public class Driver {
       return return_string;
    }
 
-   
    public static String print_bounds(){
       String return_string = "";
       Set<String> keys = Global.bounds.keySet();
@@ -328,7 +337,6 @@ public class Driver {
       return return_string;
    }   
    
-   
    public static String print_deltas(){
       String return_string = "";
       Set<String> keys = Global.deltas.keySet();
@@ -342,7 +350,6 @@ public class Driver {
       out.println();
       return return_string;
    }
-   
    
    public static String priors_toString(){
       String priors_string = String.format("%nPRIORS:%n");
