@@ -521,17 +521,20 @@ public class Csv_Counter2{
    public static void write_to_file(String filename, double d){
       try{
          FileWriter fw = new FileWriter(filename);
-         
          Set<String> keys1 = count_map.keySet();
          for(String key1 : keys1){
+            String priorfile_string = key1+",";
             Set<String> keys2 = count_map.get(key1).keySet();
             for (String key2 : keys2){
                if(!key1.contains("header") && !key1.contains("stamp")){
-                  String contents = String.format("%s:%s:=%s --> %.3f%n",key1,key2,count_map.get(key1).get(key2),count_map.get(key1).get(key2) / d);
+                  String contents = String.format("%s:%s:=%s --> %.5f%n",key1,key2,count_map.get(key1).get(key2),count_map.get(key1).get(key2) / d);
+                  priorfile_string += String.format("%s:=%.5f,",key2,count_map.get(key1).get(key2)/d);
                   fw.write(contents);
                   //str += key1+":"+key2+":=" +count_map.get(key1).get(key2)+"\n";
                }
+               
             }
+            fw.write(priorfile_string+"\n\n");
          }
          fw.close();
       } catch(Exception e){
@@ -560,13 +563,17 @@ public class Csv_Counter2{
       out.println("\n\n\n\n\n\n\n\n\nPERCENTAGES:");
       Set<String> keys1 = count_map.keySet();
       for(String key1 : keys1){
+         String priorfile_string = key1+",";
          if(!key1.contains("GSR") || !key1.contains("Manual")  || !key1.contains("Auto")  || !key1.contains("Pupil") ){
             Set<String> keys2 = count_map.get(key1).keySet();
             for (String key2 : keys2){
+               
                out.format("%s:%s:=%.3f%n",key1,key2,count_map.get(key1).get(key2)/i);
+               priorfile_string += String.format("%s:=%.3f,",key2,count_map.get(key1).get(key2)/i);
                //out.println(key1+":"+key2+"=" +count_map.get(key1).get(key2));
             }
          }
+         out.println(priorfile_string);
       }
    }
    
