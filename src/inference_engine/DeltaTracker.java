@@ -21,7 +21,7 @@ public class DeltaTracker{
    
    public double delta = 1.0; //default value of one: only looking at current value
    public double timestep = 1.0; //how many seconds a delta step is worth
-   public LinkedList<Double> next_values = new LinkedList<Double>(); //goes [future values, ..., current val]
+   public LinkedList<Double> next_values = new LinkedList<Double>(); //opposite of this -->//goes [future values, ..., current val]
    public LinkedList<Double> last_values = new LinkedList<Double>(); //goes [current val, ..., future values]
    public boolean derivative = true;
    
@@ -56,16 +56,16 @@ public class DeltaTracker{
    }
    
    public void update_last_values(Double new_val){
-      last_values.add(new_val);
+      last_values.add(new_val); //add to end of list
       if(last_values.size() > delta){
-         last_values.remove();   
+         last_values.remove();   //remove first element in list
       }
    }
    
    public void update_next_values(Double new_val){
-      next_values.add(new_val);
+      next_values.add(new_val); //add to end of list
       if(next_values.size() > delta){
-         next_values.remove();   
+         next_values.remove();   //remove first element in list
       }
    }
    
@@ -100,12 +100,12 @@ public class DeltaTracker{
             return 0.0;
          } else if (delta == 2 || var_name.equals("Trust_Human")){
             // return slope of secant line
-            out.format("compute_next_delta(): (next_values.getLast()=%.2f - next_values.getFirst()=%.2f) / timestep=%.2f = ", next_values.getLast(), next_values.getFirst(), timestep, (next_values.getLast() - next_values.getFirst())/(timestep));
+            //out.format("compute_next_delta(): (next_values.getLast()=%.2f - next_values.getFirst()=%.2f) / timestep=%.2f = ", next_values.getLast(), next_values.getFirst(), timestep, (next_values.getLast() - next_values.getFirst())/(timestep));
             return (next_values.getLast()-next_values.getFirst())/(timestep);
          } else if(derivative){
             // fit polynomial function then take derivative
             WeightedObservedPoints obs = new WeightedObservedPoints();
-            Iterator<Double> iter = next_values.iterator();
+            Iterator<Double> iter = next_values.descendingIterator();
             int i = 0;
             while(iter.hasNext()){
                obs.add(timestep * i++, iter.next());
@@ -114,10 +114,10 @@ public class DeltaTracker{
             final PolynomialCurveFitter fitter = PolynomialCurveFitter.create(2);            
             // Retrieve fitted parameters (coefficients of the polynomial function).
             final double[] coeff = fitter.fit(obs.toList());
-            out.format("compute_next_delta(): coeffs: [%s, %s]%n", coeff[1], coeff[2]);
+            //out.format("compute_next_delta(): coeffs: [%s, %s]%n", coeff[1], coeff[2]);
             //out.println("compute_next_delta(): observations: "+obs.toList().toString());
-            double slope = coeff[1] * 2 * next_values.getLast() + coeff[2];
-            out.format("compute_next_delta(): slope: %.3f * 2 * %.3f + %.3f = %.3f%n", coeff[1], next_values.getLast(), coeff[2], slope);
+            double slope = coeff[1] * 2 * next_values.getFirst() + coeff[2];
+            //out.format("compute_next_delta(): slope: %.3f * 2 * %.3f + %.3f = %.3f%n", coeff[1], next_values.getLast(), coeff[2], slope);
             return slope;
          } else if(!derivative){
             // take rate of change over first and last
@@ -138,7 +138,7 @@ public class DeltaTracker{
             return 0.0;
          } else if (delta == 2 || var_name.equals("Trust_Human")){
             // return slope of secant line
-            out.format("compute_last_delta(): (last_values.getLast()=%.2f - last_values.getFirst()=%.2f) / timestep=%.2f = ", last_values.getLast(), last_values.getFirst(), timestep, (last_values.getLast()-last_values.getFirst()) / timestep);
+            //out.format("compute_last_delta(): (last_values.getLast()=%.2f - last_values.getFirst()=%.2f) / timestep=%.2f = ", last_values.getLast(), last_values.getFirst(), timestep, (last_values.getLast()-last_values.getFirst()) / timestep);
             return (last_values.getLast()-last_values.getFirst()) / timestep;
          } else if(derivative){
             // fit polynomial function then take derivative
@@ -153,7 +153,7 @@ public class DeltaTracker{
             // Retrieve fitted parameters (coefficients of the polynomial function).
             final double[] coeff = fitter.fit(obs.toList());
             double slope = coeff[1] * 2 * last_values.getLast() + coeff[2];
-            out.format("compute_last_delta(): slope: %.3f * 2 * %.3f + %.3f = %.3f%n", coeff[1], next_values.getLast(), coeff[2], slope);
+            //out.format("compute_last_delta(): slope: %.3f * 2 * %.3f + %.3f = %.3f%n", coeff[1], next_values.getLast(), coeff[2], slope);
             return slope;
          } else if(!derivative){
             // take rate of change over first and last

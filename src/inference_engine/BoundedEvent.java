@@ -44,7 +44,7 @@ public class BoundedEvent<T> extends BayesianEvent<T>{
    
    @Override
    public String generate_bayesian_probability(HashMap<String, HashMap<String, Double[]>> cumulative_probabilities){
-      debug = true;
+      debug = false;
       //if(true) out.format("%nENTER generate_bayesian_probability: for %s %s",var_name, id);
       String str = "";
       Set<String> keys1 = pBAs.keySet();
@@ -63,9 +63,11 @@ public class BoundedEvent<T> extends BayesianEvent<T>{
             //if(debug) out.format("%.2f / %.2f %n", A_arr[0], A_arr[1]);
             if(debug) Driver.print_priors(Global.priors);
             //double pB = A_arr[0].doubleValue() / A_arr[1].doubleValue();
-            out.format("pBAs: %s%n",pBAs);
-            out.format("total_probabilities: %s%n", total_probabilities);
-            out.format("keys2: %s%n", keys2);
+            if(debug){
+               out.format("pBAs: %s%n",pBAs);
+               out.format("total_probabilities: %s%n", total_probabilities);
+               out.format("keys2: %s%n", keys2);
+            }
             if(debug) out.format("total_probabilities.get(%s).get(%s)%n",key1,key2);
             double pB = total_probabilities.get(key1).get(key2);
             if(debug) out.format("pB = %.3f / %.3f = %.3f%n", A_arr[0].doubleValue(), A_arr[1].doubleValue(), pB);
@@ -148,9 +150,9 @@ public class BoundedEvent<T> extends BayesianEvent<T>{
    public boolean equals(Object o){
       if(o instanceof BoundedEvent){
          BoundedEvent be = (BoundedEvent) o;
-         /*out.format("BoundedEvent equals: this.equals(be):%n");
+         out.format("BoundedEvent equals: this.equals(be):%n");
          out.println("\t"+this.toString());
-         out.println("\t"+(be.toString()));*/
+         out.println("\t"+(be.toString()));
          boolean nameeq = (this.var_name.equals(be.var_name));
          boolean ideq = this.id.equals(be.id);
          boolean boundeq = lower_bound == be.lower_bound && upper_bound == be.upper_bound;

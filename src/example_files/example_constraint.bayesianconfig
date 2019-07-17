@@ -1,0 +1,4 @@
+GIVENS
+EventAlert_Machine,STRING
+EVENTS
+Speed_Machine,DOUBLEDELTA,delta:=10,Speed_Machine<0,Speed_Machine>0,Speed_Machine==0

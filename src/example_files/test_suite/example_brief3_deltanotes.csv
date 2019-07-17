@@ -1,0 +1,6 @@
+Trust_Human,Alarm_M2H,Mode_H2M,PupilChange_Human,Speed_Machine,CurrentWheel_Machine,Next Delta CurrentWheel_Machine,Last Delta CurrentWheel_Machine
+3,,autonomous,0.1,0,5,7,0
+3,,autonomous,0,1.1,12,8,7
+1,cyclist alarm,autonomous,0,3,20,10,8
+1,cyclist alarm,autonomous,0,4.3,30,10,10
+1,,autonomous,-0.2,4.3,40,0,10

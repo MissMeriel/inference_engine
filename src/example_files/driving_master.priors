@@ -1,0 +1,6 @@
+Trust_Human,Trust_Human==0:=0.765,Trust_Human<0:=0.120,Trust_Human>0:=0.115
+EventW_Machine,EventW_Machine==false alarm:=0.007,EventW_Machine== :=918,EventW_Machine==pedestrian detected:=0.034,EventW_Machine==cyclist detected:=0.015,EventW_Machine==truck detected:=0.008,EventW_Machine==obstacle detected:=0.017
+Speed_Machine,Speed_Machine<5:=0.059,Speed_Machine>=10&&Speed_Machine<15:=0.249,Speed_Machine>=5&&Speed_Machine<10:=0.110,Speed_Machine>=15:=0.583
+CurrentWheel_Machine,CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10:=0.619,CurrentWheel_Machine<10&&CurrentWheel_Machine>-10:=0.381
+CurrentWheel_Machine,CurrentWheel_Machine>=20||CurrentWheel_Machine<=-20:=0.506,CurrentWheel_Machine<20&&CurrentWheel_Machine>-20:=0.494
+PupilChange_Human,PupilChange_Human==0:=0.208,PupilChange_Human>0:=0.408,PupilChange_Human<0:=0.384

@@ -1,0 +1,19 @@
+GIVENS
+//CurrentWheel_Machine,DOUBLEDELTA,delta:=10,CurrentWheel_Machine<2.5&&CurrentWheel_Machine>-2.5,CurrentWheel_Machine>=2.5||CurrentWheel_Machine<=-2.5
+//CurrentWheel_Machine,DOUBLEDELTA,delta:=10,CurrentWheel_Machine<5&&CurrentWheel_Machine>-5,CurrentWheel_Machine>=5||CurrentWheel_Machine<=-5
+//CurrentWheel_Machine,DOUBLEDELTA,delta:=10,CurrentWheel_Machine<10&&CurrentWheel_Machine>-10,CurrentWheel_Machine>=10||CurrentWheel_Machine<=-10
+//PupilChange_Human,DOUBLEEXP,PupilChange_Human==0,PupilChange_Human>0,PupilChange_Human<0
+CurrentWheel_Machine,DOUBLEDELTA,delta:=10,CurrentWheel_Machine<20&&CurrentWheel_Machine>-20,CurrentWheel_Machine>=20||CurrentWheel_Machine<=-20
+//Speed_Machine,DOUBLEEXP,Speed_Machine<5,Speed_Machine>=5&&Speed_Machine<10,Speed_Machine>=10&&Speed_Machine<15,Speed_Machine>=15
+//Alarm_M2H,STRING
+//EventW_Machine,STRINGEXP,EventW_Machine==false alarm,EventW_Machine== ,EventW_Machine!=false alarm&&EventW_Machine!= 
+EventW_Machine,STRINGEXP,EventW_Machine==false alarm,EventW_Machine== ,EventW_Machine==pedestrian detected,EventW_Machine==cyclist detected,EventW_Machine==truck detected,EventW_Machine==obstacle detected
+//EventW_Machine,STRING
+EventAlert_Machine,STRING
+EVENTS
+Speed_Machine,DOUBLEDELTA,delta:=10,Speed_Machine<0,Speed_Machine>0,Speed_Machine==0
+//Mode_H2M,STRING
+//Trust_Human,INTEXP,Trust_Human==0,Trust_Human>0&&Trust_Human<3,Trust_Human>=3
+//Trust_Human,INTDELTA,delta:=10,Trust_Human==0,Trust_Human<0,Trust_Human>0
+//CONSTRAINTS
+//P(Speed_Machine<0|EventW_Machine==false alarm&&Mode_H2M==manual)

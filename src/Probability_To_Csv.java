@@ -12,26 +12,34 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.io.FileWriter;
 import static java.lang.System.out;
+import java.util.Collections;
 
 class Probability_To_Csv{
 
    //static String[][] csv_array;
    static HashMap<String, HashMap<String,String>> header_map = new HashMap<String, HashMap<String, String>>();
-   //static Pattern subject_pattern = Pattern.compile("[S][0-9]+[\\s]*");
-   static Pattern subject_pattern = Pattern.compile("[sweep_for_target_test][0-9]+[.bag][\\s]*");
+   static Pattern subject_pattern = Pattern.compile("[S][0-9]+[\\s]*");
+   static Pattern bag_pattern = Pattern.compile("[sweep_for_target_interpolated.csv][\\s]*");
    static Pattern whitespace_pattern = Pattern.compile("^\\S+");
    static Pattern double_pattern = Pattern.compile("[0-9]+.[0-9]+");
    //static Pattern whitespace_pattern = Pattern.compile("\p{IsWhite_Space}+");
    static ArrayList<String> headers = new ArrayList<String>();
+   static boolean is_bag = false;
    
    public static void main(String[] args) throws IOException{
       out.println(Arrays.toString(args));
-      String filename = args[0]; 
+      String filename = args[0];
       try{
-            parse_file(filename, get_length(filename));
-         } catch(IOException e){
-            e.printStackTrace();
+         if(args[1].equals("bag")){
+            is_bag = true;
          }
+      } catch(Exception e){}
+      
+      try{
+         parse_file(filename, get_length(filename));
+      } catch(IOException e){
+         e.printStackTrace();
+      }
       //ArrayList<String> columns = new ArrayList<String>(csv_array[0]);
       //out.println(csv_array[0]);
       //out.println(Arrays.toString(csv_array[0]));
@@ -61,11 +69,15 @@ class Probability_To_Csv{
       String[] line_array = new String [length];
       int row_count = 0;
       String current_subject = "";
+      if(is_bag){
+         subject_pattern = Pattern.compile("./sweep/sweep_for_target_[0-9-]*interpolated.csv[\\s]*");
+      }
       while ((thisLine = dis.readLine()) != null){
          Matcher subject_matcher = subject_pattern.matcher(thisLine);
          Matcher whitespace_matcher = whitespace_pattern.matcher(thisLine);
+         
          if(subject_matcher.matches()){
-            out.println(thisLine);
+            out.println("Subject: "+thisLine);
             current_subject = thisLine;
             //continue;
          } else if(whitespace_matcher.find()){
@@ -127,6 +139,7 @@ class Probability_To_Csv{
    
    public static String map_to_csv(){
       out.println("\n\n\nmap_to_csv()");
+      Collections.sort(headers);
       String headers_str = headers.toString();
       String csv_string = "Subject,"+headers_str.substring(1, headers_str.length()-1);
       Set<String> keys1 = header_map.keySet();
@@ -135,6 +148,7 @@ class Probability_To_Csv{
          Set<String> keys2 = header_map.get(key1).keySet();
          TreeSet<String> treeset2 = new TreeSet(keys2);
          csv_string += String.format("%n%s",key1);
+         //Iterator<String> iter2 = treeset2.iterator();
          for(String header : headers){
             String temp = header_map.get(key1).get(header);
             if(temp == null){

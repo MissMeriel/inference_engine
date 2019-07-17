@@ -27,12 +27,12 @@ public class DeltaEvent<T> extends BoundedEvent<T>{
    public boolean equals(Object o){
       if(o instanceof DeltaEvent){
          DeltaEvent temp = (DeltaEvent) o;
-         out.format("DeltaEvent equals: this.equals(be):%n");
+         /*out.format("DeltaEvent equals: this.equals(be):%n");
          out.println("\tthis: "+this.toString());
          out.println("\ttemp: "+temp.toString());
          //out.format("this.id null? %s%n",(this.id==null));
          out.format("temp.id null? %s%n",(temp.id==null));
-         out.format("temp.delta=%s this.delta=%s temp.var_name=%s this.var_name=%s temp.id=%s this.id=%s%n", temp.delta, this.delta, temp.var_name, this.var_name, temp.id, this.id);
+         out.format("temp.delta=%s this.delta=%s temp.var_name=%s this.var_name=%s temp.id=%s this.id=%s%n", temp.delta, this.delta, temp.var_name, this.var_name, temp.id, this.id);*/
          if(temp.delta == this.delta && temp.var_name.equals(this.var_name) && temp.id.equals(this.id)){
             return true;
          }

@@ -1,0 +1,16 @@
+GIVENS
+//CurrentWheel_Machine,DOUBLEDELTA,delta:=2,CurrentWheel_Machine<15&&CurrentWheel_Machine>-15,CurrentWheel_Machine>=15||CurrentWheel_Machine<=-15
+//CurrentWheel_Machine,DOUBLEDELTA,delta:=10,CurrentWheel_Machine<2&&CurrentWheel_Machine>-2,CurrentWheel_Machine>=2||CurrentWheel_Machine<=-2
+//CurrentWheel_Machine,DOUBLEDELTA,delta:=10,CurrentWheel_Machine<2.5&&CurrentWheel_Machine>-2.5,CurrentWheel_Machine>=2.5||CurrentWheel_Machine<=-2.5
+//CurrentWheel_Machine,DOUBLEDELTA,delta:=10,CurrentWheel_Machine<5&&CurrentWheel_Machine>-5,CurrentWheel_Machine>=5||CurrentWheel_Machine<=-5
+//Speed_Machine,DOUBLEDELTA,delta:=3,Speed_Machine<0,Speed_Machine>0,Speed_Machine==0
+//Speed_Machine,DOUBLEEXP,Speed_Machine<5,Speed_Machine>=5&&Speed_Machine<10,Speed_Machine>=10&&Speed_Machine<15,Speed_Machine>=15
+//Alarm_M2H,STRING
+EventW_Machine,STRINGEXP,EventW_Machine==false alarm,EventW_Machine== ,EventW_Machine!=false alarm&&EventW_Machine!= 
+//EventW_Machine,STRING
+EVENTS
+//Mode_H2M,STRING
+//Trust_Human,INTEXP,Trust_Human==0,Trust_Human>0&&Trust_Human<3,Trust_Human>=3
+Trust_Human,INTDELTA,delta:=10,Trust_Human==0,Trust_Human<0,Trust_Human>0
+//CONSTRAINTS
+//P(Speed_Machine<0|EventW_Machine==false alarm&&Mode_H2M==manual)

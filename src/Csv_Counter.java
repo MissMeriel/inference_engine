@@ -7,7 +7,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.Arrays;
+import org.apache.commons.lang3.StringUtils;
 import static java.lang.System.out;
+import java.io.FileWriter;
+
 
 public class Csv_Counter{
 
@@ -18,13 +21,13 @@ public class Csv_Counter{
       out.println(Arrays.toString(args));
       String csv_file = args[0]; 
       try{
+            out.println("parse_csv_file()");
             csv_array = parse_csv_file(csv_file, get_csv_dimensions(csv_file));
          } catch(IOException e){
             e.printStackTrace();
          }
       //ArrayList<String> columns = new ArrayList<String>(csv_array[0]);
-      out.println(csv_array[0]);
-      out.println(Arrays.toString(csv_array[0]));
+      out.println("csv_array[0]:"+Arrays.toString(csv_array[0]));
       ArrayList<String> columns = new ArrayList<String>(Arrays.asList(csv_array[0]));
       int negative_count = 0;
       int positive_count = 0;
@@ -33,7 +36,7 @@ public class Csv_Counter{
       initialize_hashmap(columns);
       int[] dims = get_csv_dimensions(csv_file);
       for(int i = 1; i < dims[0]; i++){
-         out.print(i+" ");
+         //out.print(i+" ");
          for(String var_name : columns){
             int index = columns.indexOf(var_name);
             if(var_name.equals("TrustDelta")){
@@ -98,10 +101,13 @@ public class Csv_Counter{
                //CurrentWheel_Machine,DOUBLEDELTA,delta:=10,CurrentWheel_Machine<2&&CurrentWheel_Machine>-2,CurrentWheel_Machine>=2||CurrentWheel_Machine<=-2
                //CurrentWheel_Machine,DOUBLEDELTA,delta:=10,CurrentWheel_Machine<2.5&&CurrentWheel_Machine>-2.5,CurrentWheel_Machine>=2.5||CurrentWheel_Machine<=-2.5
                //CurrentWheel_Machine,DOUBLEDELTA,delta:=10,CurrentWheel_Machine<5&&CurrentWheel_Machine>-5,CurrentWheel_Machine>=5||CurrentWheel_Machine<=-5
+               //CurrentWheel_Machine<15&&CurrentWheel_Machine>-15,CurrentWheel_Machine>=15||CurrentWheel_Machine<=-15
+               //CurrentWheel_Machine<20&&CurrentWheel_Machine>-20,CurrentWheel_Machine>=20||CurrentWheel_Machine<=-20
+               //CurrentWheel_Machine<25&&CurrentWheel_Machine>-25","CurrentWheel_Machine>=25||CurrentWheel_Machine<=-25"
                double dd = Double.parseDouble(csv_array[i][index]);
-               String key1 = "CurrentWheel_Machine<25&&CurrentWheel_Machine>-25";
-               String key2 = "CurrentWheel_Machine>=25||CurrentWheel_Machine<=-25";
-               double threshold = 25.0; //rate of change
+               String key1 = "CurrentWheel_Machine<30&&CurrentWheel_Machine>-30";
+               String key2 = "CurrentWheel_Machine>=30||CurrentWheel_Machine<=-30";
+               double threshold = 30.0; //rate of change
                if(dd < threshold && dd > -threshold){
                   try{
                      double d = count_map.get(var_name).get(key1);
@@ -149,10 +155,19 @@ public class Csv_Counter{
                
             } else {
                try{
-                  double d = count_map.get(var_name).get(csv_array[i][index]);
+                  String[] temp_row = csv_array[i];
+                  //out.println("Getting index "+index+" from row "+i+":"+Arrays.toString(temp_row));
+                  String str = temp_row[index];
+                  double d = count_map.get(var_name).get(str);
                   count_map.get(var_name).put(csv_array[i][index], ++d);
                } catch(NullPointerException ex){
                   count_map.get(var_name).put(csv_array[i][index], 1.0);
+               } catch (ArrayIndexOutOfBoundsException ex){
+                  ex.printStackTrace();
+                  out.println(ex.getMessage());
+                  out.println("i: "+i);
+                  out.println("index: "+index);
+                  //System.exit(0);
                }
             }
          }
@@ -161,6 +176,7 @@ public class Csv_Counter{
       out.println(count_map);
       print_count_map();
       print_percentages(dims[0]-1);
+      write_to_file(arg[0].replace(".csv","_count_map.txt"),count_map_toString());
    }
    
    public static void initialize_hashmap(ArrayList<String> columns){
@@ -180,6 +196,28 @@ public class Csv_Counter{
       }
    }
    
+   public static void write_to_file(String filename, String contents){
+      try{
+         FileWriter fw = new FileWriter(filename);
+         fw.write(contents);
+         fw.close();
+      } catch(Exception e){
+         e.printStackTrace();
+      }
+      out.format("Counts written to %s%n",filename);
+   }
+   
+   public static String count_map_toString(){
+      String str = "COUNT MAP:\n";
+      Set<String> keys1 = count_map.keySet();
+      for(String key1 : keys1){
+         Set<String> keys2 = count_map.get(key1).keySet();
+         for (String key2 : keys2){
+            str += key1+":"+key2+":=" +count_map.get(key1).get(key2)+"\n";
+         }
+      }
+      return str;
+   }
    
    public static void print_percentages(int i){
       out.println("\n\n\n\n\n\n\n\n\nPERCENTAGES:");
@@ -204,10 +242,11 @@ public class Csv_Counter{
       int[] dims = {0, 0};
       while((thisLine = dis.readLine()) != null){
          dims[0] += 1;
-         dims[1] = (thisLine.split(",").length);
+         dims[1] = StringUtils.splitPreserveAllTokens(thisLine, ",");
       }
       return dims;
    }
+   
    
    public static String[][] parse_csv_file(String csv_file, int[] dims) throws IOException {
       FileInputStream fis = new FileInputStream(csv_file);
@@ -217,7 +256,13 @@ public class Csv_Counter{
       String[][] csv_array = new String [dims[0]][dims[1]];
       int row_count = 0;
       while ((thisLine = dis.readLine()) != null){
-         String[] cols = thisLine.split(",");
+         String[] cols = new String[]{};
+         try{
+            cols = StringUtils.splitPreserveAllTokens(thisLine, ",");
+         } catch(OutOfMemoryError ex){
+            cols = thisLine.split(",");
+         }
+         
          csv_array[row_count]= cols;
          row_count++;
       }

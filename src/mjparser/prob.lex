@@ -51,7 +51,7 @@ import java_cup.runtime.Symbol;
 "INTDELTA" { return new Symbol(sym.RAWTYPE, new SymbolValue(yyline+1, yychar+1, yytext())); }
 "DOUBLEDELTA" { return new Symbol(sym.RAWTYPE, new SymbolValue(yyline+1, yychar+1, yytext())); }
 ([a-zA-Z]|[ \t])([a-zA-Z]|[0-9]|[ \t])* {return new Symbol(sym.STRING, new SymbolValue(yyline+1, yychar+1, yytext()));}
-([a-zA-Z]|_|/)([a-zA-Z]|[0-9]|[_]|[.]|[/])* {return new Symbol(sym.VARIABLE, new SymbolValue(yyline+1, yychar+1, yytext()));}
+([a-zA-Z]|[_/])([a-zA-Z]|[0-9]|[_./])* {return new Symbol(sym.VARIABLE, new SymbolValue(yyline+1, yychar+1, yytext()));}
 [ \t\r\n\f] { /* ignore white space. */ }
 -*[0-9]+\.?[0-9]* {return new Symbol(sym.NUMBER, new SymbolValue(yyline+1, yychar+1, yytext())); }
 . { System.err.println("Illegal character: "+yytext()); }

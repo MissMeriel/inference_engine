@@ -1,0 +1,4 @@
+GIVENS
+Trust_Human,INT
+EVENTS
+Speed_Machine,DOUBLE,threshold:=0.001

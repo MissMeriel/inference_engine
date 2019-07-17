@@ -1,0 +1,6 @@
+GIVENS
+/machine_state.data,STRING
+/mission_state.data,STRING
+/warning_state.data,STRING
+EVENTS
+/visp_auto_tracker/status.data,INT

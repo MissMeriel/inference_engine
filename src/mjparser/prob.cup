@@ -105,6 +105,7 @@ non terminal SymbolValue delta_stmt;
 non terminal SymbolValue int;
 non terminal SymbolValue variable;
 non terminal comments;
+non terminal String string_literal;
 
 precedence nonassoc RAWTYPE, VARIABLE, STRING;
 precedence left LT, LTEQ, GT, GTEQ, LOGICAL_OR, LOGICAL_AND;
@@ -148,15 +149,15 @@ constraint ::=
 					String var_name = String.format("P(%s|%s)", s1.id, s2.id);
 					String id = var_name; //TODO: change later
 					double p_A = 1.0;
-					System.out.println(s1.toString()+ " "+s2.toString());
+					/*System.out.println(s1.toString()+ " "+s2.toString());
 					System.out.println("s1.testers.keySet() "+s1.testers.keySet());
-					System.out.println("s2.testers.keySet() "+s2.testers.keySet());
+					System.out.println("s2.testers.keySet() "+s2.testers.keySet());*/
 					HashMap<String,Predicate<Object>> event_testers = s1.testers;
 					HashMap<String,Predicate<Object>> given_testers = s2.testers;
 					ConstraintEvent<Object> ce = new ConstraintEvent<Object>(var_name, id, p_A, event_testers, given_testers);
-					System.out.println("ConstraintEvent:"+ce.toString());
+					/*System.out.println("ConstraintEvent:"+ce.toString());
 					System.out.println(event_testers.keySet());
-					System.out.println(given_testers.keySet());
+					System.out.println(given_testers.keySet());*/
 					RESULT = ce;
 		:}
 		;
@@ -179,60 +180,41 @@ var ::=
 		variable:v COMMA RAWTYPE:t
 		{:
 				//System.out.println("Handling rawtype "+t.lexeme);
-				RawType rt = RawType.valueOf(t.lexeme);
-				//System.out.println("rt == null? "+(rt==null));
-				Global.types.put(v.lexeme, rt);
+				Global.types.put(v.lexeme, RawType.valueOf(t.lexeme));
 				RESULT = v;
 		:}
 		| variable:v COMMA RAWTYPE:t COMMA stmts:s
 		{:
-				//System.out.println("Handling rawtype "+t.lexeme);
-				RawType rt = RawType.valueOf(t.lexeme);
-				Global.types.put(v.lexeme, rt);
+				Global.types.put(v.lexeme, RawType.valueOf(t.lexeme));
 				Global.bounds.put(v.lexeme, s.tester_list);
 				Global.bound_ids.put(v.lexeme, s.id_map);
 				RESULT = v;
 		:}
 		| variable:v COMMA RAWTYPE:t COMMA threshold_stmt:th
 		{:
-				//System.out.println("Handling rawtype "+t.lexeme);
-				RawType rt = RawType.valueOf(t.lexeme);
-				Global.types.put(v.lexeme, rt);
-				//System.out.println("threshold_stmt "+ th.toString());
-				Double dbl = Double.valueOf(th.lexeme);
-				Global.thresholds.put(v.lexeme, dbl);
+				Global.types.put(v.lexeme, RawType.valueOf(t.lexeme));
+				Global.thresholds.put(v.lexeme, Double.valueOf(th.lexeme));
 				RESULT = v;
 		:}
 		| variable:v COMMA RAWTYPE:t COMMA delta_stmt:d
 		{:
 				//System.out.println("Handling rawtype "+t.lexeme);
-				RawType rt = RawType.valueOf(t.lexeme);
-				Global.types.put(v.lexeme, rt);
+				Global.types.put(v.lexeme, RawType.valueOf(t.lexeme));
 				//System.out.println("delta_stmt "+ d.toString());
-				Double dbl = Double.valueOf(d.lexeme);
-				Global.deltas.put(v.lexeme, dbl);
+				Global.deltas.put(v.lexeme, Double.valueOf(d.lexeme));
 				RESULT = v;
 		:}
 		| variable:v COMMA RAWTYPE:t COMMA threshold_stmt:th COMMA delta_stmt:d
 		{:
-				//System.out.println("Handling rawtype "+t.lexeme);
-				RawType rt = RawType.valueOf(t.lexeme);
-				Global.types.put(v.lexeme, rt);
-				//System.out.println("delta_stmt "+ d.toString());
-				Double th_dbl = Double.valueOf(th.lexeme);
-				Global.thresholds.put(v.lexeme, th_dbl);
-				Double delta_dbl = Double.valueOf(d.lexeme);
-				Global.deltas.put(v.lexeme, delta_dbl);
+				Global.types.put(v.lexeme, RawType.valueOf(t.lexeme));
+				Global.thresholds.put(v.lexeme, Double.valueOf(th.lexeme));
+				Global.deltas.put(v.lexeme, Double.valueOf(d.lexeme));
 				RESULT = v;
 		:}
 		| variable:v COMMA RAWTYPE:t COMMA delta_stmt:d COMMA stmts:s
 		{:
-				//System.out.println("Handling rawtype "+t.lexeme);
-				RawType rt = RawType.valueOf(t.lexeme);
-				Global.types.put(v.lexeme, rt);
-				//System.out.println("delta_stmt "+ d.toString());
-				Double dbl = Double.valueOf(d.lexeme);
-				Global.deltas.put(v.lexeme, dbl);
+				Global.types.put(v.lexeme, RawType.valueOf(t.lexeme));
+				Global.deltas.put(v.lexeme, Double.valueOf(d.lexeme));
 				Global.bounds.put(v.lexeme, s.tester_list);
 				Global.bound_ids.put(v.lexeme, s.id_map);
 				RESULT = v;
@@ -268,7 +250,7 @@ stmt	::=
 				| exp:e LOGICAL_OR:lo stmt:s
 				{:
 						String id = e.id + lo.lexeme + s.id;
-						System.out.println(id);
+						//System.out.println(id);
 						Predicate<Object> tester = (Predicate<Object>) (Object d) -> {return e.tester.test(d) || s.tester.test(d);};
 						//TODO: figure out how to get var names together into or'd Bound object
 						String s_id = s.id;
@@ -280,7 +262,7 @@ stmt	::=
 								ArrayList<String> temp = new ArrayList<String>(Arrays.asList(s.var_names));
 								temp.add(e.var_name);
 								var_names = temp.toArray(var_names);
-								System.out.println("var_names: "+Arrays.toString(var_names));
+								//System.out.println("var_names: "+Arrays.toString(var_names));
 						}
 						// add in var_names and testers hashmap here
 						HashMap<String, Predicate<Object>> testers = new HashMap<String, Predicate<Object>>();
@@ -301,7 +283,7 @@ stmt	::=
 						} else {
 								bound = new Bound(id, testers, var_names);
 						}
-						System.out.println("Bound testers"+testers.keySet());
+						//System.out.println("Bound testers"+testers.keySet());
 						RESULT = bound;
 				:}
     ;
@@ -353,13 +335,13 @@ exp ::=
 						bound.tester_complement = (Predicate<Object>) (Object o) -> {Double d = Double.valueOf(o.toString()); return !(Math.abs(d-Double.valueOf(n.lexeme))<1);};
 						RESULT = bound;
 				:}
-				| variable:a EQ:op STRING:v
+				| variable:a EQ:op string_literal:v
 				{:
-						String id = a.toString() + op.lexeme + v.lexeme;
-						System.out.println(id);
-						Predicate<Object> tester = (Predicate<Object>) (Object o) -> {String s = o.toString(); return s.equals(v.lexeme);};
+						String id = a.toString() + op.lexeme + v;
+						//System.out.println(id);
+						Predicate<Object> tester = (Predicate<Object>) (Object o) -> {String s = o.toString(); return s.equals(v);};
 						Bound bound = new Bound(a.lexeme, id, tester);
-						bound.tester_complement = (Predicate<Object>) (Object o) -> {String s = o.toString(); return !s.equals(v.lexeme);};
+						bound.tester_complement = (Predicate<Object>) (Object o) -> {String s = o.toString(); return !s.equals(v);};
 						RESULT = bound;
 				:}
 				| variable:a NOTEQ:op NUMBER:n
@@ -371,29 +353,29 @@ exp ::=
 						bound.tester_complement = (Predicate<Object>) (Object o) -> {Double d = Double.valueOf(o.toString()); return !(Math.abs(d-Double.valueOf(n.lexeme))>1);};
 						RESULT = bound;
 				:}
-				| variable:a NOTEQ:op STRING:v
+				| variable:a NOTEQ:op string_literal:v
 				{:
-						String id = a.toString() + op.lexeme + v.lexeme;
-						System.out.println(id);
-						//Predicate<String> tester = (Predicate<String>) (String s) -> {return s.equals(v.lexeme);};
-						Predicate<Object> tester = (Predicate<Object>) (Object o) -> {String s = o.toString(); return !s.equals(v.lexeme);};
+						String id = a.toString() + op.lexeme + v;
+						//System.out.println(id);
+						//Predicate<String> tester = (Predicate<String>) (String s) -> {return s.equals(v);};
+						Predicate<Object> tester = (Predicate<Object>) (Object o) -> {String s = o.toString(); return !s.equals(v);};
 						Bound bound = new Bound(a.lexeme, id, tester);
-						bound.tester_complement = (Predicate<Object>) (Object o) -> {String s = o.toString(); return s.equals(v.lexeme);};
+						bound.tester_complement = (Predicate<Object>) (Object o) -> {String s = o.toString(); return s.equals(v);};
 						RESULT = bound;
 				:}
 				| exp:e1 LOGICAL_AND:la exp:e2
 				{:
 						String id = e1.id + la.lexeme + e2.id;
-						System.out.println(id);
+						//System.out.println(id);
 						Predicate<Object> tester = (Predicate<Object>) (Object o) -> {return e1.tester.test(o) && e2.tester.test(o);};
 						// add in var_names and testers hashmap here
 						HashMap<String, Predicate<Object>> testers = new HashMap<String, Predicate<Object>>();
-						if(!e1.testers.keySet().isEmpty()){ // != null){
+						if(!e1.testers.keySet().isEmpty()){
 								testers = e1.testers;
-								if(!e2.testers.keySet().isEmpty()){ // != null){
+								if(!e2.testers.keySet().isEmpty()){
 										testers.putAll(e2.testers);
 								}
-						} else if(!e2.testers.keySet().isEmpty()){ //!=null){
+						} else if(!e2.testers.keySet().isEmpty()){
 								testers = e2.testers;
 						} else {
 								testers.put(e1.var_name, e1.tester);
@@ -404,7 +386,7 @@ exp ::=
 						if(e1.var_name.equals(e2.var_name)){
 								bound = new Bound(e1.var_name, id, tester);
 						} else {
-								System.out.println("Logical and testers: "+testers.keySet());
+								//System.out.println("Logical and testers: "+testers.keySet());
 								bound = new Bound(id, testers, var_names);
 						}
 						//set up complement(s)
@@ -431,7 +413,11 @@ exp ::=
 				:}
     ;
 
-
+string_literal ::=
+		STRING:s {: RESULT = s.lexeme; :}
+		| {: RESULT = ""; :}
+		;
+		
 threshold_stmt ::=
 	THRESHOLD DEF int:i	{: RESULT = i; :}
 	;
@@ -445,5 +431,5 @@ int ::=
 	;
 
 variable ::=
-	VARIABLE:v {: System.out.println("variable:"+v.lexeme); RESULT = v; :}
+	VARIABLE:v {: /*System.out.println("variable:"+v.lexeme);*/ RESULT = v; :}
 	;

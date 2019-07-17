@@ -1,4 +1,0 @@
-Trust_Human,0=0.1,1=0.5,2=0.2,3=0.5,4=0.2,5=0.1
-Alarm_M2H, =0.8,pedestrian alarm=0.1,obstacle alarm=0.05,cyclist alarm=0.04,truck alarm=0.01
-PupilChange_Human,0.0=0.1,1.0=0.2,0.1=0.05,0=0.3,-0.1=0.2,-0.2=0.5,-0.3=0.2,0.4=0.2,-0.4=0.1
-Speed_Machine,0.0=0.2,1.1=0.3,3.0=0.2,4.3=0.2

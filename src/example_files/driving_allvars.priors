@@ -1,0 +1,4 @@
+EventW_Machine,EventW_Machine==false alarm:=0.007,EventW_Machine== :=918,EventW_Machine==pedestrian detected:=0.034,EventW_Machine==cyclist detected:=0.015,EventW_Machine==truck detected:=0.008,EventW_Machine==obstacle detected:=0.017
+PupilChange_Human,PupilChange_Human==0:=0.208,PupilChange_Human>0:=0.408,PupilChange_Human<0:=0.384
+CurrentWheel_Machine,CurrentWheel_Machine>=20||CurrentWheel_Machine<=-20:=0.506,CurrentWheel_Machine<20&&CurrentWheel_Machine>-20:=0.494
+Speed_Machine,Speed_Machine<0:=0.119,Speed_Machine==0:=0.490,Speed_Machine>0:=0.392

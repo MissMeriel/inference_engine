@@ -29,7 +29,7 @@ public class Driver {
    static ArrayList<String> vars_of_interest = new ArrayList<String>();
    //static HashMap<String, RawType> types = null;
    static HashMap<String, HashMap<String, Double>> priors = null;
-   static boolean debug = true;
+   static boolean debug = false;
    static HashMap<String, String[]> bounds = new HashMap<String, String[]>();
    
    public static void main(String[] args) throws ClassNotFoundException {
@@ -49,7 +49,7 @@ public class Driver {
             config_file = s;
             Global.types = new HashMap<String, RawType>();
          } else if (s.contains(".priors")) {
-            out.format("%s.contains(.priors)%n",s,s.contains(".priors"));
+            //out.format("%s.contains(.priors)%n",s,s.contains(".priors"));
             priors_file = s;
             priors = new HashMap<String, HashMap<String, Double>>();
          } else if (s.equals("-h")){
@@ -69,7 +69,7 @@ public class Driver {
             parse_priors_file(priors_file);
          }
       } catch(IOException e){
-         e.printStackTrace();
+         //e.printStackTrace();
       }
       build_inference_engine(csv_array, priors);
       run_inference_engine();
@@ -79,7 +79,7 @@ public class Driver {
    public static void build_inference_engine(Object[][] csv_array, HashMap<String, HashMap<String, Double>> priors){
       if(config_file.contains(".bayesianconfig") && Global.types != null){
          //pass in null priors --> build uniform dist in preprocess_trace()
-         out.format("build_inference_engine: priors == null? %s%n", (priors == null));
+         //out.format("build_inference_engine: priors == null? %s%n", (priors == null));
          engine = new TypedBayesianEngine(csv_array);
       } else if (Global.types != null) {
          engine = new TypedEngine(csv_array, Global.givens, Global.events, Global.types);
@@ -150,16 +150,16 @@ public class Driver {
          System.out.println("CONSTRAINTS:"+Global.constraint_events);
       }
       build_vars_of_interest();
-      out.println("Finished parse_typed_config_file()");
+      //out.println("Finished parse_typed_config_file()");
       //System.exit(0);
    }
    
    public static void build_vars_of_interest(){
-      out.println("Global.givens: "+Global.givens);
-      out.println("Global.events: "+Global.events);
+      //out.println("Global.givens: "+Global.givens);
+      //out.println("Global.events: "+Global.events);
       Global.vars_of_interest.addAll(Global.givens);
       Global.vars_of_interest.addAll(Global.events);
-      if(debug) out.format("vars_of_interest:%s%n",Global.vars_of_interest);
+      //if(debug) out.format("vars_of_interest:%s%n",Global.vars_of_interest);
    }
    
    public static void parse_priors_file(String config_file) throws IOException {
@@ -172,7 +172,7 @@ public class Driver {
          if (thisLine != "\n") {
             String[] splitLine = thisLine.split(",");
             HashMap<String, Double>  val = new HashMap<String, Double>();
-            if(BayesianEngine.debug) print_types();
+            //if(BayesianEngine.debug) print_types();
             for(int i = 1; i < splitLine.length; i++){
                String[] distSplit = splitLine[i].split(":=");
                //out.format("key:%s value:%s%n", distSplit[0],distSplit[1]);
@@ -199,11 +199,11 @@ public class Driver {
                      }
                   } catch(NullPointerException ex){}
                }
-               out.format("put %s into key %s%n", distSplit[1], distSplit[0]);
-               out.format("val=%s%n",val);
+               //out.format("put %s into key %s%n", distSplit[1], distSplit[0]);
+               //out.format("val=%s%n",val);
             }
             priors.put(splitLine[0], val);
-            out.format("parse_priors_file: priors.put(%s,%s)%n", splitLine[0],val);
+            //out.format("parse_priors_file: priors.put(%s,%s)%n", splitLine[0],val);
             //System.exit(0);
             /*if(types.get(splitLine[0]) == null) {
                types.put(splitLine[0], RawType.valueOf(splitLine[1]));
@@ -211,7 +211,7 @@ public class Driver {
          } 
          //System.out.println(StringEscapeUtils.escapeJava(thisLine));
       }
-      print_priors();
+      //print_priors();
       Global.priors = priors;
       fis.close();
       dis.close();
@@ -268,10 +268,6 @@ public class Driver {
          priors_string += String.format("%s : %s%n", str, priors.get(str));
          HashMap<String, Double> blah = priors.get(str);
          Set<String> keys2 = blah.keySet();
-         /*for (String str2 : keys2){
-            out.format("%-20s : %f%n", str2, blah.get(str2));
-            priors_string += String.format("%-20s : %f%n", str2, blah.get(str2));
-         }*/
       }
       return priors_string;
    }

@@ -1,0 +1,5 @@
+/machine_state.data,MachineState.:=
+/mission_state.data,MissionState.:=
+/warning_state.data,WarningState.:=
+/visp_auto_tracker/status.data,1:=,2:=,3:=,4:=
+

@@ -1,0 +1,4 @@
+GIVENS
+/flight_data.battery_low,STRING
+EVENTS
+/velocity.linear_y,DOUBLEEXP,/velocity.linear_y>=0.5&&/velocity.linear_y<0.75||/velocity.linear_y<=-0.5&&/velocity.linear_y>-0.75,/velocity.linear_y>1||/velocity.linear_y<-1,/velocity.linear_y>=0.25&&/velocity.linear_y<0.5||/velocity.linear_y<=-0.25&&/velocity.linear_y>-0.5,/velocity.linear_y<0.25&&/velocity.linear_y>-0.25

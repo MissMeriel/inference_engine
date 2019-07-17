@@ -1,5 +1,0 @@
-GIVENS
-Speed_Machine,DOUBLE,threshold=5
-Trust_Human,INTEXP,x<3,x>=3
-EVENTS
-Alarm_M2H,STRING

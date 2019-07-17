@@ -65,8 +65,9 @@ public class BayesianEvent<T> extends TypedEvent{
       int i = 0;
       Double d;
       boolean temp_found = false;
-      out.format("update_conditionals(): event_values:%s%n",event_values);
-      out.format("pBAs: "); print_pBAs();
+      debug = false;
+      /*out.format("update_conditionals(): event_values:%s%n",event_values);
+      out.format("pBAs: "); print_pBAs();*/
       for(String voi: Global.vars_of_interest){
          Object[] temp = new Object[]{0.0, event_values.get(i)};
          if(!voi.equals(this.var_name)){
@@ -119,14 +120,14 @@ public class BayesianEvent<T> extends TypedEvent{
                      break;}
                   case INTEXP:
                   case DOUBLEEXP: {
-                     out.format("type %s, temp_found?%s%n",rawtype,temp_found);
+                     //out.format("type %s, temp_found?%s%n",rawtype,temp_found);
                      if(!temp_found){
                         HashMap<String, Predicate<Object>> id_map = Global.bound_ids.get(voi);
                         Set<String> keys = id_map.keySet();
                         for(String key : keys){
                            //if(id_map.get(key).test(temp[1])){
                            if(id_map.get(key).test(event_values.get(i))){
-                              out.format("id_map.get(key=%s).test(temp[1]=%s) = %s%n",key, event_values.get(i), id_map.get(key).test(event_values.get(i)));
+                              //out.format("id_map.get(key=%s).test(temp[1]=%s) = %s%n",key, event_values.get(i), id_map.get(key).test(event_values.get(i)));
                               pBA.put(key, dbl); //change later
                               /*out.format("id_map.get(key=%s).test(temp[1]=%s) = %s%n",key, temp[1], id_map.get(key).test(temp[1]));
                               out.format("previously: pBA.put(%s,%s)%n", key, dbl);
@@ -138,14 +139,14 @@ public class BayesianEvent<T> extends TypedEvent{
                      }
                      break;}
                   case STRINGEXP:{
-                     out.format("type %s, temp_found?%s%n",rawtype,temp_found);
+                    //out.format("type %s, temp_found?%s%n",rawtype,temp_found);
                      if(!temp_found){
                         HashMap<String, Predicate<Object>> id_map = Global.bound_ids.get(voi);
                         Set<String> keys = id_map.keySet();
                         for(String key : keys){
                            //if(id_map.get(key).test(temp[1])){
                            if(id_map.get(key).test(event_values.get(i))){
-                              out.format("id_map.get(key=%s).test(temp[1]=%s) = %s%n",key, temp[1], id_map.get(key).test(temp[1]));
+                              //out.format("id_map.get(key=%s).test(temp[1]=%s) = %s%n",key, temp[1], id_map.get(key).test(temp[1]));
                               pBA.put(key, dbl); //change later
                               /*out.format("id_map.get(key=%s).test(temp[1]=%s) = %s%n",key, temp[1], id_map.get(key).test(temp[1]));
                               out.format("previously: pBA.put(%s,%s)%n", key, dbl);
@@ -165,13 +166,13 @@ public class BayesianEvent<T> extends TypedEvent{
                            //if(id_map.get(key).test(temp[1])){
                            if(id_map.get(key).test(event_values.get(i))){
                               //pBA.put(key, dbl); //change later
-                              out.format("id_map.get(key=%s).test(temp[1]=%s) = %s%n",key, temp[1], id_map.get(key).test(temp[1]));
+                              //out.format("id_map.get(key=%s).test(temp[1]=%s) = %s%n",key, temp[1], id_map.get(key).test(temp[1]));
                               //out.format("previously: pBA.put(%s,%s)%n", key, dbl);
                               pBA.put(key, dbl);
                            }
                         }
                      } else {
-                        out.format("!temp_found, so pBA.put(%s,%.3f)%n", temp[1].toString(), dbl);
+                        //out.format("!temp_found, so pBA.put(%s,%.3f)%n", temp[1].toString(), dbl);
                         pBA.put(temp[1].toString(), dbl); //change later
                      }
                      break;}
@@ -190,7 +191,7 @@ public class BayesianEvent<T> extends TypedEvent{
                      //get bound id
                      String new_key = get_bounded_invariant_id(voi, event_values.get(i).toString());
                      if(new_key != null){
-                        out.println(voi+" new_key: "+new_key);
+                        //out.println(voi+" new_key: "+new_key);
                         pBAs.get(voi).put(new_key, 1.0);
                      }
                      break;
@@ -234,7 +235,7 @@ public class BayesianEvent<T> extends TypedEvent{
     * return_val[0] == pBA count; return_val[1] == pBA name
     **/
    public Object[] get_pBA(String voi_name, String event_val, boolean debug){
-      debug = true;
+      debug = false;
       double event_val_count = Double.MAX_VALUE; //goes into r[0]
       Double voi_threshold = 0.0;
       if(debug) {
@@ -257,7 +258,7 @@ public class BayesianEvent<T> extends TypedEvent{
          r = new Object[]{event_val_count, event_val.toString()};
          return r;
       } catch (NullPointerException | NumberFormatException ex) {
-         ex.printStackTrace();
+         //ex.printStackTrace();
          boolean found = false;
          //exact match not found --> iterate over pBAs looking for closest one
          HashMap<String, Double> pBA_counts = pBAs.get(voi_name);
@@ -470,7 +471,7 @@ public class BayesianEvent<T> extends TypedEvent{
    
    
    public String generate_bayesian_probability(HashMap<String, HashMap<String, Double[]>> cumulative_probabilities){
-      debug = true;
+      debug = false;
       //if(debug) out.format("%nENTER generate_bayesian_probability: for %s %s",var_name, val.toString());
       String str = "";
       Set<String> keys1 = pBAs.keySet();
@@ -700,14 +701,16 @@ public class BayesianEvent<T> extends TypedEvent{
                   }
                   break;
                case INTEXP:
+                  
                   break;
                case DOUBLEEXP:
                   break;
             }
          }
-         System.out.print("PRIOR MAP: ");
-         System.out.println(prior_map);
+         /*System.out.print("PRIOR MAP: ");
+         System.out.println(prior_map);*/
          System.out.println("closest_match_key: "+closest_match_key);
+         out.println("get_prior("+ voi_name+", "+ val+")");
          event_val_count = prior_map.get(closest_match_key);
          r[0] = event_val_count; r[1] = closest_match_key;
          
