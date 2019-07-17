@@ -430,6 +430,7 @@ public class TypedBayesianEngine extends BasicEngine {
          //if(i >= 10){System.exit(0);}
       } // end csv loop
       sort_bayesian_events();
+      debug = false;
       if(debug){
          out.println("\nFINISHED TRACE");
          for (int i = 0; i< givens.size(); i++){
@@ -589,7 +590,7 @@ public class TypedBayesianEngine extends BasicEngine {
       for (String voi : Global.vars_of_interest){
          //change voi_vals to delta value
          RawType rawtype = Global.types.get(voi);
-         //out.println("get_var_index("+voi+");");
+         if(debug) out.println("get_var_index("+voi+");");
          int index = get_var_index(voi);
          switch(rawtype){
             case INT:

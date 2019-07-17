@@ -9,7 +9,7 @@ Speed_Machine,DOUBLEDELTA,delta:=10,Speed_Machine<0,Speed_Machine>0,Speed_Machin
 Mode_H2M,STRING
 Trust_Human,INTDELTA,delta:=10,Trust_Human==0,Trust_Human<0,Trust_Human>0
 TimeSignal_Sec,INT
-CurrentBrake_Machine,DOUBLE
-CurrentThrottle_Machine,DOUBLE
-CurrentGear_Machine,INT
-GSR_Human,DOUBLE
+//CurrentBrake_Machine,DOUBLE
+//CurrentThrottle_Machine,DOUBLE
+//CurrentGear_Machine,INT
+//GSR_Human,DOUBLE

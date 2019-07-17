@@ -69,6 +69,10 @@ public class BoundedEvent<T> extends BayesianEvent<T>{
                out.format("keys2: %s%n", keys2);
             }
             if(debug) out.format("total_probabilities.get(%s).get(%s)%n",key1,key2);
+	    if(debug) {
+		out.println("total_probabilities.get("+key1+") null? "+(total_probabilities.get(key1) == null));
+	    	out.println("total_probabilities.get("+key1+").get("+key2+") null? "+(total_probabilities.get(key1).get(key2) == null));
+	    }
             double pB = total_probabilities.get(key1).get(key2);
             if(debug) out.format("pB = %.3f / %.3f = %.3f%n", A_arr[0].doubleValue(), A_arr[1].doubleValue(), pB);
             double pA = (double) get_prior(var_name, id)[0];
@@ -121,8 +125,8 @@ public class BoundedEvent<T> extends BayesianEvent<T>{
                   break;}
             }
             //if(true)  str += String.format("= (%.3f * ((count of %s:%s)%.3f / %.3f)) / %.3f ", pA, key1,key2,val_map.get(key2), ((double)num_samples), pB);
-            if(true)  str += String.format("= (%.3f * (%.3f / %.3f)) / %.3f ", pA, val_map.get(key2), ((double)num_samples), pB);
-            if(true)  str += String.format("= %.3f / %.3f ", pA*pBA, pB);
+            if(debug)  str += String.format("= (%.3f * (%.3f / %.3f)) / %.3f ", pA, val_map.get(key2), ((double)num_samples), pB);
+            if(debug)  str += String.format("= %.3f / %.3f ", pA*pBA, pB);
             str += String.format("= %.3f", pAB);
             if(pAB > 1.0){
                out.println(str);
@@ -131,11 +135,10 @@ public class BoundedEvent<T> extends BayesianEvent<T>{
                //out.format("calculating probability for P(%s=%s|%s=%s)%n",var_name, val.toString(), key1, key2);
                out.format("pB = %.3f / %.3f = %.3f%n", A_arr[0].doubleValue(), A_arr[1].doubleValue(), pB);
                /*System.out.print("PRIORS: ");*/ Driver.print_priors(Global.priors);
-               System.out.print("CUMULATIVE_PROBABILITIES: "); print_cumulative_probabilities(cumulative_probabilities);
+               //System.out.print("CUMULATIVE_PROBABILITIES: "); print_cumulative_probabilities(cumulative_probabilities);
                //out.format("pA = get_prior(%s, %s) = %.2f%n", var_name, val.toString(), pA);
                out.format("actual_pA = %.3f / %.3f = %.3f%n", ((double)num_samples), A_arr[1].doubleValue(), actual_pA);
-               out.format("pBAs: ");
-               print_pBAs();
+               //out.format("pBAs: "); print_pBAs();
                out.format("pBA = (%.3f / %.3f) / %.3f = %.3f%n", val_map.get(key2), (double) A_arr[1].doubleValue(), actual_pA, pBA);
                out.println("\n\n");
             }
@@ -150,9 +153,9 @@ public class BoundedEvent<T> extends BayesianEvent<T>{
    public boolean equals(Object o){
       if(o instanceof BoundedEvent){
          BoundedEvent be = (BoundedEvent) o;
-         out.format("BoundedEvent equals: this.equals(be):%n");
+         /*out.format("BoundedEvent equals: this.equals(be):%n");
          out.println("\t"+this.toString());
-         out.println("\t"+(be.toString()));
+         out.println("\t"+(be.toString()));*/
          boolean nameeq = (this.var_name.equals(be.var_name));
          boolean ideq = this.id.equals(be.id);
          boolean boundeq = lower_bound == be.lower_bound && upper_bound == be.upper_bound;

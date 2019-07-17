@@ -1,5 +1,8 @@
 #!/bin/bash
 
+source /etc/profile.d/modules.sh
+module load java
+
 rootdir="./subjecttraces"
 outfile="driving_allvars.txt"
 pattern=''
@@ -12,9 +15,9 @@ for D in `find ${rootdir} -mindepth 1 -maxdepth 1`; do
 		#for E in `find ${D} -mindepth 1 -maxdepth 1`; do
 			#echo "E:" ${E}
 	        	#if [[ $E =~ concat.csv ]]; then
-		echo "Generating probabilites for" $D/concat.csv
+		echo "Generating probabilites for" $D/all_concat.csv
 			#echo $D >> $outfile
-		#java -classpath .:./*:commons-lang3-3.9/*:./mjparser/*:./commons-math3-3.6.1/* inference_engine.Driver $E/concat.csv example_files/driving_allvars.bayesianconfig example_files/driving_allvars.priors >> $outfile
+		java -classpath .:./*:commons-lang3-3.9/*:./mjparser/*:./commons-math3-3.6.1/* inference_engine.Driver $D/all_concat.csv example_files/driving_allvars.bayesianconfig example_files/driving_allvars.priors >> $outfile
 	fi
 done
-java -classpath commons-lang3-3.9/:. Probability_To_Csv $outfile
+java -classpath commons-lang3-3.9/*:. Probability_To_Csv $outfile
