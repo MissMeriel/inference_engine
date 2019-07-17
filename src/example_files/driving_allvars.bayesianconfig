@@ -7,7 +7,7 @@ CurrentWheel_Machine,DOUBLEDELTA,delta:=10,CurrentWheel_Machine<20&&CurrentWheel
 EVENTS
 Speed_Machine,DOUBLEDELTA,delta:=10,Speed_Machine<0,Speed_Machine>0,Speed_Machine==0
 Mode_H2M,STRING
-Trust_Human,DOUBLEDELTA,Trust_Human==0,Trust_Human<0,Trust_Human>0
+Trust_Human,INTDELTA,delta:=10,Trust_Human==0,Trust_Human<0,Trust_Human>0
 TimeSignal_Sec,INT
 CurrentBrake_Machine,DOUBLE
 CurrentThrottle_Machine,DOUBLE
