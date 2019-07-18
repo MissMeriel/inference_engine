@@ -178,7 +178,7 @@ public class BayesianEvent<T> extends TypedEvent{
                      break;}
                }
                pBAs.put(voi, pBA);
-               if(debug)out.format("update_conditionals: Put %s:%s into %s:%s %n", voi, event_values.get(i).toString(), temp[1].toString(), temp[0].toString());
+               if(debug) out.format("update_conditionals: Put %s:%s into %s:%s %n", voi, event_values.get(i).toString(), temp[1].toString(), temp[0].toString());
             } catch(NullPointerException ex){
                RawType type_enum = Global.types.get(voi);
                switch(type_enum){
@@ -553,8 +553,8 @@ public class BayesianEvent<T> extends TypedEvent{
                   break;}
             }
             //str += String.format("\nP(%s=%s|%s=%s) ", var_name, val.toString(), key1, key2);
-            if(debug)  str += String.format("= (%.3f * (%.3f / %.3f)) / %.3f ", pA, val_map.get(key2), ((double)num_samples), pB);
-            if(debug)  str += String.format("= %.3f / %.3f ", pA*pBA, pB);
+            if(true)  str += String.format("= (%.3f * (%.3f / %.3f)) / %.3f ", pA, val_map.get(key2), ((double)num_samples), pB);
+            if(true)  str += String.format("= %.3f / %.3f ", pA*pBA, pB);
             str += String.format("= %.3f", pAB);
             if(pAB > 1.0){
                out.println(str);
@@ -735,8 +735,10 @@ public class BayesianEvent<T> extends TypedEvent{
          }
          /*System.out.print("PRIOR MAP: ");
          System.out.println(prior_map);*/
-         System.out.println("closest_match_key: "+closest_match_key);
-         out.println("get_prior("+ voi_name+", "+ val+")");
+         if(debug) {
+            System.out.println("closest_match_key: "+closest_match_key);
+            out.println("get_prior("+ voi_name+", "+ val+")");
+         }
          event_val_count = prior_map.get(closest_match_key);
          r[0] = event_val_count; r[1] = closest_match_key;
          

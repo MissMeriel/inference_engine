@@ -619,11 +619,16 @@ public class TypedBayesianEngine extends BasicEngine {
             case INTEXP:
             case DOUBLEEXP:
             case STRINGEXP:{
-               if(threshold == Double.MAX_VALUE){
+               if(threshold == Double.MAX_VALUE && rawtype != RawType.DOUBLE){
                   al.add(row[index]);
-               } else {
+               } else if (threshold == Double.MAX_VALUE && rawtype == RawType.DOUBLE) {
                   // get closest cumulative_probabilities key
                   // prevents progpogation of different values for same entry/data sample
+                  threshold = 1.0; //TODO: why does threshold = 0 break it?
+                  String val = String.valueOf(Math.round(Double.parseDouble(row[index])));
+                  String closest_key = get_closest_cumulative_probabilites_key(voi, val, threshold, rawtype);
+                  al.add(closest_key);
+               } else {
                   String closest_key = get_closest_cumulative_probabilites_key(voi, row[index], threshold, rawtype);
                   al.add(closest_key);
                }
@@ -691,7 +696,7 @@ public class TypedBayesianEngine extends BasicEngine {
 
    
    public String get_closest_cumulative_probabilites_key(String voi, String value, double threshold, RawType rawtype){
-      out.format("get_closest_cumulative_probabilites_key(%s,%s,%s,%s)%n",voi, value, threshold, rawtype);
+      if(debug) out.format("get_closest_cumulative_probabilites_key(%s,%s,%s,%s)%n",voi, value, threshold, rawtype);
       HashMap<String, Double[]> cumulative_probability = null;
       cumulative_probability = cumulative_probabilities.get(voi);
       Set<String> keys = cumulative_probability.keySet();
@@ -702,7 +707,7 @@ public class TypedBayesianEngine extends BasicEngine {
                double keyval = Double.parseDouble(key);
                double newval = Double.parseDouble(value);
                if(Fuzzy.eq(keyval, newval, threshold)){
-                  out.format("get_closest_cumulative_probabilites_key(): return %s%n", key);
+                  if(debug) out.format("get_closest_cumulative_probabilites_key(): return %s%n", key);
                   return key;
                }
             break;}
@@ -711,7 +716,7 @@ public class TypedBayesianEngine extends BasicEngine {
                break;
          }
       }
-      out.format("get_closest_cumulative_probabilites_key(): return null%n");
+      if(debug) out.format("get_closest_cumulative_probabilites_key(): return null%n");
       return null;
    }
    
@@ -919,7 +924,7 @@ public class TypedBayesianEngine extends BasicEngine {
       
       if(debug) out.println("inside calculate_total_probabilities()");
       for(String voi : Global.vars_of_interest){
-         if(voi.equals("Mode_H2M")){
+         if(voi.equals("CurrentBrake_Machine")){
             debug = true;
          } else {
             debug = false;
@@ -946,6 +951,7 @@ public class TypedBayesianEngine extends BasicEngine {
                }
                Set<String> keys2 = cumulative_probabilities.get(key1).keySet();
                for(String key2 : keys2){
+                  if(!key2.equals("333.0")){debug = false;} else {debug = true;}
                   double total_probability = 0.0;
                   for(BayesianEvent be : events){
                      try{
@@ -979,10 +985,9 @@ public class TypedBayesianEngine extends BasicEngine {
                            out.format("key2 null? %s%n", (key2 == null));
                            out.format("trying pBA_val_map.get(%s)...%n", key2); //getting the val we're calculating total prob for...
                            out.format("does this work? be.get_pBA(%s, %s, false)%n", key1, key2);
+                           out.format("be:",be.toString());
                         }
                         Object[] temp_pBA = be.get_pBA(key1, key2, false);
-                        out.format("temp_pBA[1] null? %s%n", (temp_pBA[1] == null) );
-                        
                         if(debug){
                            out.format("yay it worked! result: %s%n", be.temp_toStr(temp_pBA));
                            //out.format("pBA_val_map.get(key2) null? %s%n", (pBA_val_map.get(key2)  == null));
@@ -1006,8 +1011,8 @@ public class TypedBayesianEngine extends BasicEngine {
                      //total_probability_map.put(key2, total_probability);
                      total_probability_map.put(key2, total_probability);
                      //out.println(be.toString());
-                     if(debug) out.format("total probability for %s:%s = %.7f%n%n", key1, key2, total_probability);
                   } // end for voi-specific events
+                  if(debug) out.format("total probability for %s:%s = %.7f%n%n", key1, key2, total_probability);
                } // end for keys2
             }
          } // end for keys1
