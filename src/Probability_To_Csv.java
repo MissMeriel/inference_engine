@@ -25,6 +25,7 @@ class Probability_To_Csv{
    //static Pattern whitespace_pattern = Pattern.compile("\p{IsWhite_Space}+");
    static ArrayList<String> headers = new ArrayList<String>();
    static boolean is_bag = false;
+   static boolean debug = false;
    
    public static void main(String[] args) throws IOException{
       out.println(Arrays.toString(args));
@@ -77,13 +78,12 @@ class Probability_To_Csv{
          Matcher whitespace_matcher = whitespace_pattern.matcher(thisLine);
          
          if(subject_matcher.matches()){
-            out.println("Subject: "+thisLine);
+            if(debug) out.println("Subject: "+thisLine);
             current_subject = thisLine;
             //continue;
          } else if(whitespace_matcher.find()){
-            out.format("Parsing %s line %s%n", current_subject, thisLine);
+            if(debug) out.format("Parsing %s line %s%n", current_subject, thisLine);
             parse_line(current_subject, thisLine);
-            //csv_array[row_count]= cols;
             out.println();
          }
          row_count++;
@@ -112,8 +112,8 @@ class Probability_To_Csv{
       String header = String.format("%s)",cols[0]);
       String[] temp = cols[1].split(" = ");
       String probability = temp[temp.length-1];
-      out.format("subject_map.put(%s, %s)%n",header,probability);
-      out.format("subject_map == null? %s%n",(subject_map == null));
+      /*out.format("subject_map.put(%s, %s)%n",header,probability);
+      out.format("subject_map == null? %s%n",(subject_map == null));*/
       if(!headers.contains(header)){
          headers.add(header);
       }
@@ -122,7 +122,7 @@ class Probability_To_Csv{
    }
    
    public static void print_header_map(){
-      out.println("\n\n\nHEADER MAP:");
+      if(debug) out.println("\n\n\nHEADER MAP:");
       Set<String> keys1 = header_map.keySet();
       TreeSet<String> treeset1 = new TreeSet(keys1);
       for(String key1 : treeset1){
@@ -152,7 +152,7 @@ class Probability_To_Csv{
          for(String header : headers){
             String temp = header_map.get(key1).get(header);
             if(temp == null){
-               out.format("header_map.get(%s).get(%s) == null%n",key1,header);
+               if(debug) out.format("header_map.get(%s).get(%s) == null%n",key1,header);
                csv_string += ",0.0";
             } else {
                csv_string += "," +temp;
@@ -160,8 +160,10 @@ class Probability_To_Csv{
             
          }
       }
-      out.println("\n\n\n\n");
-      out.println(csv_string);
+      if(debug){
+         out.println("\n\n\n\n");
+         out.println(csv_string);
+      }
       return csv_string;
    }
 

@@ -381,7 +381,7 @@ public class BayesianEvent<T> extends TypedEvent{
                         closest_match_key = key;
                      }
                   } else if(Math.round(dbl) == Math.round(key_val)) {
-                     if(debug) out.format("total_probabilities.get(%s).get(%s) = %.5f%n",key1,key,total_probabilities.get(key1).get(key));
+                     if(debug) out.format("get_total_probability(): matched by rounding; total_probabilities.get(%s).get(%s) = %.5f%n",key1,key,total_probabilities.get(key1).get(key));
                      return total_probabilities.get(key1).get(key);
                   }
                   break;}
@@ -409,7 +409,10 @@ public class BayesianEvent<T> extends TypedEvent{
             }
             if(found) break;
          } //end for keys
-      if(debug) out.format("total_probabilities.get(%s).get(%s) = %.5f%n",key1,closest_match_key,total_probabilities.get(key1).get(closest_match_key));
+         if(true) {
+            out.format("get_total_probability(): key1: %s closest_match_key: %s%n", key1, closest_match_key);
+            out.format("total_probabilities.get(%s).get(%s) = %.5f%n",key1,closest_match_key,total_probabilities.get(key1).get(closest_match_key));
+         }
          return total_probabilities.get(key1).get(closest_match_key);
       }
       //return prob;
@@ -464,6 +467,25 @@ public class BayesianEvent<T> extends TypedEvent{
             str += s2+"=";
             Double d = hash.get(s2);
             str += d.doubleValue() + " ";
+         }
+         str+="}";
+      }
+      str += "}";
+      out.println( str);
+   }
+   
+   public void print_total_probabilities(){
+      //System.out.println(cumulative_probabilities);
+      String str = "{";
+      Set<String> keys = total_probabilities.keySet();
+      for (String s : keys){
+         str += " "+s+":{";
+         HashMap<String, Double> hash = total_probabilities.get(s);
+         Set<String> keys2 = hash.keySet();
+         for (String s2 : keys2){
+            str += s2+"=";
+            Double d = hash.get(s2);
+            str += d.doubleValue() + " \n";
          }
          str+="}";
       }
@@ -543,6 +565,7 @@ public class BayesianEvent<T> extends TypedEvent{
                debug = true;
                out.println("get_total_probability("+key1+","+key2+")");
                get_total_probability(key1,key2);
+               out.print("total probabilities: "); print_total_probabilities();
                debug = false;
                //out.format("pB = %.5f / %.5f = %.5f%n", A_arr[0].doubleValue(), A_arr[1].doubleValue(), pB);
                //Driver.print_priors(Global.priors);

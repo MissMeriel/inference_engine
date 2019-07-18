@@ -2,7 +2,7 @@ GIVENS
 CurrentBrake_Machine,DOUBLE,threshold:=2
 //CurrentThrottle_Machine,DOUBLE
 //CurrentGear_Machine,INT
-GSR_Human,DOUBLE
+//GSR_Human,DOUBLE
 EVENTS
 Mode_H2M,STRING
 //EventAlert_Machine,STRING

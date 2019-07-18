@@ -105,7 +105,10 @@ public class TypedBayesianEngine extends BasicEngine {
       }
    }
    
-   
+   /**
+    * Initialize cumulative_probabilities values to optimize thresholds
+    * and pick values that prevent overlap
+    **/
    public void setup_threshold_means(){
       for(String voi_name : Global.vars_of_interest){
          Double threshold = Global.thresholds.get(voi_name);
@@ -603,6 +606,10 @@ public class TypedBayesianEngine extends BasicEngine {
          String voi = iter.next();
          //change voi_vals to delta value
          RawType rawtype = Global.types.get(voi);
+         double threshold = Double.MAX_VALUE;
+         try{
+            threshold = Global.thresholds.get(voi);
+         } catch(Exception ex){}
          if(debug) out.println("get_var_index("+voi+");");
          int index = get_var_index(voi);
          switch(rawtype){
@@ -612,7 +619,14 @@ public class TypedBayesianEngine extends BasicEngine {
             case INTEXP:
             case DOUBLEEXP:
             case STRINGEXP:{
-               al.add(row[index]);
+               if(threshold == Double.MAX_VALUE){
+                  al.add(row[index]);
+               } else {
+                  // get closest cumulative_probabilities key
+                  // prevents progpogation of different values for same entry/data sample
+                  String closest_key = get_closest_cumulative_probabilites_key(voi, row[index], threshold, rawtype);
+                  al.add(closest_key);
+               }
                break;}
             case INTDELTA:
             case DOUBLEDELTA:{
@@ -675,6 +689,31 @@ public class TypedBayesianEngine extends BasicEngine {
       return al;
    }
 
+   
+   public String get_closest_cumulative_probabilites_key(String voi, String value, double threshold, RawType rawtype){
+      out.format("get_closest_cumulative_probabilites_key(%s,%s,%s,%s)%n",voi, value, threshold, rawtype);
+      HashMap<String, Double[]> cumulative_probability = null;
+      cumulative_probability = cumulative_probabilities.get(voi);
+      Set<String> keys = cumulative_probability.keySet();
+      for(String key : keys){
+         switch(rawtype){
+            case INT:
+            case DOUBLE: {
+               double keyval = Double.parseDouble(key);
+               double newval = Double.parseDouble(value);
+               if(Fuzzy.eq(keyval, newval, threshold)){
+                  out.format("get_closest_cumulative_probabilites_key(): return %s%n", key);
+                  return key;
+               }
+            break;}
+            case STRING:
+            case DOUBLEDELTA:
+               break;
+         }
+      }
+      out.format("get_closest_cumulative_probabilites_key(): return null%n");
+      return null;
+   }
    
    public void update_delta_trackers(String[] row, int row_index){
       for (String voi : Global.vars_of_interest){
@@ -877,9 +916,14 @@ public class TypedBayesianEngine extends BasicEngine {
    
    
    public void calculate_total_probabilities(){
-      /*out.println("inside calculate_total_probabilities()");
-      out.println("Global vars of interest: "+Global.vars_of_interest);*/
+      
+      if(debug) out.println("inside calculate_total_probabilities()");
       for(String voi : Global.vars_of_interest){
+         if(voi.equals("Mode_H2M")){
+            debug = true;
+         } else {
+            debug = false;
+         }
          //collect all events with same var
          ArrayList<BayesianEvent> events = new ArrayList<BayesianEvent>();
          for(BayesianEvent be : bayesian_events){
@@ -888,17 +932,18 @@ public class TypedBayesianEngine extends BasicEngine {
             }
          }
          
-         HashMap<String, Double> voi_priors = Global.priors.get(voi);
-         System.out.println(voi+" priors:");
-         System.out.println(voi_priors);
-         
          //use cumulative_probabilities keys so as not to miss bins
-         /*out.println("calculate_total_probabilities(): calculating total probability for "+voi);
-         out.println("calculate_total_probabilities(): events="+events.toString());
-         out.print("calculate_total_probabilities(): cumulative_probabilities="); print_cumulative_probabilities();*/
+         
+         /*out.print("calculate_total_probabilities(): cumulative_probabilities="); print_cumulative_probabilities();*/
          Set<String> keys1 = cumulative_probabilities.keySet();
          for(String key1 : keys1){
             if(!key1.equals(voi)){
+               if(debug){
+                  out.println("\n\ncalculate_total_probabilities(): calculating total probability for "+key1);
+                  out.println("calculate_total_probabilities(): events="+events.toString());
+                  out.println(key1+" priors:");
+                  out.println(Global.priors.get(key1));
+               }
                Set<String> keys2 = cumulative_probabilities.get(key1).keySet();
                for(String key2 : keys2){
                   double total_probability = 0.0;
@@ -911,7 +956,7 @@ public class TypedBayesianEngine extends BasicEngine {
                            case DOUBLE:
                            case STRING:{
                               prior =  get_prior(be.var_name, be.val.toString());
-                              out.format("calculate_total_probabilities(): get_prior(%s,%s) = %.5f%n",be.var_name, be.val.toString(),prior);
+                              if(debug) out.format("calculate_total_probabilities(): get_prior(%s,%s) = %.5f%n", be.var_name, be.val.toString(),prior);
                            break;}
                            case INTEXP:
                            case DOUBLEEXP:
@@ -929,39 +974,45 @@ public class TypedBayesianEngine extends BasicEngine {
                         out.format("calculate_total_probabilities(): alternative get_prior(be.var_name=%s,key2=%s) = %.3f%n",be.var_name,key2,get_prior(be.var_name, key2));
                         out.format("calculate_total_probabilities(): pulling pBA count from %s%n",be);
                         out.format("calculate_total_probabilities(): be.pBAs.get.(%s).get(%s)=",key1,key2,pBA_val_map.get(key2));*/
-                        out.format("key1 null? %s%n", (key1 == null));
-                        out.format("key2 null? %s%n", (key2 == null));
-                        
-                        out.format("trying pBA_val_map.get(%s)...%n", key2);
-                        
-                        out.format("does this work? be.get_pBA(%s, %s, false)%n", key1, key2);
+                        if(debug) {
+                           out.format("key1 null? %s%n", (key1 == null));
+                           out.format("key2 null? %s%n", (key2 == null));
+                           out.format("trying pBA_val_map.get(%s)...%n", key2); //getting the val we're calculating total prob for...
+                           out.format("does this work? be.get_pBA(%s, %s, false)%n", key1, key2);
+                        }
                         Object[] temp_pBA = be.get_pBA(key1, key2, false);
-                        out.format("yay it worked! result: %s%n", be.temp_toStr(temp_pBA));
-                        out.format("pBA_val_map.get(key2) null? %s%n", (pBA_val_map.get(key2)  == null));
-                        /*out.format("be.num_samples null? %s%n", (be.num_samples == null));
-                        out.format("prior null? %s%n", (prior == null));*/
+                        out.format("temp_pBA[1] null? %s%n", (temp_pBA[1] == null) );
+                        
+                        if(debug){
+                           out.format("yay it worked! result: %s%n", be.temp_toStr(temp_pBA));
+                           //out.format("pBA_val_map.get(key2) null? %s%n", (pBA_val_map.get(key2)  == null));
+                        }
                         //total_probability += ((pBA_val_map.get(key2) / be.num_samples) * prior); //multiply by prior
                         total_probability += ((Double.parseDouble(temp_pBA[0].toString()) / be.num_samples) * prior); //multiply by prior
-                        out.format("calculate_total_probabilities(): total_probability += ((pBA_val_map.get(key2=%s)=%.5f / be.num_samples=%s) * prior=%.5f) = %.5f%n",key2,pBA_val_map.get(key2),be.num_samples, prior, total_probability);
-                        out.format("calculate_total_probabilities(): total_probability += %.5f = %.5f%n",((pBA_val_map.get(key2) / be.num_samples) * prior), total_probability);
+                        if(debug) {
+                           out.format("calculate_total_probabilities(): total_probability += ((closest_match_key=%s)=%.5f / be.num_samples=%s) * prior=%.5f) = %.5f%n",
+                                      temp_pBA[1],Double.parseDouble(temp_pBA[0].toString()),be.num_samples, prior, total_probability);
+                           out.format("calculate_total_probabilities(): total_probability += %.5f = %.5f%n",((Double.parseDouble(temp_pBA[0].toString()) / be.num_samples) * prior), total_probability);
+                        }
+                        //key2 = temp_pBA[1].toString();
                      } catch(NullPointerException ex){
-                        ex.printStackTrace();
-                        out.println(ex.getLocalizedMessage());
+                        if(debug) ex.printStackTrace();
                         total_probability += 0.0;
                      }
                   } // end for voi-specific events
                   // add total probabilities to BayesianEvents
                   for(BayesianEvent be : events){
                      HashMap<String, Double> total_probability_map = (HashMap<String, Double>) be.total_probabilities.get(key1);
+                     //total_probability_map.put(key2, total_probability);
                      total_probability_map.put(key2, total_probability);
                      //out.println(be.toString());
-                     out.format("total probability for %s:%s = %.7f%n%n", key1, key2, total_probability);
+                     if(debug) out.format("total probability for %s:%s = %.7f%n%n", key1, key2, total_probability);
                   } // end for voi-specific events
                } // end for keys2
             }
          } // end for keys1
       }
-      out.println("end calculate_total_probabilities()\n\n");
+      if(debug) out.println("end calculate_total_probabilities()\n\n");
    }
    
    
