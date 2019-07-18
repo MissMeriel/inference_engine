@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import java.util.Comparator;
 import static java.lang.Math.abs;
 import java.util.function.Predicate;
+import java.util.List;
 
 public class TypedBayesianEngine extends BasicEngine {
    
@@ -92,6 +93,15 @@ public class TypedBayesianEngine extends BasicEngine {
       setup_threshold_means();
       if(Global.priors.keySet().isEmpty()){
          setup_prior_uniform_dist();
+      }
+      //prune vars of interest to only those present in trace
+      Iterator<String> iter = Global.vars_of_interest.iterator();
+      Object[] first_row = csv_array[0];
+      List<Object> headers = Arrays.asList(first_row);
+      while(iter.hasNext()){
+         if(!headers.contains(iter.next())){
+            iter.remove();
+         }
       }
    }
    
@@ -587,7 +597,10 @@ public class TypedBayesianEngine extends BasicEngine {
    
    public ArrayList get_voi_vals(String[] row){
       ArrayList<String> al = new ArrayList<String>();
-      for (String voi : Global.vars_of_interest){
+      Iterator<String> iter = Global.vars_of_interest.iterator();
+      //for (String voi : Global.vars_of_interest){
+      while(iter.hasNext()){
+         String voi = iter.next();
          //change voi_vals to delta value
          RawType rawtype = Global.types.get(voi);
          if(debug) out.println("get_var_index("+voi+");");
@@ -855,8 +868,6 @@ public class TypedBayesianEngine extends BasicEngine {
       }
       //iterate through keys, appending to return string
       Set<String> keys = given_map.keySet();
-      //String[] temp_arr = keys.toArray();
-      //ArrayList<String> temp_al =
       TreeSet<String> treeset = new TreeSet(keys);
       for(String key : treeset){
          return_str += given_map.get(key)+"\n\n";
@@ -876,6 +887,11 @@ public class TypedBayesianEngine extends BasicEngine {
                events.add(be);
             }
          }
+         
+         HashMap<String, Double> voi_priors = Global.priors.get(voi);
+         System.out.println(voi+" priors:");
+         System.out.println(voi_priors);
+         
          //use cumulative_probabilities keys so as not to miss bins
          /*out.println("calculate_total_probabilities(): calculating total probability for "+voi);
          out.println("calculate_total_probabilities(): events="+events.toString());
@@ -895,7 +911,7 @@ public class TypedBayesianEngine extends BasicEngine {
                            case DOUBLE:
                            case STRING:{
                               prior =  get_prior(be.var_name, be.val.toString());
-                              //out.format("calculate_total_probabilities(): get_prior(%s,%s) = %.3f%n",be.var_name, be.val.toString(),prior);
+                              out.format("calculate_total_probabilities(): get_prior(%s,%s) = %.5f%n",be.var_name, be.val.toString(),prior);
                            break;}
                            case INTEXP:
                            case DOUBLEEXP:
@@ -913,24 +929,39 @@ public class TypedBayesianEngine extends BasicEngine {
                         out.format("calculate_total_probabilities(): alternative get_prior(be.var_name=%s,key2=%s) = %.3f%n",be.var_name,key2,get_prior(be.var_name, key2));
                         out.format("calculate_total_probabilities(): pulling pBA count from %s%n",be);
                         out.format("calculate_total_probabilities(): be.pBAs.get.(%s).get(%s)=",key1,key2,pBA_val_map.get(key2));*/
-                        total_probability += ((pBA_val_map.get(key2) / be.num_samples) * prior); //multiply by prior
-                        //out.format("total_probability += ((pBA_val_map.get(key2=%s)=%.3f / be.num_samples=%s) * prior=%.3f) = %.3f%n",key2,pBA_val_map.get(key2),be.num_samples, prior, total_probability);
-                        //out.format("total_probability += %.3f = %.3f%n",((pBA_val_map.get(key2) / be.num_samples) * prior), total_probability);
+                        out.format("key1 null? %s%n", (key1 == null));
+                        out.format("key2 null? %s%n", (key2 == null));
+                        
+                        out.format("trying pBA_val_map.get(%s)...%n", key2);
+                        
+                        out.format("does this work? be.get_pBA(%s, %s, false)%n", key1, key2);
+                        Object[] temp_pBA = be.get_pBA(key1, key2, false);
+                        out.format("yay it worked! result: %s%n", be.temp_toStr(temp_pBA));
+                        out.format("pBA_val_map.get(key2) null? %s%n", (pBA_val_map.get(key2)  == null));
+                        /*out.format("be.num_samples null? %s%n", (be.num_samples == null));
+                        out.format("prior null? %s%n", (prior == null));*/
+                        //total_probability += ((pBA_val_map.get(key2) / be.num_samples) * prior); //multiply by prior
+                        total_probability += ((Double.parseDouble(temp_pBA[0].toString()) / be.num_samples) * prior); //multiply by prior
+                        out.format("calculate_total_probabilities(): total_probability += ((pBA_val_map.get(key2=%s)=%.5f / be.num_samples=%s) * prior=%.5f) = %.5f%n",key2,pBA_val_map.get(key2),be.num_samples, prior, total_probability);
+                        out.format("calculate_total_probabilities(): total_probability += %.5f = %.5f%n",((pBA_val_map.get(key2) / be.num_samples) * prior), total_probability);
                      } catch(NullPointerException ex){
+                        ex.printStackTrace();
+                        out.println(ex.getLocalizedMessage());
                         total_probability += 0.0;
                      }
                   } // end for voi-specific events
+                  // add total probabilities to BayesianEvents
                   for(BayesianEvent be : events){
                      HashMap<String, Double> total_probability_map = (HashMap<String, Double>) be.total_probabilities.get(key1);
                      total_probability_map.put(key2, total_probability);
                      //out.println(be.toString());
-                     //out.format("total probability for %s:%s = %.3f%n%n", key1, key2, total_probability);
+                     out.format("total probability for %s:%s = %.7f%n%n", key1, key2, total_probability);
                   } // end for voi-specific events
                } // end for keys2
             }
          } // end for keys1
       }
-      //out.println("end calculate_total_probabilities()\n");
+      out.println("end calculate_total_probabilities()\n\n");
    }
    
    

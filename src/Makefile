@@ -20,11 +20,12 @@ mjparser/parser.java: mjparser/prob.cup
 
 #### parser
 parser: mjparser/Yylex.java mjparser/parser.java
-	javac -classpath .:java-cup-11a-runtime.jar:~/inference_engine/*:./mjparser/mjparser.jar -d . mjparser/parser.java mjparser/sym.java mjparser/Yylex.java
+	javac -classpath ./*:commons-lang3-3.9/*:./commons-math3-3.6.1/*:.:java-cup-11a-runtime.jar:./mjparser/mjparser.jar -d . mjparser/parser.java mjparser/sym.java mjparser/Yylex.java
 
 #### engine Java
 engine: inference_engine/*.java
-	javac -classpath .:./*:commons-lang3-3.9/*:./mjparser/*:./commons-math3-3.6.1/* inference_engine/*.java
+	javac -classpath inference_engine/*:.:./*:commons-lang3-3.9/*:./mjparser/*:./commons-math3-3.6.1/* inference_engine/*.java
 
 clean:
-	rm mjparser/Yylex.class mjparser/parser.java mjparser/*.class
+	rm mjparser/parser.java mjparser/*.class
+	rm inference_engine/*.class

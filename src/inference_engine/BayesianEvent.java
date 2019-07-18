@@ -368,7 +368,7 @@ public class BayesianEvent<T> extends TypedEvent{
                case DOUBLE:{
                   double dbl = Double.parseDouble(key2);
                   double key_val_dbl = Double.parseDouble(key);
-                  if(debug) out.format("get_total_probability(): attempting to parse double %s%n", key);
+                  if(debug) out.format("get_total_probability(): attempting to parse double %s (count %s)%n", key, total_probability_map.get(key));
                   double key_val = Double.parseDouble(key);
                   if(Fuzzy.eq(dbl, key_val, voi_threshold.doubleValue()) && voi_threshold != Double.MAX_VALUE) {
                      if(closest_match_key != null){
@@ -381,7 +381,7 @@ public class BayesianEvent<T> extends TypedEvent{
                         closest_match_key = key;
                      }
                   } else if(Math.round(dbl) == Math.round(key_val)) {
-		     if(debug) out.format("total_probabilities.get(%s).get(%s) = %.5f%n",key1,key,total_probabilities.get(key1).get(key));
+                     if(debug) out.format("total_probabilities.get(%s).get(%s) = %.5f%n",key1,key,total_probabilities.get(key1).get(key));
                      return total_probabilities.get(key1).get(key);
                   }
                   break;}
@@ -398,7 +398,7 @@ public class BayesianEvent<T> extends TypedEvent{
                         closest_match_key = key;
                      }
                   } else if(i == key_val_int) {
-		     if(debug) out.format("total_probabilities.get(%s).get(%s) = %.5f%n",key1,key,total_probabilities.get(key1).get(key));
+                     if(debug) out.format("total_probabilities.get(%s).get(%s) = %.5f%n",key1,key,total_probabilities.get(key1).get(key));
                      return total_probabilities.get(key1).get(key);
                   }
                   break;}
@@ -409,7 +409,7 @@ public class BayesianEvent<T> extends TypedEvent{
             }
             if(found) break;
          } //end for keys
-	 if(debug) out.format("total_probabilities.get(%s).get(%s) = %.5f%n",key1,closest_match_key,total_probabilities.get(key1).get(closest_match_key));
+      if(debug) out.format("total_probabilities.get(%s).get(%s) = %.5f%n",key1,closest_match_key,total_probabilities.get(key1).get(closest_match_key));
          return total_probabilities.get(key1).get(closest_match_key);
       }
       //return prob;
@@ -539,11 +539,11 @@ public class BayesianEvent<T> extends TypedEvent{
                out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
                out.println("PROBABILITY > 1 (count="+ (++gt_one_count) +")");//System.exit(0);
                out.format("calculating probability for P(%s=%s|%s=%s)%n",var_name, val.toString(), key1, key2);
-		out.format("pB: %.5f%n",get_total_probability(key1,key2));
-		debug = true;
-		out.println("get_total_probability("+key1+","+key2+")");
-		get_total_probability(key1,key2);
-		debug = false;
+               out.format("pB: %.5f%n",get_total_probability(key1,key2));
+               debug = true;
+               out.println("get_total_probability("+key1+","+key2+")");
+               get_total_probability(key1,key2);
+               debug = false;
                //out.format("pB = %.5f / %.5f = %.5f%n", A_arr[0].doubleValue(), A_arr[1].doubleValue(), pB);
                //Driver.print_priors(Global.priors);
                //System.out.print("CUMULATIVE_PROBABILITIES: "); print_cumulative_probabilities(cumulative_probabilities);
@@ -558,9 +558,6 @@ public class BayesianEvent<T> extends TypedEvent{
       return str;
    }
    
-   /*public Double get_total_probability(String key1, String key2){
-      return total_probabilities.get(key1).get(key2);
-   }*/
    
    public Double[] get_cumulative_probability(String voi_name, String val, HashMap<String, HashMap<String, Double[]>> cumulative_probabilities){
       Double[] d_arr = new Double[2];
