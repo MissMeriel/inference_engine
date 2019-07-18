@@ -624,9 +624,10 @@ public class TypedBayesianEngine extends BasicEngine {
                } else if (threshold == Double.MAX_VALUE && rawtype == RawType.DOUBLE) {
                   // get closest cumulative_probabilities key
                   // prevents progpogation of different values for same entry/data sample
-                  threshold = 1.0; //TODO: why does threshold = 0 break it?
+                  threshold = 1.0; //TODO: why do thresholds 0 and 0.5 break it?
                   String val = String.valueOf(Math.round(Double.parseDouble(row[index])));
                   String closest_key = get_closest_cumulative_probabilites_key(voi, val, threshold, rawtype);
+                  if(debug) out.println("get_voi_vals(): closest_key="+closest_key);
                   al.add(closest_key);
                } else {
                   String closest_key = get_closest_cumulative_probabilites_key(voi, row[index], threshold, rawtype);
@@ -696,6 +697,7 @@ public class TypedBayesianEngine extends BasicEngine {
 
    
    public String get_closest_cumulative_probabilites_key(String voi, String value, double threshold, RawType rawtype){
+      //debug = true;
       if(debug) out.format("get_closest_cumulative_probabilites_key(%s,%s,%s,%s)%n",voi, value, threshold, rawtype);
       HashMap<String, Double[]> cumulative_probability = null;
       cumulative_probability = cumulative_probabilities.get(voi);
@@ -708,6 +710,7 @@ public class TypedBayesianEngine extends BasicEngine {
                double newval = Double.parseDouble(value);
                if(Fuzzy.eq(keyval, newval, threshold)){
                   if(debug) out.format("get_closest_cumulative_probabilites_key(): return %s%n", key);
+                  //debug = false;
                   return key;
                }
             break;}
@@ -717,6 +720,8 @@ public class TypedBayesianEngine extends BasicEngine {
          }
       }
       if(debug) out.format("get_closest_cumulative_probabilites_key(): return null%n");
+      //debug = false;
+      print_cumulative_probabilities();
       return null;
    }
    
@@ -921,14 +926,13 @@ public class TypedBayesianEngine extends BasicEngine {
    
    
    public void calculate_total_probabilities(){
-      
       if(debug) out.println("inside calculate_total_probabilities()");
       for(String voi : Global.vars_of_interest){
-         if(voi.equals("CurrentBrake_Machine")){
+         /*if(voi.equals("CurrentBrake_Machine")){
             debug = true;
          } else {
             debug = false;
-         }
+         }*/
          //collect all events with same var
          ArrayList<BayesianEvent> events = new ArrayList<BayesianEvent>();
          for(BayesianEvent be : bayesian_events){
@@ -951,7 +955,7 @@ public class TypedBayesianEngine extends BasicEngine {
                }
                Set<String> keys2 = cumulative_probabilities.get(key1).keySet();
                for(String key2 : keys2){
-                  if(!key2.equals("333.0")){debug = false;} else {debug = true;}
+                  //if(!key2.equals("333.0")){debug = false;} else {debug = true;}
                   double total_probability = 0.0;
                   for(BayesianEvent be : events){
                      try{
