@@ -1,0 +1,13 @@
+/velocity.linear_y,
+/velocity.linear_y>=0.5&&/velocity.linear_y<0.75||/velocity.linear_y<=-0.5&&/velocity.linear_y>-0.75:=0.0001,
+/velocity.linear_y>1||/velocity.linear_y<-1:=0.0001,
+/velocity.linear_y>=0.25&&/velocity.linear_y<0.5||/velocity.linear_y<=-0.25&&/velocity.linear_y>-0.5:=0.003,
+/velocity.linear_y<0.25&&/velocity.linear_y>-0.25:=0.997
+/machine_state.data,MachineState.Manual:=0.215,MachineState.Landing:=0.031,MachineState.Hovering:=0.061,MachineState.FinishedBehavior:=0.031,MachineState.LosingVicon:=0.015,MissionState.Suspended:=0.031,MachineState.PossibleTargetDetected:=0.138,MachineState.Sweeping:=0.338,MachineState.Default:=0.002,MachineState.OutsideSweepArea:=0.138
+/mission_state.data,MissionState.PossibleTargetDetected:=0.143,MissionState.Complete:=0.032,MissionState.OutsideSweepArea:=0.206,MissionState.Suspended:=0.079,MissionState.InsideSweepArea:=0.317,WarningState.AbortingMission:=0.001,MissionState.Default:=0.0001,MissionState.WaitingForUser:=0.016,MissionState.InProgress:=0.206
+/command_state.data,CommandState.Auto:=0.508,CommandState.Manual:=0.184,CommandState.Default:=0.308
+/flight_data.battery_low,True:=0.061,False:=0.939
+/user_input.data,UserCommand.Land:=0.045,UserCommand.KeepHovering:=0.022,UserCommand.SweepAgain:=0.011,UserCommand.RequestAutoControl:=0.025,UserCommand.ReturnHome:=0.386,UserCommand.RequestManualControl:=0.284,UserCommand.KeepSweeping:=0.068,UserCommand.LookCloser:=0.591
+/user_input.reaction_time_secs,/user_input.reaction_time_secs<0.2:=0.080,/user_input.reaction_time_secs>=0.2&&/user_input.reaction_time_secs<0.4:=0.080,/user_input.reaction_time_secs>=0.4&&/user_input.reaction_time_secs<0.6:=0.228,/user_input.reaction_time_secs>=0.6&&/user_input.reaction_time_secs<0.8:=0.329,/user_input.reaction_time_secs>=1&&/user_input.reaction_time_secs<3:=0.016,/user_input.reaction_time_secs>=3&&/user_input.reaction_time_secs<6:=0.030,/user_input.reaction_time_secs>=6&&/user_input.reaction_time_secs<9:=0.192,/user_input.reaction_time_secs>=9&&/user_input.reaction_time_secs<12:=0.032,/user_input.reaction_time_secs>=12&&/user_input.reaction_time_secs<15:=0.010,/user_input.reaction_time_secs>=15:=0.002
+/flight_data.gravity_state,True:=0.053,False:=0.947
+

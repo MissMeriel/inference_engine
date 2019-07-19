@@ -1,0 +1,10 @@
+GIVENS
+/velocity.linear_y,DOUBLEEXP,/velocity.linear_y>=0.5&&/velocity.linear_y<0.75||/velocity.linear_y<=-0.5&&/velocity.linear_y>-0.75,/velocity.linear_y>1||/velocity.linear_y<-1,/velocity.linear_y>=0.25&&/velocity.linear_y<0.5||/velocity.linear_y<=-0.25&&/velocity.linear_y>-0.5,/velocity.linear_y<0.25&&velocity.linear_y>-0.25
+/machine_state.data,STRING
+/mission_state.data,STRING
+/command_state.data,STRING
+/flight_data.battery_low,STRING
+/user_input.data,STRING
+EVENTS
+/user_input.reaction_time_secs,DOUBLEEXP,/user_input.reaction_time_secs<0.2,/user_input.reaction_time_secs>=0.2&&/user_input.reaction_time_secs<0.4,/user_input.reaction_time_secs>=0.4&&/user_input.reaction_time_secs<0.6,/user_input.reaction_time_secs>=0.6&&/user_input.reaction_time_secs<0.8,/user_input.reaction_time_secs>=1&&/user_input.reaction_time_secs<3,/user_input.reaction_time_secs>=3&&/user_input.reaction_time_secs<6,/user_input.reaction_time_secs>=6&&/user_input.reaction_time_secs<9,/user_input.reaction_time_secs>=9&&/user_input.reaction_time_secs<12,/user_input.reaction_time_secs>=12&&/user_input.reaction_time_secs<15,/user_input.reaction_time_secs>=15
+
