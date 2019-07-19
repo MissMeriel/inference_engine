@@ -1,8 +1,4 @@
-/velocity.linear_y,
-/velocity.linear_y>=0.5&&/velocity.linear_y<0.75||/velocity.linear_y<=-0.5&&/velocity.linear_y>-0.75:=0.0001,
-/velocity.linear_y>1||/velocity.linear_y<-1:=0.0001,
-/velocity.linear_y>=0.25&&/velocity.linear_y<0.5||/velocity.linear_y<=-0.25&&/velocity.linear_y>-0.5:=0.003,
-/velocity.linear_y<0.25&&/velocity.linear_y>-0.25:=0.997
+/velocity.linear_y,/velocity.linear_y>=0.5&&/velocity.linear_y<0.75||/velocity.linear_y<=-0.5&&/velocity.linear_y>-0.75:=0.0001,/velocity.linear_y>0.75||/velocity.linear_y<-0.75:=0.0001,/velocity.linear_y>=0.25&&/velocity.linear_y<0.5||/velocity.linear_y<=-0.25&&/velocity.linear_y>-0.5:=0.003,/velocity.linear_y<0.25&&/velocity.linear_y>-0.25:=0.997
 /machine_state.data,MachineState.Manual:=0.215,MachineState.Landing:=0.031,MachineState.Hovering:=0.061,MachineState.FinishedBehavior:=0.031,MachineState.LosingVicon:=0.015,MissionState.Suspended:=0.031,MachineState.PossibleTargetDetected:=0.138,MachineState.Sweeping:=0.338,MachineState.Default:=0.002,MachineState.OutsideSweepArea:=0.138
 /mission_state.data,MissionState.PossibleTargetDetected:=0.143,MissionState.Complete:=0.032,MissionState.OutsideSweepArea:=0.206,MissionState.Suspended:=0.079,MissionState.InsideSweepArea:=0.317,WarningState.AbortingMission:=0.001,MissionState.Default:=0.0001,MissionState.WaitingForUser:=0.016,MissionState.InProgress:=0.206
 /command_state.data,CommandState.Auto:=0.508,CommandState.Manual:=0.184,CommandState.Default:=0.308

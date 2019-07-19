@@ -1,5 +1,5 @@
 GIVENS
-/velocity.linear_y,DOUBLEEXP,/velocity.linear_y>=0.5&&/velocity.linear_y<0.75||/velocity.linear_y<=-0.5&&/velocity.linear_y>-0.75,/velocity.linear_y>1||/velocity.linear_y<-1,/velocity.linear_y>=0.25&&/velocity.linear_y<0.5||/velocity.linear_y<=-0.25&&/velocity.linear_y>-0.5,/velocity.linear_y<0.25&&velocity.linear_y>-0.25
+/velocity.linear_y,DOUBLEEXP,/velocity.linear_y>=0.5&&/velocity.linear_y<0.75||/velocity.linear_y<=-0.5&&/velocity.linear_y>-0.75,/velocity.linear_y>0.75||/velocity.linear_y<-0.75,/velocity.linear_y>=0.25&&/velocity.linear_y<0.5||/velocity.linear_y<=-0.25&&/velocity.linear_y>-0.5,/velocity.linear_y<0.25&&/velocity.linear_y>-0.25
 /machine_state.data,STRING
 /mission_state.data,STRING
 /command_state.data,STRING

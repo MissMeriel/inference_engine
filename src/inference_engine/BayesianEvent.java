@@ -35,6 +35,8 @@ public class BayesianEvent<T> extends TypedEvent{
    public BayesianEvent(String var_name, T val, Prior prior_attribution){
       super(var_name, val);
       this.prior_attribution = prior_attribution;
+      initialize_pBAs();
+      initialize_total_probabilities();
    }
    
    
@@ -101,8 +103,8 @@ public class BayesianEvent<T> extends TypedEvent{
                if(debug) out.format("update_conditionals: Caught null ptr from get_pBA%n");
                temp_found = false;
             }catch(NumberFormatException ex ){
-               if(debug) out.format("update_conditionals: Caught NumberFormatException from get_pBA%n");
-               //ex.printStackTrace();
+               if(debug) {out.format("update_conditionals: Caught NumberFormatException from get_pBA%n");
+               ex.printStackTrace();}
                temp_found = true;
             }
             try{
@@ -739,6 +741,7 @@ public class BayesianEvent<T> extends TypedEvent{
             System.out.println("closest_match_key: "+closest_match_key);
             out.println("get_prior("+ voi_name+", "+ val+")");
          }
+         
          event_val_count = prior_map.get(closest_match_key);
          r[0] = event_val_count; r[1] = closest_match_key;
          
