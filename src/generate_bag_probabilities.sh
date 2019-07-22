@@ -1,7 +1,9 @@
 #!/bin/bash
 
-rootdir="./sweep/"
-outfile="batterylow_velocity.txt"
+rootdir="./sweep_newinterp/"
+outfile="sweep_newinterp_allvars3.txt"
+config_file=" example_files/sweep_allvars.bayesianconfig"
+priors_file="example_files/sweep_allvars.priors"
 pattern=''
 echo "" > $outfile
 for D in `find ${rootdir} -mindepth 1 -maxdepth 1`; do
@@ -12,7 +14,7 @@ for D in `find ${rootdir} -mindepth 1 -maxdepth 1`; do
         if [[ $D =~ \interpolated.csv$ ]]; then
 		echo "Generating probabilites for" $D
 		echo $D >> $outfile
-		java -classpath .:./*:commons-lang3-3.9/*:./mjparser/*:./commons-math3-3.6.1/* inference_engine.Driver $D example_files/sweep.bayesianconfig example_files/sweep.priors >> $outfile
+		java -classpath .:./*:commons-lang3-3.9/*:./mjparser/*:./commons-math3-3.6.1/* inference_engine.Driver $D $config_file $priors_file >> $outfile
 	fi
 done
 java -classpath commons-lang3-3.9/:. Probability_To_Csv $outfile bag

@@ -19,7 +19,11 @@ class Probability_To_Csv{
    //static String[][] csv_array;
    static HashMap<String, HashMap<String,String>> header_map = new HashMap<String, HashMap<String, String>>();
    static Pattern subject_pattern = Pattern.compile("[S][0-9]+[\\s]*");
-   static Pattern bag_pattern = Pattern.compile("[sweep_for_target_interpolated.csv][\\s]*");
+   //static Pattern bag_pattern = Pattern.compile("[.]*[sweep_for_target_interpolated.csv][\\s]*");
+//./sweep_newinterp/sweep_for_target_2019-04-11-09-01-22interpolated.csv
+
+   //static Pattern bag_pattern = Pattern.compile("./sweep_newinterp/sweep_for_target_2019-\\d*[-][0-9]*[-][0-9]*[-][0-9]*[-][0-9]*[interpolated.csv][\\s]*");
+   static Pattern bag_pattern = Pattern.compile("./sweep_newinterp/sweep_for_target_2019-\\d*[-][0-9]*[-][0-9]*[-][0-9]*[-][0-9]*[interpolated.csv][\\s]*");
    static Pattern whitespace_pattern = Pattern.compile("^\\S+");
    static Pattern double_pattern = Pattern.compile("[0-9]+.[0-9]+");
    //static Pattern whitespace_pattern = Pattern.compile("\p{IsWhite_Space}+");
@@ -71,7 +75,7 @@ class Probability_To_Csv{
       int row_count = 0;
       String current_subject = "";
       if(is_bag){
-         subject_pattern = Pattern.compile("./sweep/sweep_for_target_[0-9-]*interpolated.csv[\\s]*");
+         subject_pattern = Pattern.compile("./sweep[_newinterp]*/sweep_for_target_[0-9-]*interpolated.csv[\\s]*");
       }
       while ((thisLine = dis.readLine()) != null){
          Matcher subject_matcher = subject_pattern.matcher(thisLine);
@@ -110,8 +114,15 @@ class Probability_To_Csv{
          header_map.put(subject, subject_map);
       }
       String header = String.format("%s)",cols[0]);
+      String probability = "";
+      try{
       String[] temp = cols[1].split(" = ");
-      String probability = temp[temp.length-1];
+      probability = temp[temp.length-1];
+      } catch(ArrayIndexOutOfBoundsException ex){
+	ex.printStackTrace();
+	out.println("subject:"+subject+", line:"+line);
+	System.exit(0);
+      }
       /*out.format("subject_map.put(%s, %s)%n",header,probability);
       out.format("subject_map == null? %s%n",(subject_map == null));*/
       if(!headers.contains(header)){
