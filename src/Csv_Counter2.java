@@ -178,14 +178,137 @@ public class Csv_Counter2{
                            count_map.get(var_name).put(key3, 1.0);
                         }
                      }
-                     
+                  } else if (var_name.equals("CurrentBrake_MachineDelta")){
+                     double dd = Double.parseDouble(row[index]);
+                     String key1 = "CurrentBrake_Machine>0";
+                     String key2 = "CurrentBrake_Machine<0";
+                     String key3 = "CurrentBrake_Machine==0";
+                     double th1 = 0;
+                     if(dd > 0){
+                        try{
+                           double d = count_map.get(var_name).get(key1);
+                           count_map.get(var_name).put(key1, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key1, 1.0);
+                        }
+                     } else if(dd < 0){
+                        try{
+                           double d = count_map.get(var_name).get(key2);
+                           count_map.get(var_name).put(key2, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key2, 1.0);
+                        }
+                     } else {
+                        try{
+                           double d = count_map.get(var_name).get(key3);
+                           count_map.get(var_name).put(key3, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key3, 1.0);
+                        }
+                     }
+                  } else if (var_name.equals("CurrentThrottle_MachineDelta")){
+                     double dd = Double.parseDouble(row[index]);
+                     String key1 = "CurrentThrottle_Machine>0";
+                     String key2 = "CurrentThrottle_Machine<0";
+                     String key3 = "CurrentThrottle_Machine==0";
+                     double th1 = 0;
+                     if(dd > th1){
+                        try{
+                           double d = count_map.get(var_name).get(key1);
+                           count_map.get(var_name).put(key1, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key1, 1.0);
+                        }
+                     } else if(dd < th1){
+                        try{
+                           double d = count_map.get(var_name).get(key2);
+                           count_map.get(var_name).put(key2, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key2, 1.0);
+                        }
+                     } else {
+                        try{
+                           double d = count_map.get(var_name).get(key3);
+                           count_map.get(var_name).put(key3, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key3, 1.0);
+                        }
+                     }
+                  } else if (var_name.equals("CurrentGear_MachineDelta")){
+                     double dd = Double.parseDouble(row[index]);
+                     String key1 = "CurrentGear_Machine>0";
+                     String key2 = "CurrentGear_Machine<0";
+                     String key3 = "CurrentGear_Machine==0";
+                     double th1 = 0;
+                     if(dd > 0){
+                        try{
+                           double d = count_map.get(var_name).get(key1);
+                           count_map.get(var_name).put(key1, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key1, 1.0);
+                        }
+                     } else if(dd < 0){
+                        try{
+                           double d = count_map.get(var_name).get(key2);
+                           count_map.get(var_name).put(key2, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key2, 1.0);
+                        }
+                     } else {
+                        try{
+                           double d = count_map.get(var_name).get(key3);
+                           count_map.get(var_name).put(key3, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key3, 1.0);
+                        }
+                     }
+                  } else if (var_name.equals("GSR_HumanDelta")){
+                     double dd = Double.parseDouble(row[index]);
+                     String key1 = "GSR_Human>0";
+                     String key2 = "GSR_Human<0";
+                     String key3 = "GSR_Human==0";
+                     double th1 = 0;
+                     if(dd > 0){
+                        try{
+                           double d = count_map.get(var_name).get(key1);
+                           count_map.get(var_name).put(key1, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key1, 1.0);
+                        }
+                     } else if(dd < 0){
+                        try{
+                           double d = count_map.get(var_name).get(key2);
+                           count_map.get(var_name).put(key2, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key2, 1.0);
+                        }
+                     } else {
+                        try{
+                           double d = count_map.get(var_name).get(key3);
+                           count_map.get(var_name).put(key3, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key3, 1.0);
+                        }
+                     }
                   } else if (var_name.contains("velocity.linear_y")) {
                      double dd = 0;
                      try{
                         dd = round(Double.parseDouble(row[index]), 2);
                      } catch(java.lang.NumberFormatException ex){}
-                     if(Math.abs(dd) < 0.25){
-                        String key = "/velocity.linear_y<0.25&&velocity.linear_y>-0.25";
+                     if(Math.abs(dd) < 0.1){
+                        String key = "/velocity.linear_y<0.1&&velocity.linear_y>-0.1";
+                        try {
+                           double d = count_map.get(var_name).get(key);
+                           count_map.get(var_name).put(key, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key, 1.0);
+                        } catch(ArrayIndexOutOfBoundsException e){
+                           e.printStackTrace();
+                           //System.exit(0);
+                        }
+                     
+                     } else if(Math.abs(dd) < 0.25){
+                        String key = "/velocity.linear_y<0.25&&/velocity.linear_y>=0.1||&&velocity.linear_y>-0.25&&/velocity.linear_y<=-0.1";
                         try {
                            double d = count_map.get(var_name).get(key);
                            count_map.get(var_name).put(key, ++d);
@@ -254,7 +377,7 @@ public class Csv_Counter2{
                            e.printStackTrace();
                            //System.exit(0);
                         }
-                        
+                  
                   } else if (var_name.contains("TELLO")) {
                      double dd = 0;
                      try{
