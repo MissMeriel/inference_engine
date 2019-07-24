@@ -290,6 +290,34 @@ public class Csv_Counter2{
                            count_map.get(var_name).put(key3, 1.0);
                         }
                      }
+                  } else if (var_name.equals("ModeDelta")){
+                     double dd = Double.parseDouble(row[index]);
+                     String key1 = "Mode==auto->manual";
+                     String key2 = "Mode==manual->auto";
+                     String key3 = "Mode constant";
+                     double th1 = 0;
+                     if(dd > 0){
+                        try{
+                           double d = count_map.get(var_name).get(key1);
+                           count_map.get(var_name).put(key1, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key1, 1.0);
+                        }
+                     } else if(dd < 0){
+                        try{
+                           double d = count_map.get(var_name).get(key2);
+                           count_map.get(var_name).put(key2, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key2, 1.0);
+                        }
+                     } else {
+                        try{
+                           double d = count_map.get(var_name).get(key3);
+                           count_map.get(var_name).put(key3, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key3, 1.0);
+                        }
+                     }
                   } else if (var_name.contains("velocity.linear_y")) {
                      double dd = 0;
                      try{

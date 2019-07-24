@@ -92,6 +92,7 @@ terminal SymbolValue LOGICAL_OR;
 terminal SymbolValue SEMI;
 terminal SymbolValue COMMA;
 terminal SymbolValue COMMENT;
+terminal SymbolValue STRING_TRANSITION;
 non terminal program;
 non terminal ArrayList<String> vars;
 non terminal ArrayList<ConstraintEvent> constraints;

@@ -4,7 +4,7 @@ source /etc/profile.d/modules.sh
 module load java
 
 rootdir="./subjecttraces"
-outfile="driving_allvars.txt"
+outfile="driving_allvars2.txt"
 pattern=''
 echo "" > $outfile
 for D in `find ${rootdir} -mindepth 1 -maxdepth 1`; do

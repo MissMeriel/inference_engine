@@ -13,6 +13,8 @@ public class Bound{
    public HashMap<String, Predicate<Object>> tester_complements = new HashMap<String, Predicate<Object>>();
    public Predicate<Object> tester;
    public Predicate<Object> tester_complement;
+   public Predicate<Object> string_tester;
+   public Predicate<Object> string_tester_complement;
    //public ArrayList<Predicate<Double> = new ArrayList<Predicate<Double>>();
    
    public Bound(String var_name, String id, Predicate<Object> tester){

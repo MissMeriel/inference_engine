@@ -53,7 +53,7 @@ public class TypedBayesianEngine extends BasicEngine {
          RawType rawtype = Global.types.get(voi_name);
          switch(rawtype){
             case INTDELTA:
-            case DOUBLEDELTA:{
+            case DOUBLEDELTA: {
                //out.println("initialize_delta_trackers(): var_name: "+voi_name);
                //delta_trackers.put(voi_name, new HashMap<String, DeltaTracker>());
                double delta = Global.deltas.get(voi_name);
@@ -79,6 +79,13 @@ public class TypedBayesianEngine extends BasicEngine {
                dt.set_next_values(next_values);
                dt.set_last_values(last_values);
                break;}
+            /*case STRINGDELTA: {
+               double delta = Global.deltas.get(voi_name);
+               StringDeltaTracker dt = new StringDeltaTracker(voi_name, delta, 0.0);
+               delta_trackers.put(voi_name, dt);
+               //initialize next_values with the next delta values
+               
+               break;}*/
          }
       }
       //System.exit(0);
@@ -107,7 +114,6 @@ public class TypedBayesianEngine extends BasicEngine {
          }
       }
       //TODO: do same for Global.givens and Global.events
-      
    }
    
    /**
@@ -251,7 +257,8 @@ public class TypedBayesianEngine extends BasicEngine {
             case DOUBLEEXP:
             case STRINGEXP:
             case INTDELTA:
-            case DOUBLEDELTA: {
+            case DOUBLEDELTA:
+            case STRINGDELTA: {
                HashMap<String, Predicate<Object>> bound_id_map = Global.bound_ids.get(voi_name);
                Set<String> keys = bound_id_map.keySet();
                for(String key: keys){
@@ -359,6 +366,22 @@ public class TypedBayesianEngine extends BasicEngine {
                   break;}
                case INTDELTA:
                case DOUBLEDELTA:{
+                  DeltaTracker dt = delta_trackers.get(voi_name);
+                  try{
+                     event_val = new Double(dt.compute_next_delta()).toString();
+                  } catch(DeltaException de){
+                     //out.println(de.getMessage());
+                     event_val = "0.0";
+                  }
+                  //make new DeltaEvent
+                  //out.format("voi_name=%s event_val=%s%n",voi_name,event_val);
+                  Predicate<Object> tester = get_tester(voi_name, Double.parseDouble(event_val));
+                  //out.format("get_tester_id(%s, %s);%n",voi_name,Double.parseDouble(event_val));
+                  String tester_id = get_tester_id(voi_name, Double.parseDouble(event_val));
+                  double delta = Global.deltas.get(voi_name);
+                  be_test = new DeltaEvent<Double>(voi_name, tester_id, prior, tester, delta);
+                  break;}
+               case STRINGDELTA:{
                   DeltaTracker dt = delta_trackers.get(voi_name);
                   try{
                      event_val = new Double(dt.compute_next_delta()).toString();

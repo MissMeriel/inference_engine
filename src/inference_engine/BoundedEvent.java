@@ -103,7 +103,8 @@ public class BoundedEvent<T> extends BayesianEvent<T>{
                   str += String.format("\nP(%s|", id);
                   break;}
                case INTDELTA:
-               case DOUBLEDELTA: {
+               case DOUBLEDELTA:
+               case STRINGDELTA: {
                   str += String.format("\nP(rate of change of %s|", id);
                   break;}
             }
@@ -120,7 +121,8 @@ public class BoundedEvent<T> extends BayesianEvent<T>{
                   str += String.format("%s) ", key2);
                   break;}
                case INTDELTA:
-               case DOUBLEDELTA: {
+               case DOUBLEDELTA:
+               case STRINGDELTA: {
                   str += String.format("rate of change of %s) ", key2);
                   break;}
             }

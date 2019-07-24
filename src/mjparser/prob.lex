@@ -42,6 +42,7 @@ import java_cup.runtime.Symbol;
 ">=" { return new Symbol(sym.GTEQ, new SymbolValue(yyline+1, yychar+1, yytext()));}
 "&&" { return new Symbol(sym.LOGICAL_AND, new SymbolValue(yyline+1, yychar+1, yytext()));}
 "||" { return new Symbol(sym.LOGICAL_OR, new SymbolValue(yyline+1, yychar+1, yytext()));}
+"->" { return new Symbol(sym.STRING_TRANSITION, new SymbolValue(yyline+1, yychar+1, yytext()));}
 "INT" { return new Symbol(sym.RAWTYPE, new SymbolValue(yyline+1, yychar+1, yytext())); }
 "DOUBLE" { return new Symbol(sym.RAWTYPE, new SymbolValue(yyline+1, yychar+1, yytext())); }
 "STRING" { return new Symbol(sym.RAWTYPE, new SymbolValue(yyline+1, yychar+1, yytext())); }
@@ -50,6 +51,7 @@ import java_cup.runtime.Symbol;
 "STRINGEXP" { return new Symbol(sym.RAWTYPE, new SymbolValue(yyline+1, yychar+1, yytext())); }
 "INTDELTA" { return new Symbol(sym.RAWTYPE, new SymbolValue(yyline+1, yychar+1, yytext())); }
 "DOUBLEDELTA" { return new Symbol(sym.RAWTYPE, new SymbolValue(yyline+1, yychar+1, yytext())); }
+"STRINGDELTA" { return new Symbol(sym.RAWTYPE, new SymbolValue(yyline+1, yychar+1, yytext())); }
 ([a-zA-Z]|[ \t])([a-zA-Z]|[0-9]|[ \t])* {return new Symbol(sym.STRING, new SymbolValue(yyline+1, yychar+1, yytext()));}
 ([a-zA-Z]|[_/])([a-zA-Z]|[0-9]|[_./])* {return new Symbol(sym.VARIABLE, new SymbolValue(yyline+1, yychar+1, yytext()));}
 [ \t\r\n\f] { /* ignore white space. */ }

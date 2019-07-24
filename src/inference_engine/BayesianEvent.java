@@ -85,7 +85,8 @@ public class BayesianEvent<T> extends TypedEvent{
                   case DOUBLEEXP:
                   case STRINGEXP:
                   case INTDELTA:
-                  case DOUBLEDELTA:{
+                  case DOUBLEDELTA:
+                  case STRINGDELTA: {
                      HashMap<String, Predicate<Object>> id_map = Global.bound_ids.get(voi);
                      Set<String> keys = id_map.keySet();
                      for(String key : keys){
@@ -160,7 +161,8 @@ public class BayesianEvent<T> extends TypedEvent{
                      }
                      break;}
                   case INTDELTA:
-                  case DOUBLEDELTA:{
+                  case DOUBLEDELTA:
+                  case STRINGDELTA: {
                      if(!temp_found){
                         HashMap<String, Predicate<Object>> id_map = Global.bound_ids.get(voi);
                         Set<String> keys = id_map.keySet();
@@ -267,7 +269,8 @@ public class BayesianEvent<T> extends TypedEvent{
          RawType type_enum = Global.types.get(voi_name);
          switch(type_enum){
             case DOUBLEDELTA:
-            case INTDELTA: {
+            case INTDELTA:
+            case STRINGDELTA: {
                pBA_counts = pBAs.get(event_val);
             break;}
          }
@@ -476,6 +479,7 @@ public class BayesianEvent<T> extends TypedEvent{
       out.println( str);
    }
    
+   
    public void print_total_probabilities(){
       //System.out.println(cumulative_probabilities);
       String str = "{";
@@ -550,7 +554,8 @@ public class BayesianEvent<T> extends TypedEvent{
                   str += String.format("%s) ", key2);
                   break;}
                case INTDELTA:
-               case DOUBLEDELTA: {
+               case DOUBLEDELTA:
+               case STRINGDELTA: {
                   str += String.format("rate of change of %s) ", key2);
                   break;}
             }
