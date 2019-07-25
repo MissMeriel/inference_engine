@@ -1,7 +1,7 @@
 #!/bin/bash
 
-rootdir="./sweep_newinterp/"
-outfile="sweep_newinterp_allvars3.txt"
+rootdir="./sweep_newinterp2/"
+outfile="sweep_newinterp_allvars4.txt"
 config_file=" example_files/sweep_allvars.bayesianconfig"
 priors_file="example_files/sweep_allvars.priors"
 pattern=''

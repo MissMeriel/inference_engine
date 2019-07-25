@@ -353,6 +353,7 @@ public class TypedBayesianEngine extends BasicEngine {
                   be_test = new BoundedEvent<Integer>(voi_name, tester_id, prior, tester);
                   break;}
                case DOUBLEEXP:{
+		  //out.format("getting tester for %s %s%n", voi_name,event_val);
                   Predicate<Object> tester = get_tester(voi_name, Double.parseDouble(event_val));
                   String tester_id = get_tester_id(voi_name, Double.parseDouble(event_val));
                   //if(debug) out.format("Got tester %s%n", tester_id);
@@ -850,7 +851,14 @@ public class TypedBayesianEngine extends BasicEngine {
                case INTEXP:
                case DOUBLEEXP:
                case STRINGEXP:{
-                  Predicate<Object> tester = Global.bound_ids.get(voi_name).get(key);
+		  Predicate<Object> tester = null;
+		  try{
+                  tester = Global.bound_ids.get(voi_name).get(key);
+			//debugBayesianEngine.info("Getting tester for "+voi_name+" "+key);
+			//debugBayesianEngine.info("val == null?"+(val == null)); 
+		  } catch(Exception e) {
+			System.exit(0);
+		  }
                   if(tester.test((Object)val)){
                      found = true;
                      closest_match_key = key;

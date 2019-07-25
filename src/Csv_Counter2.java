@@ -32,12 +32,17 @@ public class Csv_Counter2{
       int positive_count = 0;
       int zero_count = 0;
       out.format("%s rows, %s columns%n",dims[0],dims[1]);
+      out.format("Number of columns in AL: %s%n",columns.size());
       initialize_hashmap(columns);
       for(int i = 1; i < dims[0]; i++){
          out.println(i+" out of "+ dims[0]);
          if ((thisLine = dis.readLine()) != null){
             String[] cols = new String[]{};
-            String[] row = StringUtils.splitPreserveAllTokens(thisLine, ",");
+            String[] row = StringUtils.splitByWholeSeparatorPreserveAllTokens(thisLine, ",");
+            if(row.length < 97){
+               out.println("row # "+i+"\nrow length: "+row.length);
+               System.exit(0);
+            }
             for(String var_name : columns){
                try{
                   int index = columns.indexOf(var_name);
@@ -324,19 +329,20 @@ public class Csv_Counter2{
                         dd = round(Double.parseDouble(row[index]), 2);
                      } catch(java.lang.NumberFormatException ex){}
                      if(Math.abs(dd) < 0.1){
-                        String key = "/velocity.linear_y<0.1&&velocity.linear_y>-0.1";
+                        String key = "/velocity.linear_y<0.1&&/velocity.linear_y>-0.1";
                         try {
                            double d = count_map.get(var_name).get(key);
                            count_map.get(var_name).put(key, ++d);
                         } catch(NullPointerException ex){
                            count_map.get(var_name).put(key, 1.0);
                         } catch(ArrayIndexOutOfBoundsException e){
+			   System.out.println("row "+i);
                            e.printStackTrace();
-                           //System.exit(0);
+                           System.exit(0);
                         }
                      
                      } else if(Math.abs(dd) < 0.25){
-                        String key = "/velocity.linear_y<0.25&&/velocity.linear_y>=0.1||&&velocity.linear_y>-0.25&&/velocity.linear_y<=-0.1";
+                        String key = "/velocity.linear_y<0.25&&/velocity.linear_y>=0.1||/velocity.linear_y>-0.25&&/velocity.linear_y<=-0.1";
                         try {
                            double d = count_map.get(var_name).get(key);
                            count_map.get(var_name).put(key, ++d);
@@ -368,7 +374,7 @@ public class Csv_Counter2{
                            e.printStackTrace();
                            //System.exit(0);
                         }
-                     } else if(Math.abs(dd) < 0.1) {
+                     } else if(Math.abs(dd) < 1.0) {
                         String key = "/velocity.linear_y>=0.75&&/velocity.linear_y<1||/velocity.linear_y<=-0.75&&/velocity.linear_y>-1";
                         try {
                            double d = count_map.get(var_name).get(key);
@@ -427,7 +433,7 @@ public class Csv_Counter2{
                         dd = Double.parseDouble(row[index]);
                      } catch(java.lang.NumberFormatException ex){}
                      if(dd < 0.2){
-                        String key = "/user_input.reaction_time_secs < 0.2";
+                        String key = "/user_input.reaction_time_secs<0.2";
                         try{
                            double d = count_map.get(var_name).get(key);
                            count_map.get(var_name).put(key, ++d);
@@ -435,7 +441,7 @@ public class Csv_Counter2{
                            count_map.get(var_name).put(key, 1.0);
                         } catch(ArrayIndexOutOfBoundsException e){}
                      } else if(dd < 0.4){
-                        String key = "0.2 <= /user_input.reaction_time_secs < 0.4";
+                        String key = "/user_input.reaction_time_secs>=0.2&&/user_input.reaction_time_secs<0.4";
                         try{
                            double d = count_map.get(var_name).get(key);
                            count_map.get(var_name).put(key, ++d);
@@ -443,7 +449,7 @@ public class Csv_Counter2{
                            count_map.get(var_name).put(key, 1.0);
                         } catch(ArrayIndexOutOfBoundsException e){}
                      } else if(dd < 0.6){
-                        String key = "0.4 <= /user_input.reaction_time_secs < 0.6";
+                        String key = "/user_input.reaction_time_secs>=0.4&&/user_input.reaction_time_secs<0.6";
                         try{
                            double d = count_map.get(var_name).get(key);
                            count_map.get(var_name).put(key, ++d);
@@ -451,55 +457,47 @@ public class Csv_Counter2{
                            count_map.get(var_name).put(key, 1.0);
                         } catch(ArrayIndexOutOfBoundsException e){}
                      } else if(dd < 0.8){
-                        String key = "0.6 <= /user_input.reaction_time_secs < 0.8";
+                        String key = "/user_input.reaction_time_secs>=0.6&&/user_input.reaction_time_secs<0.8";
                         try{
                            double d = count_map.get(var_name).get(key);
                            count_map.get(var_name).put(key, ++d);
                         } catch(NullPointerException ex){
                            count_map.get(var_name).put(key, 1.0);
                         } catch(ArrayIndexOutOfBoundsException e){}
-                     } else if(dd < 1){
-                        String key = "0.8 <= /user_input.reaction_time_secs < 1";
+                     } else if(dd < 1.0){
+                        String key = "/user_input.reaction_time_secs>=0.8&&/user_input.reaction_time_secs<1";
                         try{
                            double d = count_map.get(var_name).get(key);
                            count_map.get(var_name).put(key, ++d);
                         } catch(NullPointerException ex){
                            count_map.get(var_name).put(key, 1.0);
                         } catch(ArrayIndexOutOfBoundsException e){} 
-                     } else if(dd < 1){
-                        String key = "0.5 <= /user_input.reaction_time_secs < 1";
-                        try{
-                           double d = count_map.get(var_name).get(key);
-                           count_map.get(var_name).put(key, ++d);
-                        } catch(NullPointerException ex){
-                           count_map.get(var_name).put(key, 1.0);
-                        } catch(ArrayIndexOutOfBoundsException e){} 
-                     } else if(dd < 3){
-                        String key = "1 <= /user_input.reaction_time_secs < 3";
+                     } else if(dd < 3.0){
+                        String key = "/user_input.reaction_time_secs>=1&&/user_input.reaction_time_secs<3";
                         try{
                            double d = count_map.get(var_name).get(key);
                            count_map.get(var_name).put(key, ++d);
                         } catch(NullPointerException ex){
                            count_map.get(var_name).put(key, 1.0);
                         } catch(ArrayIndexOutOfBoundsException e){}                     
-                     } else if(dd < 6){
-                        String key = "3 <= /user_input.reaction_time_secs < 6";
+                     } else if(dd < 6.0){
+                        String key = "/user_input.reaction_time_secs>=3&&/user_input.reaction_time_secs<6";
                         try{
                            double d = count_map.get(var_name).get(key);
                            count_map.get(var_name).put(key, ++d);
                         } catch(NullPointerException ex){
                            count_map.get(var_name).put(key, 1.0);
                         } catch(ArrayIndexOutOfBoundsException e){}
-                     } else if(dd < 9){
-                        String key = "6 <= /user_input.reaction_time_secs < 9";
+                     } else if(dd < 9.0){
+                        String key = "/user_input.reaction_time_secs>=6&&/user_input.reaction_time_secs<9";
                         try{
                            double d = count_map.get(var_name).get(key);
                            count_map.get(var_name).put(key, ++d);
                         } catch(NullPointerException ex){
                            count_map.get(var_name).put(key, 1.0);
                         } catch(ArrayIndexOutOfBoundsException e){}
-                     } else if (dd < 12){
-                        String key = "9 <= /user_input.reaction_time_secs < 12";
+                     } else if (dd < 12.0){
+                        String key = "/user_input.reaction_time_secs>=9&&/user_input.reaction_time_secs<12";
                         try{
                            double d = count_map.get(var_name).get(key);
                            count_map.get(var_name).put(key, ++d);
@@ -507,7 +505,7 @@ public class Csv_Counter2{
                            count_map.get(var_name).put(key, 1.0);
                         } catch(ArrayIndexOutOfBoundsException e){}
                      } else if (dd < 15){
-                        String key = "12 <= /user_input.reaction_time_secs < 15";
+                        String key = "/user_input.reaction_time_secs>=12&&/user_input.reaction_time_secs<15";
                         try{
                            double d = count_map.get(var_name).get(key);
                            count_map.get(var_name).put(key, ++d);
@@ -515,7 +513,7 @@ public class Csv_Counter2{
                            count_map.get(var_name).put(key, 1.0);
                         } catch(ArrayIndexOutOfBoundsException e){}
                      } else {
-                        String key = "/user_input.reaction_time_secs >= 15";
+                        String key = "/user_input.reaction_time_secs>=15";
                         try{
                            double d = count_map.get(var_name).get(key);
                            count_map.get(var_name).put(key, ++d);
@@ -545,7 +543,7 @@ public class Csv_Counter2{
                         dd = Double.parseDouble(row[index]);
                      } catch(java.lang.NumberFormatException ex){}
                      if(dd < 20){
-                        String key = "/flight_data.battery_percentage < 20";
+                        String key = "/flight_data.battery_percentage<20";
                         try{
                            double d = count_map.get(var_name).get(key);
                            count_map.get(var_name).put(key, ++d);
@@ -553,7 +551,7 @@ public class Csv_Counter2{
                            count_map.get(var_name).put(key, 1.0);
                         } catch(ArrayIndexOutOfBoundsException e){}
                      } else if (dd < 40){
-                        String key = "20 <= /flight_data.battery_percentage < 40";
+                        String key = "/flight_data.battery_percentage>=20&&/flight_data.battery_percentage<40";
                         try{
                            double d = count_map.get(var_name).get(key);
                            count_map.get(var_name).put(key, ++d);
@@ -561,7 +559,7 @@ public class Csv_Counter2{
                            count_map.get(var_name).put(key, 1.0);
                         } catch(ArrayIndexOutOfBoundsException e){}
                      } else if (dd < 60){
-                        String key = "40 <= /flight_data.battery_percentage < 60";
+                        String key = "/flight_data.battery_percentage>=40&&/flight_data.battery_percentage<60";
                         try{
                            double d = count_map.get(var_name).get(key);
                            count_map.get(var_name).put(key, ++d);
@@ -570,7 +568,7 @@ public class Csv_Counter2{
                         } catch(ArrayIndexOutOfBoundsException e){}
                         
                      } else if(dd < 80){
-                        String key = " 60 <= /flight_data.battery_percentage < 80";
+                        String key = "/flight_data.battery_percentage>=60&&/flight_data.battery_percentage<80";
                         try{
                            double d = count_map.get(var_name).get(key);
                            count_map.get(var_name).put(key, ++d);
@@ -578,7 +576,7 @@ public class Csv_Counter2{
                            count_map.get(var_name).put(key, 1.0);
                         } catch(ArrayIndexOutOfBoundsException e){}
                      } else {
-                        String key = "/flight_data.battery_percentage > 80";
+                        String key = "/flight_data.battery_percentage>80";
                         try{
                            double d = count_map.get(var_name).get(key);
                            count_map.get(var_name).put(key, ++d);
@@ -597,7 +595,9 @@ public class Csv_Counter2{
                      
                      HashMap<String, Double> temp_map = count_map.get(var_name);
                      try{
-                        //out.println("Getting index "+index+" from row "+i+":"+Arrays.toString(row));
+                        out.println("Getting "+var_name+" @ index "+index+" from row "+i+":"+Arrays.toString(row));
+			
+      			out.format("Number of columns in AL: %s%n",columns.size());
                         String str = row[index];
                         if(str.equals("")){continue;}
                         /*out.println(temp_map == null);
@@ -619,7 +619,7 @@ public class Csv_Counter2{
                         out.println("row length: "+row.length);
                         out.println("column name: "+var_name);
                         out.println("column index: "+index);
-                        //System.exit(0);
+                        System.exit(0);
                      }
                   }
                }catch(ArrayIndexOutOfBoundsException e){}

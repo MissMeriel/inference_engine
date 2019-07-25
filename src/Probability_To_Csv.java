@@ -75,7 +75,7 @@ class Probability_To_Csv{
       int row_count = 0;
       String current_subject = "";
       if(is_bag){
-         subject_pattern = Pattern.compile("./sweep[_newinterp]*/sweep_for_target_[0-9-]*interpolated.csv[\\s]*");
+         subject_pattern = Pattern.compile("./sweep[_newinterp2]*/sweep_for_target_[0-9-]*interpolated.csv[\\s]*");
       }
       while ((thisLine = dis.readLine()) != null){
          Matcher subject_matcher = subject_pattern.matcher(thisLine);
