@@ -328,21 +328,31 @@ public class Csv_Counter2{
                      try{
                         dd = round(Double.parseDouble(row[index]), 2);
                      } catch(java.lang.NumberFormatException ex){}
-                     if(Math.abs(dd) < 0.1){
-                        String key = "/velocity.linear_y<0.1&&/velocity.linear_y>-0.1";
+                     if(Math.abs(dd) < 0.01){
+                        String key = "/velocity.linear_y<0.01&&/velocity.linear_y>-0.01";
                         try {
                            double d = count_map.get(var_name).get(key);
                            count_map.get(var_name).put(key, ++d);
                         } catch(NullPointerException ex){
                            count_map.get(var_name).put(key, 1.0);
                         } catch(ArrayIndexOutOfBoundsException e){
-			   System.out.println("row "+i);
                            e.printStackTrace();
                            System.exit(0);
                         }
-                     
+                        
+                     } else if(Math.abs(dd) < 0.1){
+                        String key = "/velocity.linear_y>=0.01&&/velocity.linear_y<0.1||/velocity.linear_y<=-0.01&&/velocity.linear_y>-0.1";
+                        try {
+                           double d = count_map.get(var_name).get(key);
+                           count_map.get(var_name).put(key, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key, 1.0);
+                        } catch(ArrayIndexOutOfBoundsException e){
+                           e.printStackTrace();
+                           System.exit(0);
+                        }
                      } else if(Math.abs(dd) < 0.25){
-                        String key = "/velocity.linear_y<0.25&&/velocity.linear_y>=0.1||/velocity.linear_y>-0.25&&/velocity.linear_y<=-0.1";
+                        String key = "/velocity.linear_y>=0.1&&/velocity.linear_y<0.25||/velocity.linear_y<=-0.1&&/velocity.linear_y>-0.25";
                         try {
                            double d = count_map.get(var_name).get(key);
                            count_map.get(var_name).put(key, ++d);
@@ -363,8 +373,8 @@ public class Csv_Counter2{
                            e.printStackTrace();
                            //System.exit(0);
                         }
-                     } else if(Math.abs(dd) < 0.75) {
-                        String key = "/velocity.linear_y>=0.5&&/velocity.linear_y<0.75||/velocity.linear_y<=-0.5&&/velocity.linear_y>-0.75";
+                     } else {
+                        String key = "/velocity.linear_y>=0.5||/velocity.linear_y<=-0.5";
                         try {
                            double d = count_map.get(var_name).get(key);
                            count_map.get(var_name).put(key, ++d);
@@ -374,8 +384,48 @@ public class Csv_Counter2{
                            e.printStackTrace();
                            //System.exit(0);
                         }
-                     } else if(Math.abs(dd) < 1.0) {
-                        String key = "/velocity.linear_y>=0.75&&/velocity.linear_y<1||/velocity.linear_y<=-0.75&&/velocity.linear_y>-1";
+                     }
+                  } else if (var_name.contains("velocity.linear_x")) {
+                     double dd = 0;
+                     try{
+                        dd = round(Double.parseDouble(row[index]), 2);
+                     } catch(java.lang.NumberFormatException ex){}
+                     if(Math.abs(dd) < 0.01){
+                        String key = "/velocity.linear_x<0.01&&/velocity.linear_x>-0.01";
+                        try {
+                           double d = count_map.get(var_name).get(key);
+                           count_map.get(var_name).put(key, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key, 1.0);
+                        } catch(ArrayIndexOutOfBoundsException e){
+                           e.printStackTrace();
+                           System.exit(0);
+                        }
+                        
+                     } else if(Math.abs(dd) < 0.1){
+                        String key = "/velocity.linear_x>=0.01&&/velocity.linear_x<0.1||/velocity.linear_x<=-0.01&&/velocity.linear_x>-0.1";
+                        try {
+                           double d = count_map.get(var_name).get(key);
+                           count_map.get(var_name).put(key, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key, 1.0);
+                        } catch(ArrayIndexOutOfBoundsException e){
+                           e.printStackTrace();
+                           System.exit(0);
+                        }
+                     } else if(Math.abs(dd) < 0.25){
+                        String key = "/velocity.linear_x>=0.1&&/velocity.linear_x<0.25||/velocity.linear_x<=-0.1&&/velocity.linear_x>-0.25";
+                        try {
+                           double d = count_map.get(var_name).get(key);
+                           count_map.get(var_name).put(key, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key, 1.0);
+                        } catch(ArrayIndexOutOfBoundsException e){
+                           e.printStackTrace();
+                           //System.exit(0);
+                        }
+                     } else if(Math.abs(dd) < 0.5) {
+                        String key = "/velocity.linear_x>=0.25&&/velocity.linear_x<0.5||/velocity.linear_x<=-0.25&&/velocity.linear_x>-0.5";
                         try {
                            double d = count_map.get(var_name).get(key);
                            count_map.get(var_name).put(key, ++d);
@@ -386,7 +436,7 @@ public class Csv_Counter2{
                            //System.exit(0);
                         }
                      } else {
-                        String key = "/velocity.linear_y>1||/velocity.linear_y<-1";
+                        String key = "/velocity.linear_x>=0.5||/velocity.linear_x<=-0.5";
                         try {
                            double d = count_map.get(var_name).get(key);
                            count_map.get(var_name).put(key, ++d);
