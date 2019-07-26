@@ -1,5 +1,7 @@
 GIVENS
-/velocity.linear_y,DOUBLEEXP,/velocity.linear_y>=0.5&&/velocity.linear_y<0.75||/velocity.linear_y<=-0.5&&/velocity.linear_y>-0.75,/velocity.linear_y<0.1&&/velocity.linear_y>-0.1,/velocity.linear_y<0.25&&/velocity.linear_y>=0.1||/velocity.linear_y>-0.25&&/velocity.linear_y<=-0.1,/velocity.linear_y>0.75||/velocity.linear_y<-0.75,/velocity.linear_y>=0.25&&/velocity.linear_y<0.5||/velocity.linear_y<=-0.25&&/velocity.linear_y>-0.5
+/velocity.linear_y,DOUBLEEXP,/velocity.linear_y>=0.01&&/velocity.linear_y<0.1||/velocity.linear_y<=-0.01&&/velocity.linear_y>-0.1,/velocity.linear_y>=0.1&&/velocity.linear_y<0.25||/velocity.linear_y<=-0.1&&/velocity.linear_y>-0.25,/velocity.linear_y>=0.25&&/velocity.linear_y<0.5||/velocity.linear_y<=-0.25&&/velocity.linear_y>-0.5,/velocity.linear_y>=0.5||/velocity.linear_y<=-0.5,/velocity.linear_y<0.01&&/velocity.linear_y>-0.01
+/velocity.linear_x,DOUBLEEXP,/velocity.linear_x>=0.25&&/velocity.linear_x<0.5||/velocity.linear_x<=-0.25&&/velocity.linear_x>-0.5,/velocity.linear_x<0.01&&/velocity.linear_x>-0.01,/velocity.linear_x>=0.01&&/velocity.linear_x<0.1||/velocity.linear_x<=-0.01&&/velocity.linear_x>-0.1,/velocity.linear_x>=0.5||/velocity.linear_x<=-0.5,/velocity.linear_x>=0.1&&/velocity.linear_x<0.25||/velocity.linear_x<=-0.1&&/velocity.linear_x>-0.25
+/visp_auto_tracker/status.data,STRING
 /machine_state.data,STRING
 /mission_state.data,STRING
 /command_state.data,STRING

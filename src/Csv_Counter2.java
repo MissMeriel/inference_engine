@@ -40,7 +40,7 @@ public class Csv_Counter2{
             String[] cols = new String[]{};
             String[] row = StringUtils.splitByWholeSeparatorPreserveAllTokens(thisLine, ",");
             if(row.length < 97){
-               out.println("row # "+i+"\nrow length: "+row.length);
+               //out.println("row # "+i+"\nrow length: "+row.length);
                System.exit(0);
             }
             for(String var_name : columns){
@@ -645,9 +645,8 @@ public class Csv_Counter2{
                      
                      HashMap<String, Double> temp_map = count_map.get(var_name);
                      try{
-                        out.println("Getting "+var_name+" @ index "+index+" from row "+i+":"+Arrays.toString(row));
-			
-      			out.format("Number of columns in AL: %s%n",columns.size());
+                        //out.println("Getting "+var_name+" @ index "+index+" from row "+i+":"+Arrays.toString(row));
+      			//out.format("Number of columns in AL: %s%n",columns.size());
                         String str = row[index];
                         if(str.equals("")){continue;}
                         /*out.println(temp_map == null);
