@@ -22,6 +22,7 @@ public class TypedBayesianEngine extends BasicEngine {
    HashMap<String, HashMap<String, Double[]>> cumulative_probabilities = null;
    int trace_total;
    public static boolean debug = false;
+   public static boolean filter_by_average = true;
    //ArrayList<DeltaTracker> delta_trackers = null;
    HashMap<String, DeltaTracker> delta_trackers = null;
    
@@ -912,7 +913,7 @@ public class TypedBayesianEngine extends BasicEngine {
          BayesianEvent be = iter.next();
          switch(be.prior_attribution){
             case PROB_A:
-               String temp = be.generate_bayesian_probability(cumulative_probabilities);
+               String temp = be.generate_bayesian_probability(cumulative_probabilities, filter_by_average);
                str += temp + "\n\n";
                break;
          } // end switch

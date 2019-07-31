@@ -43,7 +43,7 @@ public class BoundedEvent<T> extends BayesianEvent<T>{
    }
    
    @Override
-   public String generate_bayesian_probability(HashMap<String, HashMap<String, Double[]>> cumulative_probabilities){
+   public String generate_bayesian_probability(HashMap<String, HashMap<String, Double[]>> cumulative_probabilities, boolean filter_by_average){
       debug = false;
       //if(true) out.format("%nENTER generate_bayesian_probability: for %s %s",var_name, id);
       String str = "";
@@ -51,6 +51,8 @@ public class BoundedEvent<T> extends BayesianEvent<T>{
       for(String key1 : keys1){
          HashMap<String, Double> val_map = (HashMap<String, Double>) pBAs.get(key1);
          Set<String> keys2 = val_map.keySet();
+         ArrayList<Double> family_probs = new ArrayList<Double>();
+         String event_str = "";
          for(String key2 : keys2){
             //Double[] A_arr = cumulative_probabilities.get(var_name).get(val.toString());
             if(debug) {
@@ -90,22 +92,23 @@ public class BoundedEvent<T> extends BayesianEvent<T>{
                out.format("pBA = (%.3f / %.3f) / %.3f = %.3f%n", val_map.get(key2), (double) A_arr[1].doubleValue(), actual_pA, pBA);
             }
             double pAB = (pA * pBA) / pB;
+            family_probs.add(pAB);
             RawType rawtype1 = Global.types.get(var_name);
             switch(rawtype1){
                case INT:
                case DOUBLE:
                case STRING:{
-                  str += String.format("\nP(%s|", id);
+                  event_str += String.format("\nP(%s|", id);
                   break;}
                case INTEXP:
                case DOUBLEEXP:
                case STRINGEXP: {
-                  str += String.format("\nP(%s|", id);
+                  event_str += String.format("\nP(%s|", id);
                   break;}
                case INTDELTA:
                case DOUBLEDELTA:
                case STRINGDELTA: {
-                  str += String.format("\nP(rate of change of %s|", id);
+                  event_str += String.format("\nP(rate of change of %s|", id);
                   break;}
             }
             RawType rawtype2 = Global.types.get(key1);
@@ -113,23 +116,23 @@ public class BoundedEvent<T> extends BayesianEvent<T>{
                case INT:
                case DOUBLE:
                case STRING:{
-                  str += String.format("%s=%s) ",key1,key2);
+                  event_str += String.format("%s=%s) ",key1,key2);
                   break;}
                case INTEXP:
                case DOUBLEEXP:
                case STRINGEXP: {
-                  str += String.format("%s) ", key2);
+                  event_str += String.format("%s) ", key2);
                   break;}
                case INTDELTA:
                case DOUBLEDELTA:
                case STRINGDELTA: {
-                  str += String.format("rate of change of %s) ", key2);
+                  event_str += String.format("rate of change of %s) ", key2);
                   break;}
             }
             //if(true)  str += String.format("= (%.3f * ((count of %s:%s)%.3f / %.3f)) / %.3f ", pA, key1,key2,val_map.get(key2), ((double)num_samples), pB);
-            if(debug)  str += String.format("= (%.3f * (%.3f / %.3f)) / %.3f ", pA, val_map.get(key2), ((double)num_samples), pB);
-            if(debug)  str += String.format("= %.3f / %.3f ", pA*pBA, pB);
-            str += String.format("= %.3f", pAB);
+            if(debug)  event_str += String.format("= (%.3f * (%.3f / %.3f)) / %.3f ", pA, val_map.get(key2), ((double)num_samples), pB);
+            if(debug)  event_str += String.format("= %.3f / %.3f ", pA*pBA, pB);
+            event_str += String.format("= %.3f", pAB);
             if(pAB > 1.0){
                out.println(str);
                out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
@@ -143,6 +146,15 @@ public class BoundedEvent<T> extends BayesianEvent<T>{
                //out.format("pBAs: "); print_pBAs();
                out.format("pBA = (%.3f / %.3f) / %.3f = %.3f%n", val_map.get(key2), (double) A_arr[1].doubleValue(), actual_pA, pBA);
                out.println("\n\n");
+            }
+         }// end keys2 foreach
+         if(filter_by_average){
+            boolean above_threshold = false;
+            for(double d : family_probs){
+               above_threshold = d >= 0.4 || above_threshold;
+            }
+            if(above_threshold){
+               str += event_str;
             }
          }
       }

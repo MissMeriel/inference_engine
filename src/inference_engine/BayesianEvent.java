@@ -500,7 +500,7 @@ public class BayesianEvent<T> extends TypedEvent{
    }
    
    
-   public String generate_bayesian_probability(HashMap<String, HashMap<String, Double[]>> cumulative_probabilities){
+   public String generate_bayesian_probability(HashMap<String, HashMap<String, Double[]>> cumulative_probabilities, boolean filter_by_average){
       debug = false;
       //if(debug) out.format("%nENTER generate_bayesian_probability: for %s %s",var_name, val.toString());
       String str = "";
@@ -508,6 +508,8 @@ public class BayesianEvent<T> extends TypedEvent{
       for(String key1 : keys1){
          HashMap<String, Double> val_map = pBAs.get(key1);
          Set<String> keys2 = val_map.keySet();
+         String event_str = "";
+         ArrayList<Double> family_probs = new ArrayList<Double>();
          for(String key2 : keys2){
             if(debug) {
                out.format("%ngenerate_bayesian_probability: cumulative_probabilities.get(%s).get(%s)=%n", key1, key2);
@@ -540,29 +542,30 @@ public class BayesianEvent<T> extends TypedEvent{
                out.format("pBA = (%.3f / %.3f) / %.3f = %.3f%n", val_map.get(key2), (double) A_arr[1].doubleValue(), actual_pA, pBA);
             }
             double pAB = (pA * pBA) / pB;
-            str += String.format("\nP(%s=%s|", var_name, val.toString());
+            family_probs.add(pAB);
+            event_str += String.format("\nP(%s=%s|", var_name, val.toString());
             RawType rawtype2 = Global.types.get(key1);
             switch(rawtype2){
                case INT:
                case DOUBLE:
                case STRING:{
-                  str += String.format("%s=%s) ",key1,key2);
+                  event_str += String.format("%s=%s) ",key1,key2);
                   break;}
                case INTEXP:
                case DOUBLEEXP:
                case STRINGEXP: {
-                  str += String.format("%s) ", key2);
+                  event_str += String.format("%s) ", key2);
                   break;}
                case INTDELTA:
                case DOUBLEDELTA:
                case STRINGDELTA: {
-                  str += String.format("rate of change of %s) ", key2);
+                  event_str += String.format("rate of change of %s) ", key2);
                   break;}
             }
             //str += String.format("\nP(%s=%s|%s=%s) ", var_name, val.toString(), key1, key2);
-            if(true)  str += String.format("= (%.3f * (%.3f / %.3f)) / %.3f ", pA, val_map.get(key2), ((double)num_samples), pB);
-            if(true)  str += String.format("= %.3f / %.3f ", pA*pBA, pB);
-            str += String.format("= %.3f", pAB);
+            if(true)  event_str += String.format("= (%.3f * (%.3f / %.3f)) / %.3f ", pA, val_map.get(key2), ((double)num_samples), pB);
+            if(true)  event_str += String.format("= %.3f / %.3f ", pA*pBA, pB);
+            event_str += String.format("= %.3f", pAB);
             if(pAB > 1.0){
                out.println(str);
                out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
@@ -582,6 +585,15 @@ public class BayesianEvent<T> extends TypedEvent{
                //out.format("pBAs: "); print_pBAs();
                out.format("pBA = (%.5f / %.5f) / %.5f = %.5f%n", val_map.get(key2), (double) A_arr[1].doubleValue(), actual_pA, pBA);
                out.println("\n\n");
+            }
+         } //end keys2 foreach
+         if(filter_by_average){
+            boolean above_threshold = false;
+            for(double d : family_probs){
+               above_threshold = d >= 0.4 || above_threshold;
+            }
+            if(above_threshold){
+               str += event_str;
             }
          }
       }
