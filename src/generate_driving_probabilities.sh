@@ -4,7 +4,7 @@ source /etc/profile.d/modules.sh
 module load java
 
 rootdir="./subjecttraces"
-outfile="driving_allvars_avgfilter1.txt"
+outfile="driving_testformatting.txt"
 pattern=''
 config_file="example_files/driving_allvars.bayesianconfig"
 priors_file="example_files/driving_allvars.priors"

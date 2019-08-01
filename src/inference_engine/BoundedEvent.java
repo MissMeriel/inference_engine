@@ -131,8 +131,8 @@ public class BoundedEvent<T> extends BayesianEvent<T>{
             }
             //if(true)  str += String.format("= (%.3f * ((count of %s:%s)%.3f / %.3f)) / %.3f ", pA, key1,key2,val_map.get(key2), ((double)num_samples), pB);
             if(debug)  event_str += String.format("= (%.3f * (%.3f / %.3f)) / %.3f ", pA, val_map.get(key2), ((double)num_samples), pB);
-            if(debug)  event_str += String.format("= %.3f / %.3f ", pA*pBA, pB);
-            event_str += String.format("= %.3f", pAB);
+            if(true)  event_str += String.format("= %.5f * %.5f / %.5f ", pA, pBA, pB);
+            event_str += String.format("= %.5f", pAB);
             if(pAB > 1.0){
                out.println(str);
                out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
@@ -156,6 +156,8 @@ public class BoundedEvent<T> extends BayesianEvent<T>{
             if(above_threshold){
                str += event_str;
             }
+         } else {
+            str += event_str;
          }
       }
       return str;

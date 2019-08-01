@@ -32,7 +32,7 @@ class Probability_To_Csv{
    static ArrayList<String> headers = new ArrayList<String>();
    static boolean is_bag = false;
    static boolean debug = false;
-   static boolean horiz_output = true;
+   static boolean horiz_output = false;
    
    public static void main(String[] args) throws IOException{
       out.println(Arrays.toString(args));
@@ -42,7 +42,11 @@ class Probability_To_Csv{
             is_bag = true;
          }
       } catch(Exception e){}
-      
+      try{
+         if(args[1].equals("horiz") || args[2].equals("horiz")){
+            horiz_output = true;
+         }
+      } catch(Exception e){}
       if(horiz_output){
          if(is_bag){
             subject_pattern = Pattern.compile(bag_pattern_string);
@@ -58,7 +62,7 @@ class Probability_To_Csv{
             e.printStackTrace();
          }
          String csv_string = map_to_csv_horiz(trace_names, inv_names);
-         String csv_filename = filename.replace("txt","csv");
+         String csv_filename = filename.replace(".txt","horiz.csv");
          out.println(csv_filename);
          write_csv_to_file(csv_filename, csv_string);
       } else {
@@ -178,9 +182,11 @@ class Probability_To_Csv{
       try{
          String[] temp = cols[1].split(" = ");
          probability = temp[temp.length-1];
+         out.format("%ncols[1] = %s%n",cols[1]);
          prior = temp[prior_index];
-         temp = prior.split(" * ");
-         prior = temp[0];
+         temp = cols[1].split(" * ");
+         out.format("temp=%s%n",Arrays.toString(temp));
+         prior = temp[1];
       } catch(ArrayIndexOutOfBoundsException ex){
          ex.printStackTrace();
          out.println("subject:"+subject+", line:"+line);
@@ -193,6 +199,8 @@ class Probability_To_Csv{
       }
       subject_map.put(header, probability);
       prior_map.put(header, prior);
+      out.format("%s%n",line);
+      out.format("prior_map.put(%s,%s)%n",header,prior);
       header_map.put(subject, subject_map);
    }
    

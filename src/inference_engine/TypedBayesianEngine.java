@@ -22,7 +22,7 @@ public class TypedBayesianEngine extends BasicEngine {
    HashMap<String, HashMap<String, Double[]>> cumulative_probabilities = null;
    int trace_total;
    public static boolean debug = false;
-   public static boolean filter_by_average = true;
+   public static boolean filter_by_average = false;
    //ArrayList<DeltaTracker> delta_trackers = null;
    HashMap<String, DeltaTracker> delta_trackers = null;
    
@@ -354,8 +354,18 @@ public class TypedBayesianEngine extends BasicEngine {
                   be_test = new BoundedEvent<Integer>(voi_name, tester_id, prior, tester);
                   break;}
                case DOUBLEEXP:{
-		  //out.format("getting tester for %s %s%n", voi_name,event_val);
-                  Predicate<Object> tester = get_tester(voi_name, Double.parseDouble(event_val));
+                  //out.format("getting tester for %s %s%n", voi_name,event_val);
+                  out.format("get_tester(%s, %s) fro row %s%n",voi_name,event_val,i);
+                  Predicate<Object> tester = null;
+                  try{
+                     tester = get_tester(voi_name, Double.parseDouble(event_val));
+                  } catch(NumberFormatException ex){
+                     out.format("get_tester(%s, %s) fro row %s%n",voi_name,event_val,i);
+                     ex.printStackTrace();
+                     
+                     System.exit(0);
+                  }
+                  
                   String tester_id = get_tester_id(voi_name, Double.parseDouble(event_val));
                   //if(debug) out.format("Got tester %s%n", tester_id);
                   be_test = new BoundedEvent<Double>(voi_name, tester_id, prior, tester);
