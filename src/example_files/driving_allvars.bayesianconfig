@@ -8,8 +8,8 @@ EVENTS
 //Speed_Machine,DOUBLEDELTA,delta:=10,Speed_Machine<0,Speed_Machine>0,Speed_Machine==0
 Mode_H2M,STRING
 Trust_Human,INTDELTA,delta:=10,Trust_Human==0,Trust_Human<0,Trust_Human>0
-//TimeSignal_Sec,INT
-//CurrentBrake_Machine,DOUBLEEXP,CurrentBrake_Machine==0,CurrentBrake_Machine>0
-//CurrentThrottle_Machine,DOUBLEEXP,CurrentThrottle_Machine==0,CurrentThrottle_Machine>0
+TimeSignal_Sec,INTEXP,TimeSignal_Sec>=120&&TimeSignal_Sec<180,TimeSignal_Sec>=60&&TimeSignal_Sec<120,TimeSignal_Sec<60
+CurrentBrake_Machine,DOUBLEEXP,CurrentBrake_Machine==0,CurrentBrake_Machine>0
+CurrentThrottle_Machine,DOUBLEEXP,CurrentThrottle_Machine==0,CurrentThrottle_Machine>0
 //CurrentGear_Machine,INT
 //GSR_Human,DOUBLE

@@ -363,6 +363,33 @@ public class Csv_Counter2{
                            count_map.get(var_name).put(key3, 1.0);
                         }
                      }
+                  } else if (var_name.equals("TimeSignal_Sec")){
+                     double dd = Double.parseDouble(row[index]);
+                     String key1 = "TimeSignal_Sec<60";
+                     String key2 = "TimeSignal_Sec>=60&&TimeSignal_Sec<120";
+                     String key3 = "TimeSignal_Sec>=120&&TimeSignal_Sec<180";
+                     if(dd < 60){
+                        try{
+                           double d = count_map.get(var_name).get(key1);
+                           count_map.get(var_name).put(key1, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key1, 1.0);
+                        }
+                     } else if(dd < 120){
+                        try{
+                           double d = count_map.get(var_name).get(key2);
+                           count_map.get(var_name).put(key2, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key2, 1.0);
+                        }
+                     } else {
+                        try{
+                           double d = count_map.get(var_name).get(key3);
+                           count_map.get(var_name).put(key3, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key3, 1.0);
+                        }
+                     }
                   } else if (var_name.contains("velocity.linear_y")) {
                      double dd = 0;
                      try{
