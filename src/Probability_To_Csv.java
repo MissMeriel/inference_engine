@@ -22,10 +22,11 @@ class Probability_To_Csv{
    static Pattern subject_pattern = Pattern.compile("[S][0-9]+[\\s]*");
    //static Pattern bag_pattern = Pattern.compile("[.]*[sweep_for_target_interpolated.csv][\\s]*");
 //./sweep_newinterp/sweep_for_target_2019-04-11-09-01-22interpolated.csv
+//./sweep_newinterp/sweep_for_target_2019-04-18-08-34-09interpolatedtest.csv
 
    //static Pattern bag_pattern = Pattern.compile("./sweep_newinterp/sweep_for_target_2019-\\d*[-][0-9]*[-][0-9]*[-][0-9]*[-][0-9]*[interpolated.csv][\\s]*");
-   static Pattern bag_pattern = Pattern.compile("./sweep_newinterp/sweep_for_target_2019-\\d*[-][0-9]*[-][0-9]*[-][0-9]*[-][0-9]*[interpolated.csv][\\s]*");
-   static String bag_pattern_string = "./sweep[_newinterp2]*/sweep_for_target_[0-9-]*interpolated.csv[\\s]*";
+   //static Pattern bag_pattern = Pattern.compile("./sweep_newinterp/sweep_for_target_2019-\\d*[-][0-9]*[-][0-9]*[-][0-9]*[-][0-9]*[interpolated.csv][\\s]*");
+   static String bag_pattern_string = "./sweep_newinterp/split/exp_traces/sweep_for_target_[0-9-]*interpolatedtest.csv[\\s]*";
    static Pattern whitespace_pattern = Pattern.compile("^\\S+");
    static Pattern double_pattern = Pattern.compile("[0-9]+.[0-9]+");
    //static Pattern whitespace_pattern = Pattern.compile("\p{IsWhite_Space}+");

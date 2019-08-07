@@ -1,11 +1,11 @@
 GIVENS
 //Alarm_M2H,STRING
 //EventAlert_Machine,STRING
-//EventW_Machine,STRINGEXP,EventW_Machine==false alarm,EventW_Machine== ,EventW_Machine==pedestrian detected,EventW_Machine==cyclist detected,EventW_Machine==truck detected,EventW_Machine==obstacle detected
-//PupilChange_Human,DOUBLEEXP,PupilChange_Human==0,PupilChange_Human>0,PupilChange_Human<0
-//CurrentWheel_Machine,DOUBLEDELTA,delta:=10,CurrentWheel_Machine<20&&CurrentWheel_Machine>-20,CurrentWheel_Machine>=20||CurrentWheel_Machine<=-20
+EventW_Machine,STRINGEXP,EventW_Machine==false alarm,EventW_Machine== ,EventW_Machine==pedestrian detected,EventW_Machine==cyclist detected,EventW_Machine==truck detected,EventW_Machine==obstacle detected
+PupilChange_Human,DOUBLEEXP,PupilChange_Human==0,PupilChange_Human>0,PupilChange_Human<0
+CurrentWheel_Machine,DOUBLEDELTA,delta:=10,CurrentWheel_Machine<20&&CurrentWheel_Machine>-20,CurrentWheel_Machine>=20||CurrentWheel_Machine<=-20
 EVENTS
-//Speed_Machine,DOUBLEDELTA,delta:=10,Speed_Machine<0,Speed_Machine>0,Speed_Machine==0
+Speed_Machine,DOUBLEDELTA,delta:=10,Speed_Machine<0,Speed_Machine>0,Speed_Machine==0
 Mode_H2M,STRING
 Trust_Human,INTDELTA,delta:=10,Trust_Human==0,Trust_Human<0,Trust_Human>0
 TimeSignal_Sec,INTEXP,TimeSignal_Sec>=120&&TimeSignal_Sec<180,TimeSignal_Sec>=60&&TimeSignal_Sec<120,TimeSignal_Sec<60

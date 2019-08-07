@@ -354,8 +354,7 @@ public class TypedBayesianEngine extends BasicEngine {
                   be_test = new BoundedEvent<Integer>(voi_name, tester_id, prior, tester);
                   break;}
                case DOUBLEEXP:{
-                  //out.format("getting tester for %s %s%n", voi_name,event_val);
-                  out.format("get_tester(%s, %s) fro row %s%n",voi_name,event_val,i);
+                  //out.format("get_tester(%s, %s) fro row %s%n",voi_name,event_val,i);
                   Predicate<Object> tester = null;
                   try{
                      tester = get_tester(voi_name, Double.parseDouble(event_val));
