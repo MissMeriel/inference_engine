@@ -20,163 +20,625 @@ public class Csv_Counter{
    public static void main(String[] args) throws IOException{
       out.println(Arrays.toString(args));
       String csv_file = args[0]; 
-      try{
-            out.println("parse_csv_file()");
-            csv_array = parse_csv_file(csv_file, get_csv_dimensions(csv_file));
-         } catch(IOException e){
-            e.printStackTrace();
-         }
-      //ArrayList<String> columns = new ArrayList<String>(csv_array[0]);
-      out.println("csv_array[0]:"+Arrays.toString(csv_array[0]));
-      ArrayList<String> columns = new ArrayList<String>(Arrays.asList(csv_array[0]));
+      
+      int[] dims = get_csv_dimensions(csv_file);
+      
+      FileInputStream fis = new FileInputStream(csv_file);
+      DataInputStream dis = new DataInputStream(fis);
+      String thisLine = dis.readLine();
+      String[] temp_cols = StringUtils.splitPreserveAllTokens(thisLine, ",");
+      ArrayList<String> columns = new ArrayList<String>(Arrays.asList(temp_cols));
       int negative_count = 0;
       int positive_count = 0;
       int zero_count = 0;
-      
+      out.format("%s rows, %s columns%n",dims[0],dims[1]);
+      out.format("Number of columns in AL: %s%n",columns.size());
       initialize_hashmap(columns);
-      int[] dims = get_csv_dimensions(csv_file);
       for(int i = 1; i < dims[0]; i++){
-         //out.print(i+" ");
-         for(String var_name : columns){
-            int index = columns.indexOf(var_name);
-            if(var_name.equals("TrustDelta")){
-               //out.println(csv_array[i][index]);
-               if(Double.parseDouble(csv_array[i][index]) < 0){
-                  try{
-                     double d = count_map.get(var_name).get("negative_count");
-                     count_map.get(var_name).put("negative_count", ++d);
-                  } catch(NullPointerException ex){
-                     count_map.get(var_name).put("negative_count", 1.0);
-                  }
-                  negative_count++;
-               } else if(Double.parseDouble(csv_array[i][index]) > 0){
-                  try{
-                     double d = count_map.get(var_name).get("positive_count");
-                     count_map.get(var_name).put("positive_count", ++d);
-                  } catch(NullPointerException ex){
-                     count_map.get(var_name).put("positive_count", 1.0);
-                  }
-                  negative_count++;
-               } else {
-                  try{
-                     double d = count_map.get(var_name).get("zero_count");
-                     count_map.get(var_name).put("zero_count", ++d);
-                  } catch(NullPointerException ex){
-                     count_map.get(var_name).put("zero_count", 1.0);
-                  }
-                  zero_count++;
-               }
-            } else if(var_name.equals("Speed_Machine")){
-               //Speed_Machine<5,Speed_Machine>=5&&Speed_Machine<10,Speed_Machine>=10&&Speed_Machine<15,Speed_Machine>=15
-               if(Double.parseDouble(csv_array[i][index]) < 5.0){
-                  try{
-                     double d = count_map.get(var_name).get("Speed_Machine<5");
-                     count_map.get(var_name).put("Speed_Machine<5", ++d);
-                  } catch(NullPointerException ex){
-                     count_map.get(var_name).put("Speed_Machine<5", 1.0);
-                  }
-               } else if(Double.parseDouble(csv_array[i][index]) >= 5.0 && Double.parseDouble(csv_array[i][index]) < 10.0){
-                  try{
-                     double d = count_map.get(var_name).get("Speed_Machine>=5&&Speed_Machine<10");
-                     count_map.get(var_name).put("Speed_Machine>=5&&Speed_Machine<10", ++d);
-                  } catch(NullPointerException ex){
-                     count_map.get(var_name).put("Speed_Machine>=5&&Speed_Machine<10", 1.0);
-                  }
-               } else if (Double.parseDouble(csv_array[i][index]) >= 10.0 && Double.parseDouble(csv_array[i][index]) < 15.0){
-                  try{
-                     double d = count_map.get(var_name).get("Speed_Machine>=10&&Speed_Machine<15");
-                     count_map.get(var_name).put("Speed_Machine>=10&&Speed_Machine<15", ++d);
-                  } catch(NullPointerException ex){
-                     count_map.get(var_name).put("Speed_Machine>=10&&Speed_Machine<15", 1.0);
-                  }
-               } else {
-                  try{
-                     double d = count_map.get(var_name).get("Speed_Machine>=15");
-                     count_map.get(var_name).put("Speed_Machine>=15", ++d);
-                  } catch(NullPointerException ex){
-                     count_map.get(var_name).put("Speed_Machine>=15", 1.0);
-                  }
-               }
-            } else if(var_name.equals("CurrentWheel_MachineDelta")){
-               //CurrentWheel_Machine,DOUBLEDELTA,delta:=10,CurrentWheel_Machine<2&&CurrentWheel_Machine>-2,CurrentWheel_Machine>=2||CurrentWheel_Machine<=-2
-               //CurrentWheel_Machine,DOUBLEDELTA,delta:=10,CurrentWheel_Machine<2.5&&CurrentWheel_Machine>-2.5,CurrentWheel_Machine>=2.5||CurrentWheel_Machine<=-2.5
-               //CurrentWheel_Machine,DOUBLEDELTA,delta:=10,CurrentWheel_Machine<5&&CurrentWheel_Machine>-5,CurrentWheel_Machine>=5||CurrentWheel_Machine<=-5
-               //CurrentWheel_Machine<15&&CurrentWheel_Machine>-15,CurrentWheel_Machine>=15||CurrentWheel_Machine<=-15
-               //CurrentWheel_Machine<20&&CurrentWheel_Machine>-20,CurrentWheel_Machine>=20||CurrentWheel_Machine<=-20
-               //CurrentWheel_Machine<25&&CurrentWheel_Machine>-25","CurrentWheel_Machine>=25||CurrentWheel_Machine<=-25"
-               double dd = Double.parseDouble(csv_array[i][index]);
-               String key1 = "CurrentWheel_Machine<30&&CurrentWheel_Machine>-30";
-               String key2 = "CurrentWheel_Machine>=30||CurrentWheel_Machine<=-30";
-               double threshold = 30.0; //rate of change
-               if(dd < threshold && dd > -threshold){
-                  try{
-                     double d = count_map.get(var_name).get(key1);
-                     count_map.get(var_name).put(key1, ++d);
-                  } catch(NullPointerException ex){
-                     count_map.get(var_name).put(key1, 1.0);
-                  }
-               } else if(dd >= threshold || dd <= -threshold){
-                  try{
-                     double d = count_map.get(var_name).get(key2);
-                     count_map.get(var_name).put(key2, ++d);
-                  } catch(NullPointerException ex){
-                     count_map.get(var_name).put(key2, 1.0);
-                  }
-               }
-            } else if (var_name.equals("PupilChange_Human")) {
-               double dd = Double.parseDouble(csv_array[i][index]);
-               String key1 = "PupilChange_Human>0";
-               String key2 = "PupilChange_Human<0";
-               String key3 = "PupilChange_Human==0";
-               double th1 = 0;
-               double th2 = 1;
-               if(dd > th1){
-                  try{
-                     double d = count_map.get(var_name).get(key1);
-                     count_map.get(var_name).put(key1, ++d);
-                  } catch(NullPointerException ex){
-                     count_map.get(var_name).put(key1, 1.0);
-                  }
-               } else if(dd < th1){
-                  try{
-                     double d = count_map.get(var_name).get(key2);
-                     count_map.get(var_name).put(key2, ++d);
-                  } catch(NullPointerException ex){
-                     count_map.get(var_name).put(key2, 1.0);
-                  }
-               } else {
-                  try{
-                     double d = count_map.get(var_name).get(key3);
-                     count_map.get(var_name).put(key3, ++d);
-                  } catch(NullPointerException ex){
-                     count_map.get(var_name).put(key3, 1.0);
-                  }
-               }
-               
-            } else {
+         out.println(i+" out of "+ dims[0]);
+         if ((thisLine = dis.readLine()) != null){
+            String[] cols = new String[]{};
+            String[] row = StringUtils.splitByWholeSeparatorPreserveAllTokens(thisLine, ",");
+            /*if(row.length < 97){
+               //out.println("row # "+i+"\nrow length: "+row.length);
+               System.exit(0);
+            }*/
+            for(String var_name : columns){
                try{
-                  String[] temp_row = csv_array[i];
-                  //out.println("Getting index "+index+" from row "+i+":"+Arrays.toString(temp_row));
-                  String str = temp_row[index];
-                  double d = count_map.get(var_name).get(str);
-                  count_map.get(var_name).put(csv_array[i][index], ++d);
-               } catch(NullPointerException ex){
-                  count_map.get(var_name).put(csv_array[i][index], 1.0);
-               } catch (ArrayIndexOutOfBoundsException ex){
-                  ex.printStackTrace();
-                  out.println(ex.getMessage());
-                  out.println("i: "+i);
-                  out.println("index: "+index);
-                  //System.exit(0);
-               }
+                  int index = columns.indexOf(var_name);
+                  if(var_name.equals("TrustDelta")){
+                     //out.println(row[index]);
+                     if(Double.parseDouble(row[index]) < 0){
+                        try{
+                           double d = count_map.get(var_name).get("negative_count");
+                           count_map.get(var_name).put("negative_count", ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put("negative_count", 1.0);
+                        }
+                        negative_count++;
+                     } else if(Double.parseDouble(row[index]) > 0){
+                        try{
+                           double d = count_map.get(var_name).get("positive_count");
+                           count_map.get(var_name).put("positive_count", ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put("positive_count", 1.0);
+                        }
+                        negative_count++;
+                     } else {
+                        try{
+                           double d = count_map.get(var_name).get("zero_count");
+                           count_map.get(var_name).put("zero_count", ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put("zero_count", 1.0);
+                        }
+                        zero_count++;
+                     }
+                  } else if(var_name.equals("Speed_Machine")){
+                     //Speed_Machine<5,Speed_Machine>=5&&Speed_Machine<10,Speed_Machine>=10&&Speed_Machine<15,Speed_Machine>=15
+                     if(Double.parseDouble(row[index]) < 5.0){
+                        try{
+                           double d = count_map.get(var_name).get("Speed_Machine<5");
+                           count_map.get(var_name).put("Speed_Machine<5", ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put("Speed_Machine<5", 1.0);
+                        }
+                     } else if(Double.parseDouble(row[index]) >= 5.0 && Double.parseDouble(row[index]) < 10.0){
+                        try{
+                           double d = count_map.get(var_name).get("Speed_Machine>=5&&Speed_Machine<10");
+                           count_map.get(var_name).put("Speed_Machine>=5&&Speed_Machine<10", ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put("Speed_Machine>=5&&Speed_Machine<10", 1.0);
+                        }
+                     } else if (Double.parseDouble(row[index]) >= 10.0 && Double.parseDouble(row[index]) < 15.0){
+                        try{
+                           double d = count_map.get(var_name).get("Speed_Machine>=10&&Speed_Machine<15");
+                           count_map.get(var_name).put("Speed_Machine>=10&&Speed_Machine<15", ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put("Speed_Machine>=10&&Speed_Machine<15", 1.0);
+                        }
+                     } else {
+                        try{
+                           double d = count_map.get(var_name).get("Speed_Machine>=15");
+                           count_map.get(var_name).put("Speed_Machine>=15", ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put("Speed_Machine>=15", 1.0);
+                        }
+                     }
+                     
+                  } else if (var_name.equals("Speed_Delta")){
+                     if(Double.parseDouble(row[index]) > 0) {
+                        try{
+                           double d = count_map.get(var_name).get("Speed_Delta>0");
+                           count_map.get(var_name).put("Speed_Delta>0", ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put("Speed_Delta>0", 1.0);
+                        }
+                     } else if(Double.parseDouble(row[index]) < 0){
+                        try{
+                           double d = count_map.get(var_name).get("Speed_Delta<0");
+                           count_map.get(var_name).put("Speed_Delta<0", ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put("Speed_Delta<0", 1.0);
+                        }
+                     } else {
+                        try{
+                           double d = count_map.get(var_name).get("Speed_Delta==0");
+                           count_map.get(var_name).put("Speed_Delta==0", ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put("Speed_Delta==0", 1.0);
+                        }
+                     }
+                  } else if(var_name.equals("CurrentWheel_MachineDelta")){
+                     double dd = Double.parseDouble(row[index]);
+                     double threshold = 20.0; //rate of change
+                     String key1 = String.format("CurrentWheel_Machine<%s&&CurrentWheel_Machine>-%s",threshold,threshold);
+                     String key2 = String.format("CurrentWheel_Machine>=%s||CurrentWheel_Machine<=-%s",threshold,threshold);
+                     
+                     if(dd < threshold && dd > -threshold){
+                        try{
+                           double d = count_map.get(var_name).get(key1);
+                           count_map.get(var_name).put(key1, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key1, 1.0);
+                        }
+                     } else if(dd >= threshold || dd <= -threshold){
+                        try{
+                           double d = count_map.get(var_name).get(key2);
+                           count_map.get(var_name).put(key2, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key2, 1.0);
+                        }
+                     }
+                  } else if (var_name.equals("PupilChange_Human")) {
+                     double dd = Double.parseDouble(row[index]);
+                     String key1 = "PupilChange_Human>0";
+                     String key2 = "PupilChange_Human<0";
+                     String key3 = "PupilChange_Human==0";
+                     double th1 = 0;
+                     double th2 = 1;
+                     if(dd > th1){
+                        try{
+                           double d = count_map.get(var_name).get(key1);
+                           count_map.get(var_name).put(key1, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key1, 1.0);
+                        }
+                     } else if(dd < th1){
+                        try{
+                           double d = count_map.get(var_name).get(key2);
+                           count_map.get(var_name).put(key2, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key2, 1.0);
+                        }
+                     } else {
+                        try{
+                           double d = count_map.get(var_name).get(key3);
+                           count_map.get(var_name).put(key3, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key3, 1.0);
+                        }
+                     }
+                  } else if (var_name.equals("CurrentBrake_MachineDelta")){
+                     double dd = Double.parseDouble(row[index]);
+                     String key1 = "CurrentBrake_MachineDelta>0";
+                     String key2 = "CurrentBrake_MachineDelta<0";
+                     String key3 = "CurrentBrake_MachineDelta==0";
+                     double th1 = 0;
+                     if(dd > 0){
+                        try{
+                           double d = count_map.get(var_name).get(key1);
+                           count_map.get(var_name).put(key1, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key1, 1.0);
+                        }
+                     } else if(dd < 0){
+                        try{
+                           double d = count_map.get(var_name).get(key2);
+                           count_map.get(var_name).put(key2, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key2, 1.0);
+                        }
+                     } else {
+                        try{
+                           double d = count_map.get(var_name).get(key3);
+                           count_map.get(var_name).put(key3, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key3, 1.0);
+                        }
+                     }
+                  } else if (var_name.equals("CurrentBrake_Machine")){
+                     double dd = Double.parseDouble(row[index]);
+                     String key1 = "CurrentBrake_Machine>0";
+                     String key3 = "CurrentBrake_Machine==0";
+                     double th1 = 0;
+                     if(dd > 0){
+                        try{
+                           double d = count_map.get(var_name).get(key1);
+                           count_map.get(var_name).put(key1, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key1, 1.0);
+                        }
+                     } else {
+                        try{
+                           double d = count_map.get(var_name).get(key3);
+                           count_map.get(var_name).put(key3, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key3, 1.0);
+                        }
+                     }
+                  } else if (var_name.equals("CurrentThrottle_MachineDelta")){
+                     double dd = Double.parseDouble(row[index]);
+                     String key1 = "CurrentThrottle_MachineDelta>0";
+                     String key2 = "CurrentThrottle_MachineDelta<0";
+                     String key3 = "CurrentThrottle_MachineDelta==0";
+                     double th1 = 0;
+                     if(dd > th1){
+                        try{
+                           double d = count_map.get(var_name).get(key1);
+                           count_map.get(var_name).put(key1, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key1, 1.0);
+                        }
+                     } else if(dd < th1){
+                        try{
+                           double d = count_map.get(var_name).get(key2);
+                           count_map.get(var_name).put(key2, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key2, 1.0);
+                        }
+                     } else {
+                        try{
+                           double d = count_map.get(var_name).get(key3);
+                           count_map.get(var_name).put(key3, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key3, 1.0);
+                        }
+                     }
+                  } else if (var_name.equals("CurrentThrottle_Machine")){
+                     double dd = Double.parseDouble(row[index]);
+                     String key1 = "CurrentThrottle_Machine>0";
+                     String key3 = "CurrentThrottle_Machine==0";
+                     double th1 = 0;
+                     if(dd > th1){
+                        try{
+                           double d = count_map.get(var_name).get(key1);
+                           count_map.get(var_name).put(key1, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key1, 1.0);
+                        }
+                     } else {
+                        try{
+                           double d = count_map.get(var_name).get(key3);
+                           count_map.get(var_name).put(key3, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key3, 1.0);
+                        }
+                     }
+                  } else if (var_name.equals("CurrentGear_MachineDelta")){
+                     double dd = Double.parseDouble(row[index]);
+                     String key1 = "CurrentGear_Machine>0";
+                     String key2 = "CurrentGear_Machine<0";
+                     String key3 = "CurrentGear_Machine==0";
+                     double th1 = 0;
+                     if(dd > 0){
+                        try{
+                           double d = count_map.get(var_name).get(key1);
+                           count_map.get(var_name).put(key1, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key1, 1.0);
+                        }
+                     } else if(dd < 0){
+                        try{
+                           double d = count_map.get(var_name).get(key2);
+                           count_map.get(var_name).put(key2, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key2, 1.0);
+                        }
+                     } else {
+                        try{
+                           double d = count_map.get(var_name).get(key3);
+                           count_map.get(var_name).put(key3, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key3, 1.0);
+                        }
+                     }
+                  } else if (var_name.equals("GSR_HumanDelta")){
+                     double dd = Double.parseDouble(row[index]);
+                     String key1 = "GSR_Human>0";
+                     String key2 = "GSR_Human<0";
+                     String key3 = "GSR_Human==0";
+                     double th1 = 0;
+                     if(dd > 0){
+                        try{
+                           double d = count_map.get(var_name).get(key1);
+                           count_map.get(var_name).put(key1, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key1, 1.0);
+                        }
+                     } else if(dd < 0){
+                        try{
+                           double d = count_map.get(var_name).get(key2);
+                           count_map.get(var_name).put(key2, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key2, 1.0);
+                        }
+                     } else {
+                        try{
+                           double d = count_map.get(var_name).get(key3);
+                           count_map.get(var_name).put(key3, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key3, 1.0);
+                        }
+                     }
+                  } else if (var_name.equals("ModeDelta")){
+                     double dd = Double.parseDouble(row[index]);
+                     String key1 = "Mode==auto->manual";
+                     String key2 = "Mode==manual->auto";
+                     String key3 = "Mode constant";
+                     double th1 = 0;
+                     if(dd > 0){
+                        try{
+                           double d = count_map.get(var_name).get(key1);
+                           count_map.get(var_name).put(key1, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key1, 1.0);
+                        }
+                     } else if(dd < 0){
+                        try{
+                           double d = count_map.get(var_name).get(key2);
+                           count_map.get(var_name).put(key2, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key2, 1.0);
+                        }
+                     } else {
+                        try{
+                           double d = count_map.get(var_name).get(key3);
+                           count_map.get(var_name).put(key3, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key3, 1.0);
+                        }
+                     }
+                  } else if (var_name.equals("TimeSignal_Sec")){
+                     double dd = Double.parseDouble(row[index]);
+                     String key1 = "TimeSignal_Sec<60";
+                     String key2 = "TimeSignal_Sec>=60&&TimeSignal_Sec<120";
+                     String key3 = "TimeSignal_Sec>=120&&TimeSignal_Sec<180";
+                     if(dd < 60){
+                        try{
+                           double d = count_map.get(var_name).get(key1);
+                           count_map.get(var_name).put(key1, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key1, 1.0);
+                        }
+                     } else if(dd < 120){
+                        try{
+                           double d = count_map.get(var_name).get(key2);
+                           count_map.get(var_name).put(key2, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key2, 1.0);
+                        }
+                     } else {
+                        try{
+                           double d = count_map.get(var_name).get(key3);
+                           count_map.get(var_name).put(key3, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key3, 1.0);
+                        }
+                     }
+                  } else if (var_name.contains("velocity.linear_y")) {
+                     double dd = 0;
+                     try{
+                        dd = round(Double.parseDouble(row[index]), 2);
+                     } catch(java.lang.NumberFormatException ex){}
+                     if(Math.abs(dd) < 0.01){
+                        String key = "/velocity.linear_y<0.01&&/velocity.linear_y>-0.01";
+                        try {
+                           double d = count_map.get(var_name).get(key);
+                           count_map.get(var_name).put(key, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key, 1.0);
+                        } catch(ArrayIndexOutOfBoundsException e){
+                           e.printStackTrace();
+                           System.exit(0);
+                        }
+                        
+                     } else if(Math.abs(dd) < 0.1){
+                        String key = "/velocity.linear_y>=0.01&&/velocity.linear_y<0.25||/velocity.linear_y<=-0.01&&/velocity.linear_y>-0.25";
+                        try {
+                           double d = count_map.get(var_name).get(key);
+                           count_map.get(var_name).put(key, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key, 1.0);
+                        } catch(ArrayIndexOutOfBoundsException e){
+                           e.printStackTrace();
+                           System.exit(0);
+                        }
+                     } else {
+                        String key = "/velocity.linear_y>=0.25||/velocity.linear_y<=-0.25";
+                        try {
+                           double d = count_map.get(var_name).get(key);
+                           count_map.get(var_name).put(key, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key, 1.0);
+                        } catch(ArrayIndexOutOfBoundsException e){
+                           e.printStackTrace();
+                           //System.exit(0);
+                        }
+                     }
+                  } else if (var_name.contains("velocity.linear_x")) {
+                     double dd = 0;
+                     try{
+                        dd = round(Double.parseDouble(row[index]), 2);
+                     } catch(java.lang.NumberFormatException ex){}
+                     if(Math.abs(dd) < 0.01){
+                        String key = "/velocity.linear_x<0.01&&/velocity.linear_x>-0.01";
+                        try {
+                           double d = count_map.get(var_name).get(key);
+                           count_map.get(var_name).put(key, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key, 1.0);
+                        } catch(ArrayIndexOutOfBoundsException e){
+                           e.printStackTrace();
+                           System.exit(0);
+                        }
+                        
+                     } else if(Math.abs(dd) < 0.25){
+                        String key = "/velocity.linear_x>=0.01&&/velocity.linear_x<0.25||/velocity.linear_x<=-0.01&&/velocity.linear_x>-0.25";
+                        try {
+                           double d = count_map.get(var_name).get(key);
+                           count_map.get(var_name).put(key, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key, 1.0);
+                        } catch(ArrayIndexOutOfBoundsException e){
+                           e.printStackTrace();
+                           System.exit(0);
+                        }
+                     } else {
+                        String key = "/velocity.linear_x>=0.25||/velocity.linear_x<=-0.25";
+                        try {
+                           double d = count_map.get(var_name).get(key);
+                           count_map.get(var_name).put(key, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key, 1.0);
+                        } catch(ArrayIndexOutOfBoundsException e){
+                           e.printStackTrace();
+                           //System.exit(0);
+                        }
+                     }
+                  } else if (var_name.contains("velocity")) {
+                     double dd = 0;
+                     try{
+                        dd = round(Double.parseDouble(row[index]), 2);
+                     } catch(java.lang.NumberFormatException ex){}
+                     try{
+                           double d = count_map.get(var_name).get(Double.toString(dd));
+                           count_map.get(var_name).put(Double.toString(dd), ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(Double.toString(dd), 1.0);
+                        } catch(ArrayIndexOutOfBoundsException e){
+                           e.printStackTrace();
+                        }
+                  
+                  } else if (var_name.contains("TELLO")) {
+                     double dd = 0;
+                     try{
+                        dd = round(Double.parseDouble(row[index]), 1);
+                     } catch(java.lang.NumberFormatException ex){}
+                     try{
+                           double d = count_map.get(var_name).get(Double.toString(dd));
+                           count_map.get(var_name).put(Double.toString(dd), ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(Double.toString(dd), 1.0);
+                        } catch(ArrayIndexOutOfBoundsException e){
+                           e.printStackTrace();
+                           //System.exit(0);
+                        }
+                  
+                  } else if (var_name.contains("/user_input.reaction_time_secs")) {
+                     double dd = 0;
+                     try{
+                        dd = Double.parseDouble(row[index]);
+                     } catch(java.lang.NumberFormatException ex){}
+                     if(dd < 0.0){
+                        String key = "/user_input.reaction_time_secs<0";
+                        try{
+                           double d = count_map.get(var_name).get(key);
+                           count_map.get(var_name).put(key, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key, 1.0);
+                        } catch(ArrayIndexOutOfBoundsException e){}
+                     } else if(dd < 7.0){
+                        String key = "/user_input.reaction_time_secs>=0&&/user_input.reaction_time_secs<7";
+                        try{
+                           double d = count_map.get(var_name).get(key);
+                           count_map.get(var_name).put(key, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key, 1.0);
+                        } catch(ArrayIndexOutOfBoundsException e){}
+                     } else {
+                        String key = "/user_input.reaction_time_secs>=7";
+                        try{
+                           double d = count_map.get(var_name).get(key);
+                           count_map.get(var_name).put(key, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key, 1.0);
+                        } catch(ArrayIndexOutOfBoundsException e){}
+                     }
+                     
+                  } else if (var_name.contains("/visp_auto_tracker/object_position")) {
+                     double dd = 0;
+                     try{
+                        dd = round(Double.parseDouble(row[index]), 1);
+                     } catch(java.lang.NumberFormatException ex){}
+                     try{
+                        double d = count_map.get(var_name).get(Double.toString(dd));
+                        count_map.get(var_name).put(Double.toString(dd), ++d);
+                     } catch(NullPointerException ex){
+                        count_map.get(var_name).put(Double.toString(dd), 1.0);
+                     } catch(ArrayIndexOutOfBoundsException e){
+                        e.printStackTrace();
+                     }
+                  
+                  } else if (var_name.contains("/flight_data.battery_percentage")) {
+                     double dd = 0;
+                     try{
+                        dd = Double.parseDouble(row[index]);
+                     } catch(java.lang.NumberFormatException ex){}
+                     if(dd < 20){
+                        String key = "/flight_data.battery_percentage<20";
+                        try{
+                           double d = count_map.get(var_name).get(key);
+                           count_map.get(var_name).put(key, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key, 1.0);
+                        } catch(ArrayIndexOutOfBoundsException e){}
+                     } else if (dd < 40){
+                        String key = "/flight_data.battery_percentage>=20&&/flight_data.battery_percentage<40";
+                        try{
+                           double d = count_map.get(var_name).get(key);
+                           count_map.get(var_name).put(key, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key, 1.0);
+                        } catch(ArrayIndexOutOfBoundsException e){}
+                     } else if (dd < 60){
+                        String key = "/flight_data.battery_percentage>=40&&/flight_data.battery_percentage<60";
+                        try{
+                           double d = count_map.get(var_name).get(key);
+                           count_map.get(var_name).put(key, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key, 1.0);
+                        } catch(ArrayIndexOutOfBoundsException e){}
+                        
+                     } else if(dd < 80){
+                        String key = "/flight_data.battery_percentage>=60&&/flight_data.battery_percentage<80";
+                        try{
+                           double d = count_map.get(var_name).get(key);
+                           count_map.get(var_name).put(key, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key, 1.0);
+                        } catch(ArrayIndexOutOfBoundsException e){}
+                     } else {
+                        String key = "/flight_data.battery_percentage>80";
+                        try{
+                           double d = count_map.get(var_name).get(key);
+                           count_map.get(var_name).put(key, ++d);
+                        } catch(NullPointerException ex){
+                           count_map.get(var_name).put(key, 1.0);
+                        } catch(ArrayIndexOutOfBoundsException e){}
+                     }
+                  
+                  } else if (!var_name.contains("header")
+                             && !var_name.contains("stamp")
+                             && !var_name.contains("smart_video_exit_mode")
+                             && !var_name.contains("power_state")
+                             && !var_name.contains("throw_fly_timer")
+                             && !var_name.contains("frame")){
+                     //out.println("index of "+var_name+":"+index);
+                     
+                     HashMap<String, Double> temp_map = count_map.get(var_name);
+                     try{
+                        //out.println("Getting "+var_name+" @ index "+index+" from row "+i+":"+Arrays.toString(row));
+                        //out.format("Number of columns in AL: %s%n",columns.size());
+                        String str = row[index];
+                        if(str.equals("")){continue;}
+                        /*out.println(temp_map == null);
+                        out.println(str == null);*/
+                        double d = temp_map.get(str);
+                        count_map.get(var_name).put(row[index], ++d);
+                     } catch(NullPointerException ex){
+                        //ex.printStackTrace();
+                        try{
+                           count_map.get(var_name).put(row[index], 1.0);
+                        }catch(ArrayIndexOutOfBoundsException e){
+                           e.printStackTrace();
+                           //System.exit(0);
+                        }
+                     } catch (ArrayIndexOutOfBoundsException ex){
+                        ex.printStackTrace();
+                        out.println(ex.getMessage());
+                        out.println("row index: "+i);
+                        out.println("row length: "+row.length);
+                        out.println("column name: "+var_name);
+                        out.println("column index: "+index);
+                        System.exit(0);
+                     }
+                  }
+               }catch(ArrayIndexOutOfBoundsException e){}
             }
          }
       }
-      out.format("positive_count: %s%nnegative_count: %s%nzero_count: %s%n", positive_count, negative_count, zero_count);
-      out.println(count_map);
-      print_count_map();
-      print_percentages(dims[0]-1);
-      write_to_file(arg[0].replace(".csv","_count_map.txt"),count_map_toString());
+      fis.close();
+      dis.close();
+      //out.format("positive_count: %s%nnegative_count: %s%nzero_count: %s%n", positive_count, negative_count, zero_count);
+      //out.println(count_map);
+      //print_count_map();
+      //print_percentages(dims[0]-1);
+      write_to_file(csv_file.replace(".csv","_count_map.txt"), (double) dims[0]);
+   }
+   
+   public static double round(double val, double decimal_pts){
+      double scale = Math.pow(10, decimal_pts);
+      return Math.round(val * scale) / scale;
    }
    
    public static void initialize_hashmap(ArrayList<String> columns){
@@ -207,13 +669,42 @@ public class Csv_Counter{
       out.format("Counts written to %s%n",filename);
    }
    
+   
+   public static void write_to_file(String filename, double d){
+      try{
+         FileWriter fw = new FileWriter(filename);
+         Set<String> keys1 = count_map.keySet();
+         for(String key1 : keys1){
+            String priorfile_string = key1+",";
+            Set<String> keys2 = count_map.get(key1).keySet();
+            for (String key2 : keys2){
+               if(!key1.contains("header") && !key1.contains("stamp")){
+                  String contents = String.format("%s:%s:=%s --> %.5f%n",key1,key2,count_map.get(key1).get(key2),count_map.get(key1).get(key2) / d);
+                  priorfile_string += String.format("%s:=%.5f,",key2,count_map.get(key1).get(key2)/d);
+                  fw.write(contents);
+               }
+               
+            }
+            fw.write(priorfile_string+"\n\n");
+         }
+         fw.close();
+      } catch(Exception e){
+         e.printStackTrace();
+      }
+      out.format("Counts written to %s%n",filename);
+   }
+   
+   
    public static String count_map_toString(){
       String str = "COUNT MAP:\n";
       Set<String> keys1 = count_map.keySet();
       for(String key1 : keys1){
          Set<String> keys2 = count_map.get(key1).keySet();
          for (String key2 : keys2){
-            str += key1+":"+key2+":=" +count_map.get(key1).get(key2)+"\n";
+            if(!key1.contains("header") && !key1.contains("stamp")){
+               str += key1+":"+key2+":=" +count_map.get(key1).get(key2)+"\n";
+            }
+            
          }
       }
       return str;
@@ -223,13 +714,17 @@ public class Csv_Counter{
       out.println("\n\n\n\n\n\n\n\n\nPERCENTAGES:");
       Set<String> keys1 = count_map.keySet();
       for(String key1 : keys1){
+         String priorfile_string = key1+",";
          if(!key1.contains("GSR") || !key1.contains("Manual")  || !key1.contains("Auto")  || !key1.contains("Pupil") ){
             Set<String> keys2 = count_map.get(key1).keySet();
             for (String key2 : keys2){
+               
                out.format("%s:%s:=%.3f%n",key1,key2,count_map.get(key1).get(key2)/i);
+               priorfile_string += String.format("%s:=%.3f,",key2,count_map.get(key1).get(key2)/i);
                //out.println(key1+":"+key2+"=" +count_map.get(key1).get(key2));
             }
          }
+         out.println(priorfile_string);
       }
    }
    
@@ -242,7 +737,7 @@ public class Csv_Counter{
       int[] dims = {0, 0};
       while((thisLine = dis.readLine()) != null){
          dims[0] += 1;
-         dims[1] = StringUtils.splitPreserveAllTokens(thisLine, ",");
+         dims[1] = StringUtils.splitPreserveAllTokens(thisLine, ",").length;
       }
       return dims;
    }
@@ -270,4 +765,5 @@ public class Csv_Counter{
       dis.close();
       return csv_array;
    }
+   
 }

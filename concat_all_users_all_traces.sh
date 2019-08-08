@@ -1,7 +1,7 @@
 #!/bin/bash
 
-rootdir='./driving_sim_data/PreProcess_PupilChange_0222/'
-outfilebase='./src/subjecttraces/'
+rootdir='./driving_sim_data/DrivingRawData20190807(weatherAdded)/'
+outfilebase='./src/subjecttraces_weather/'
 outfile='all_users_all_traces_concat.csv'
 echo "outputfilebase="  $outfilebase
 need_header=true
