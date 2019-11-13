@@ -1,0 +1,445 @@
+/* prob.cup */
+ 
+/***** Command Line build instructions (as implemented in Makefile)
+ in this (src) directory:
+ java -jar java-cup-11a.jar  PA0.cup
+ javac -classpath .:java-cup-11a-runtime.jar -d . parser.java sym.java Yylex.java
+    
+*****/
+
+/***** Run instructions
+ in this (src) directory:
+ java -classpath .:java-cup-11a-runtime.jar parser ../infile
+
+*****/
+package mjparser;
+
+import java_cup.runtime.*;
+import java.io.FileInputStream;
+import java.util.function.Predicate;
+import java.util.*;
+import java.io.PrintWriter;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Arrays;
+
+import inference_engine.RawType;
+import inference_engine.Global;
+import inference_engine.ConstraintEvent;
+
+parser code {:
+    public static void main(String args[]) throws Exception {
+        new parser(new Yylex(new FileInputStream(args[0]))).parse();
+    }
+				
+				public PrintWriter out; 
+    
+				public String programName;
+
+				public void unrecovered_syntax_error(Symbol cur_SymbolValue) {
+								//System.out.println("cur_SymbolValue: "+ cur_SymbolValue.value);
+								report_fatal_error("Fatal syntax error", cur_SymbolValue);
+				}
+					
+				public void report_fatal_error(String message, Object info) {
+								report_error(message, info);
+								done_parsing();
+								Symbol sym = (Symbol)info;
+								mjparser.SymbolValue tok = (mjparser.SymbolValue)sym.value;
+								throw new mjparser.ParseException("Fatal parsing error", tok.line, tok.pos);
+				}
+					
+				public void report_error(String message, Object info) {
+								Symbol sym = (Symbol)info;
+								mjparser.SymbolValue tok = (mjparser.SymbolValue)sym.value;
+								System.out.println("sym null? "+(sym == null));
+								System.out.println("sym.sym: "+sym.sym);
+								System.err.println("tok null? "+ (tok == null));
+								System.err.println("tok.lexeme: "+ tok.lexeme);
+								System.err.println("[" + tok.line + "," + tok.pos + "] "); 
+								System.err.println( message + " at " + tok.toString() );
+				}
+					
+:}
+
+terminal SymbolValue GIVENS;
+terminal SymbolValue EVENTS;
+terminal SymbolValue CONSTRAINTS;
+terminal SymbolValue RAWTYPE;
+terminal SymbolValue P_LPAREN;
+terminal SymbolValue GIVEN;
+terminal SymbolValue RPAREN;
+terminal SymbolValue STRING;
+terminal SymbolValue VARIABLE;
+terminal SymbolValue DELTA_VARIABLE;
+terminal SymbolValue THRESHOLD;
+terminal SymbolValue DELTA;
+terminal SymbolValue DEF;
+terminal SymbolValue NUMBER;
+terminal SymbolValue EQ;
+terminal SymbolValue NOTEQ;
+terminal SymbolValue LT;
+terminal SymbolValue LTEQ;
+terminal SymbolValue GT;
+terminal SymbolValue GTEQ;
+terminal SymbolValue LOGICAL_AND;
+terminal SymbolValue LOGICAL_OR;
+terminal SymbolValue SEMI;
+terminal SymbolValue COMMA;
+terminal SymbolValue COMMENT;
+terminal SymbolValue STRING_TRANSITION;
+non terminal program;
+non terminal ArrayList<String> vars;
+non terminal ArrayList<ConstraintEvent> constraints;
+non terminal ConstraintEvent constraint;
+non terminal SymbolValue var;
+non terminal BoundList stmts;
+non terminal Bound stmt;
+non terminal Bound exp;
+non terminal SymbolValue threshold_stmt;
+non terminal SymbolValue delta_stmt;
+non terminal SymbolValue int;
+non terminal SymbolValue variable;
+non terminal comments;
+non terminal String string_literal;
+
+precedence nonassoc RAWTYPE, VARIABLE, STRING;
+precedence left LT, LTEQ, GT, GTEQ, LOGICAL_OR, LOGICAL_AND;
+
+start with program;
+
+
+program	::=	
+	GIVENS vars:gv EVENTS vars:ev
+	{:
+			Global.givens = gv;
+			Global.events = ev;
+	:}
+	| GIVENS vars:gv EVENTS vars:ev CONSTRAINTS constraints:c
+	{:
+			/* System.out.print("Given vars: ");
+			System.out.println(gv);
+			System.out.print("Event vars: ");
+			System.out.println(ev); */
+			Global.givens = gv;
+			Global.events = ev;
+			Global.constraint_events = c;
+	:}
+	;
+
+constraints ::=
+		constraints:cs constraint:c
+		{:
+					cs.add(c);
+					RESULT = cs;
+		:}
+		|
+		{:
+				RESULT = new ArrayList<ConstraintEvent>();
+		:}
+		;
+		
+constraint ::=
+		P_LPAREN stmt:s1 GIVEN stmt:s2 RPAREN
+		{:
+					String var_name = String.format("P(%s|%s)", s1.id, s2.id);
+					String id = var_name; //TODO: change later
+					double p_A = 1.0;
+					/*System.out.println(s1.toString()+ " "+s2.toString());
+					System.out.println("s1.testers.keySet() "+s1.testers.keySet());
+					System.out.println("s2.testers.keySet() "+s2.testers.keySet());*/
+					HashMap<String,Predicate<Object>> event_testers = s1.testers;
+					HashMap<String,Predicate<Object>> given_testers = s2.testers;
+					ConstraintEvent<Object> ce = new ConstraintEvent<Object>(var_name, id, p_A, event_testers, given_testers);
+					/*System.out.println("ConstraintEvent:"+ce.toString());
+					System.out.println(event_testers.keySet());
+					System.out.println(given_testers.keySet());*/
+					RESULT = ce;
+		:}
+		;
+
+vars ::=
+		vars:vs var:v
+		{:
+				//System.out.println("lexeme="+v.lexeme+", value="+v.value+", sym==COMMENT? "+(v.value == sym.COMMENT));
+				//System.out.println();
+				if(v.value != sym.COMMENT){
+						vs.add(v.lexeme);
+				}
+				RESULT = vs;
+		:}
+		|
+		{: RESULT = new ArrayList<String>(); :}
+		;
+	
+var ::=
+		variable:v COMMA RAWTYPE:t
+		{:
+				//System.out.println("Handling rawtype "+t.lexeme);
+				Global.types.put(v.lexeme, RawType.valueOf(t.lexeme));
+				RESULT = v;
+		:}
+		| variable:v COMMA RAWTYPE:t COMMA stmts:s
+		{:
+				Global.types.put(v.lexeme, RawType.valueOf(t.lexeme));
+				Global.bounds.put(v.lexeme, s.tester_list);
+				Global.bound_ids.put(v.lexeme, s.id_map);
+				RESULT = v;
+		:}
+		| variable:v COMMA RAWTYPE:t COMMA threshold_stmt:th
+		{:
+				Global.types.put(v.lexeme, RawType.valueOf(t.lexeme));
+				Global.thresholds.put(v.lexeme, Double.valueOf(th.lexeme));
+				RESULT = v;
+		:}
+		| variable:v COMMA RAWTYPE:t COMMA delta_stmt:d
+		{:
+				//System.out.println("Handling rawtype "+t.lexeme);
+				Global.types.put(v.lexeme, RawType.valueOf(t.lexeme));
+				//System.out.println("delta_stmt "+ d.toString());
+				Global.deltas.put(v.lexeme, Double.valueOf(d.lexeme));
+				RESULT = v;
+		:}
+		| variable:v COMMA RAWTYPE:t COMMA threshold_stmt:th COMMA delta_stmt:d
+		{:
+				Global.types.put(v.lexeme, RawType.valueOf(t.lexeme));
+				Global.thresholds.put(v.lexeme, Double.valueOf(th.lexeme));
+				Global.deltas.put(v.lexeme, Double.valueOf(d.lexeme));
+				RESULT = v;
+		:}
+		| variable:v COMMA RAWTYPE:t COMMA delta_stmt:d COMMA stmts:s
+		{:
+				Global.types.put(v.lexeme, RawType.valueOf(t.lexeme));
+				Global.deltas.put(v.lexeme, Double.valueOf(d.lexeme));
+				Global.bounds.put(v.lexeme, s.tester_list);
+				Global.bound_ids.put(v.lexeme, s.id_map);
+				RESULT = v;
+		:}
+		| COMMENT:c
+		{:
+				RESULT = c;
+		:}
+		;
+	
+stmts   ::=
+    stmts:ss COMMA stmt:s
+				{:
+						ss.tester_list.add((Predicate) s.tester);
+						ss.id_map.put(s.id, s.tester);
+						RESULT = ss;
+				:}
+    |	stmt:s
+				{:
+						BoundList blist = new BoundList();
+						blist.tester_list.add(s.tester);
+						blist.id_map.put(s.id, s.tester);
+						RESULT = blist;
+				:}
+				;
+
+stmt	::=
+    exp:e
+				{:
+						//System.out.println("exp "+ e.toString());
+						RESULT = e;
+				:}
+				| exp:e LOGICAL_OR:lo stmt:s
+				{:
+						String id = e.id + lo.lexeme + s.id;
+						//System.out.println(id);
+						Predicate<Object> tester = (Predicate<Object>) (Object d) -> {return e.tester.test(d) || s.tester.test(d);};
+						//TODO: figure out how to get var names together into or'd Bound object
+						String s_id = s.id;
+						String[] var_names = s.var_names;
+						if(var_names == null){
+								var_names = new String[]{e.var_name, s.var_name};
+						} else {
+								var_names = s.var_names;
+								ArrayList<String> temp = new ArrayList<String>(Arrays.asList(s.var_names));
+								temp.add(e.var_name);
+								var_names = temp.toArray(var_names);
+								//System.out.println("var_names: "+Arrays.toString(var_names));
+						}
+						// add in var_names and testers hashmap here
+						HashMap<String, Predicate<Object>> testers = new HashMap<String, Predicate<Object>>();
+						if(!e.testers.keySet().isEmpty()){ // != null){
+								testers = e.testers;
+								if(!s.testers.keySet().isEmpty()){ // != null){
+										testers.putAll(s.testers);
+								}
+						} else if(!s.testers.keySet().isEmpty()){ // !=null){
+								testers = s.testers;
+						} else {
+								testers.put(e.var_name, e.tester);
+								testers.put(s.var_name, s.tester);
+						}
+						Bound bound = null;
+						if(e.var_name.equals(s.var_name)){
+								bound = new Bound(e.var_name, id, tester);
+						} else {
+								bound = new Bound(id, testers, var_names);
+						}
+						//System.out.println("Bound testers"+testers.keySet());
+						RESULT = bound;
+				:}
+    ;
+
+
+exp ::=            
+				variable:a LT:op int:b
+				{:
+							String id = a.toString()+ "<" + b.toString();
+							//System.out.println(id);
+							Predicate<Object> tester = (Predicate<Object>) (Object o) -> {Double d = Double.valueOf(o.toString()); return d < Double.valueOf(b.lexeme);};
+							Bound bound = new Bound(a.lexeme, id, tester);
+							bound.tester_complement = (Predicate<Object>) (Object o) -> {Double d = Double.valueOf(o.toString()); return d >= Double.valueOf(b.lexeme);};
+							RESULT = bound;
+				:}
+				|	variable:a LTEQ:op int:b
+				{:
+						String id = a.toString()+"<=" + b.toString();
+						//System.out.println(id);
+						Predicate<Object> tester = (Predicate<Object>) (Object o) -> {Double d = Double.valueOf(o.toString()); return d <= Double.valueOf(b.lexeme);};
+						Bound bound = new Bound(a.lexeme, id, tester);
+						bound.tester_complement = (Predicate<Object>) (Object o) -> {Double d = Double.valueOf(o.toString()); return d > Double.valueOf(b.lexeme);};
+						RESULT = bound;
+				:}
+				|	variable:a GT:op int:b
+				{:
+						String id = a.toString() +">" + b.toString();
+						//System.out.println(id);
+						Predicate<Object> tester = (Predicate<Object>) (Object o) -> {Double d = Double.valueOf(o.toString()); return d > Double.valueOf(b.lexeme);};
+						Bound bound = new Bound(a.lexeme, id, tester);
+						bound.tester_complement = (Predicate<Object>) (Object o) -> {Double d = Double.valueOf(o.toString()); return d <= Double.valueOf(b.lexeme);};
+						RESULT = bound;
+				:}
+				|	variable:a GTEQ:op int:b
+				{:
+						String id = a.toString() +">=" + b.toString();
+						//System.out.println(id);
+						Predicate<Object> tester = (Predicate<Object>) (Object o) -> {Double d = Double.valueOf(o.toString()); return d >= Double.valueOf(b.lexeme);};
+						Bound bound = new Bound(a.lexeme, id, tester);
+						bound.tester_complement = (Predicate<Object>) (Object o) -> {Double d = Double.valueOf(o.toString()); return d < Double.valueOf(b.lexeme);};
+						RESULT = bound;
+				:}
+				| variable:a EQ:op NUMBER:n
+				{:
+						String id = a.toString() + op.lexeme + n.lexeme;
+						//System.out.println(id);
+						Predicate<Object> tester = (Predicate<Object>) (Object o) -> {Double d = Double.valueOf(o.toString()); return Math.abs(d-Double.valueOf(n.lexeme))<1;};
+						Bound bound = new Bound(a.lexeme, id, tester);
+						bound.tester_complement = (Predicate<Object>) (Object o) -> {Double d = Double.valueOf(o.toString()); return !(Math.abs(d-Double.valueOf(n.lexeme))<1);};
+						RESULT = bound;
+				:}
+				| variable:a EQ:op string_literal:v
+				{:
+						String id = a.toString() + op.lexeme + v;
+						//System.out.println(id);
+						Predicate<Object> tester = (Predicate<Object>) (Object o) -> {String s = o.toString(); return s.equals(v);};
+						Bound bound = new Bound(a.lexeme, id, tester);
+						bound.tester_complement = (Predicate<Object>) (Object o) -> {String s = o.toString(); return !s.equals(v);};
+						RESULT = bound;
+				:}
+				| variable:a NOTEQ:op NUMBER:n
+				{:
+						String id = a.toString() + op.lexeme + n.lexeme;
+						//System.out.println(id);
+						Predicate<Object> tester = (Predicate<Object>) (Object o) -> {Double d = Double.valueOf(o.toString()); return Math.abs(d-Double.valueOf(n.lexeme))>1;};
+						Bound bound = new Bound(a.lexeme, id, tester);
+						bound.tester_complement = (Predicate<Object>) (Object o) -> {Double d = Double.valueOf(o.toString()); return !(Math.abs(d-Double.valueOf(n.lexeme))>1);};
+						RESULT = bound;
+				:}
+				| variable:a NOTEQ:op string_literal:v
+				{:
+						String id = a.toString() + op.lexeme + v;
+						//System.out.println(id);
+						//Predicate<String> tester = (Predicate<String>) (String s) -> {return s.equals(v);};
+						Predicate<Object> tester = (Predicate<Object>) (Object o) -> {String s = o.toString(); return !s.equals(v);};
+						Bound bound = new Bound(a.lexeme, id, tester);
+						bound.tester_complement = (Predicate<Object>) (Object o) -> {String s = o.toString(); return s.equals(v);};
+						RESULT = bound;
+				:}
+				| variable:a EQ:op1 string_literal:v1 STRING_TRANSITION:op2 string_literal:v2
+				{:
+						String id = a.toString() + op1.lexeme + v1 + op2.lexeme + v2;
+						//System.out.println(id);
+						Predicate<Object> tester = (Predicate<Object[]>) (Object[] o) -> {String s0 = o[0].toString(); String s1 = o[1].toString(); return s0.equals(v1) && s1.equals(v2);};
+						Bound bound = new Bound(a.lexeme, id, tester);
+						bound.tester_complement = (Predicate<Object[]>) (Object[] o) -> {String s0 = o[0].toString(); String s1 = o[1].toString(); return !s0.equals(v1) || !s1.equals(v2);};
+						RESULT = bound;
+				:}
+				| exp:e1 LOGICAL_AND:la exp:e2
+				{:
+						String id = e1.id + la.lexeme + e2.id;
+						//System.out.println(id);
+						Predicate<Object> tester = (Predicate<Object>) (Object o) -> {return e1.tester.test(o) && e2.tester.test(o);};
+						// add in var_names and testers hashmap here
+						HashMap<String, Predicate<Object>> testers = new HashMap<String, Predicate<Object>>();
+						if(!e1.testers.keySet().isEmpty()){
+								testers = e1.testers;
+								if(!e2.testers.keySet().isEmpty()){
+										testers.putAll(e2.testers);
+								}
+						} else if(!e2.testers.keySet().isEmpty()){
+								testers = e2.testers;
+						} else {
+								testers.put(e1.var_name, e1.tester);
+								testers.put(e2.var_name, e2.tester);
+						}
+						String[] var_names = {e1.var_name, e2.var_name};
+						Bound bound = null;
+						if(e1.var_name.equals(e2.var_name)){
+								bound = new Bound(e1.var_name, id, tester);
+						} else {
+								//System.out.println("Logical and testers: "+testers.keySet());
+								bound = new Bound(id, testers, var_names);
+						}
+						//set up complement(s)
+						if(e1.var_name.equals(e2.var_name)){
+								bound.tester_complement = (Predicate<Object>) (Object o) -> {return e1.tester_complement.test(o) && e2.tester_complement.test(o);};
+						} else	if(!e1.tester_complements.keySet().isEmpty()){
+								if(!e2.tester_complements.keySet().isEmpty()){
+										Set<String> keys = e1.tester_complements.keySet();
+										for(String key : keys){
+												if(e1.tester_complements.keySet().contains(key)){
+														//combine if necessary
+														Predicate<Object> temp = (Predicate<Object>) (Object o) -> {return e1.tester_complements.get(key).test(o) && e2.tester_complements.get(key).test(o);};
+														e2.tester_complements.put(key, temp);
+												}
+										} 
+								} else {
+												bound.tester_complements = e1.tester_complements;
+								}
+						} else	if(!e2.tester_complements.keySet().isEmpty()){
+								e2.tester_complements.put(e1.var_name, e1.tester_complement);
+								bound.tester_complements = e2.tester_complements;
+						}
+						RESULT = bound;
+				:}
+    ;
+
+string_literal ::=
+		STRING:s {: RESULT = s.lexeme; :}
+		| {: RESULT = ""; :}
+		;
+		
+threshold_stmt ::=
+	THRESHOLD DEF int:i	{: RESULT = i; :}
+	;
+	
+delta_stmt ::=
+	DELTA DEF int:i	{: RESULT = i; :}
+	;
+	
+int ::=
+	NUMBER:n	{: /*System.out.println("int "+n.lexeme);*/ RESULT = n; :}
+	;
+
+variable ::=
+	VARIABLE:v {: /*System.out.println("variable:"+v.lexeme);*/ RESULT = v; :}
+	;
