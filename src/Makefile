@@ -24,7 +24,7 @@ parser: mjparser/Yylex.java mjparser/parser.java
 
 #### engine Java
 engine: inference_engine/*.java
-	javac -classpath inference_engine/*:.:./*:commons-lang3-3.9/*:./mjparser/*:./commons-math3-3.6.1/* inference_engine/*.java
+	javac -classpath inference_engine/*:.:./*:commons-lang3-3.9/*:./mjparser/*:./commons-math3-3.6.1/*:./* inference_engine/*.java
 
 clean:
 	rm mjparser/parser.java mjparser/*.class

@@ -3,6 +3,7 @@ package inference_engine;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.TreeSet;
 import java.util.Set;
 import java.util.Iterator;
@@ -13,6 +14,7 @@ import java.util.Comparator;
 import static java.lang.Math.abs;
 import java.util.function.Predicate;
 import java.util.List;
+import com.google.common.collect.Sets;
 
 public class TypedBayesianEngine extends BasicEngine {
    
@@ -95,6 +97,7 @@ public class TypedBayesianEngine extends BasicEngine {
       if(Global.priors.keySet().isEmpty()){
          setup_prior_uniform_dist();
       }
+      generateCompoundEvents();
    }
    
    public void prune_vars_of_interest(){
@@ -262,11 +265,47 @@ public class TypedBayesianEngine extends BasicEngine {
                break;}
          }
       }//end voi for
-      //out.println("Finished setup_threshold_means(); set up cumulative probabilities:");
-      //print_cumulative_probabilities();
+      out.println("Finished setup_threshold_means(); set up cumulative probabilities:");
+      print_cumulative_probabilities();
    }
    
    
+   public void setup_compound_events(){
+      // get all possible values for variables
+      // initialize CompoundEvents combinatorically
+      for(String voi_name : Global.vars_of_interest){
+         Double threshold = Global.thresholds.get(voi_name);
+         RawType type = Global.types.get(voi_name);
+         TreeSet<Double> d_set = new TreeSet<Double>();
+         TreeSet<Integer> i_set = new TreeSet<Integer>();
+         TreeSet<String> s_set = new TreeSet<String>();
+         for(int i = 1; i< csv_array.length; i++){
+            String[] row = (String[]) csv_array[i];
+            switch(type){
+               case DOUBLE:
+                  try{
+                     double val = Double.valueOf(row[get_var_index(voi_name)]);
+                     d_set.add(val);
+                  } catch(NumberFormatException ex){
+                     d_set.add(Double.MIN_VALUE);
+                  }
+                  break;
+               case INT:
+                  try{
+                     int val =Integer.valueOf(row[get_var_index(voi_name)]);
+                     i_set.add(val);
+                  } catch(NumberFormatException ex){
+                     i_set.add(Integer.MIN_VALUE);
+                  }
+                  break;
+               case STRING:
+                  s_set.add(row[get_var_index(voi_name)]);
+                  break;
+            }
+         }
+      }
+      
+   }
    public void setup_prior_uniform_dist(){
       //out.println("\nEntered setup_prior_uniform_dist()");
       //print_cumulative_probabilities();
@@ -1100,6 +1139,72 @@ public class TypedBayesianEngine extends BasicEngine {
          out.println(key1+":"+Global.bound_ids.get(key1)+" ");
       }
       out.println();
+   }
+   
+   public Set<CompoundEvent> generateCompoundEvents(){
+      Set<CompoundEvent> ces = new HashSet();
+      Set set = Sets.newHashSet(Global.vars_of_interest);
+      Set<Set> powerSet = Sets.powerSet(set);
+      HashSet<Set<String>> prunedPowerSet = new HashSet();
+      Iterator<Set> iter = powerSet.iterator();
+      while(iter.hasNext()){
+         Set<String> s = iter.next();
+         if(s.size() > 2){
+            prunedPowerSet.add(s);
+            System.out.println(s);
+         }
+      }
+      for(Set<String> s : prunedPowerSet){
+         for(String A_var : s){
+            HashSet<String> clone = new HashSet<String>(s);
+            clone.remove(A_var);
+            // make CompoundEvent with each var as an A-var
+            String[] givens = new String[clone.size()];
+            Iterator<String> iter2 = clone.iterator();
+            int i = 0;
+            while(iter2.hasNext()){
+               String o = iter2.next();
+               givens[i] = o.toString();
+               i++;
+            }
+            CompoundEvent ce = new CompoundEvent(A_var, givens);
+            ces.add(ce);
+         }
+         System.out.println();
+      }
+      System.out.println("\nCompoundEvents:");
+      for(CompoundEvent ce : ces){
+         System.out.println(ce.toString());
+      }
+      
+      // initialize with values
+      Set<CompoundEvent> initialized_ces = ces.copy(); //new HashSet<CompoundEvent>();
+      iter = initialized_ces.iterator();
+      //for(CompoundEvent ce : initialized_ces){
+      while(iter.hasNext()){
+         CompoundEvent ce = iter.next();
+         for(String var_name : cumulative_probabilities.keySet()){
+            Set<CompoundEvent> temp = new HashSet<CompoundEvent>();
+            for(String val : cumulative_probabilities.get(var_name).keySet()){
+               if(ce.contains(var_name)){
+                  CompoundEvent clone = ce.clone();
+                  if(clone.givensContains(var_name)){
+                     // initialize givens with value
+                     clone.setGivensVal(var_name, val);
+                  } else {
+                     //set up A_var value
+                  }
+                  System.out.println("var_name:"+var_name+"; ce:"+ce.toString());
+                  temp.add(clone);
+               }
+            }
+            initialized_ces = temp;
+         }
+      }
+      
+      
+      System.exit(0);
+      return ces;
    }
    
 }

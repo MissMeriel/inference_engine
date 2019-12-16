@@ -72,6 +72,7 @@ public class Driver {
          //e.printStackTrace();
       }
       build_inference_engine(csv_array, priors);
+      //((TypedBayesianEngine) engine).generateCompoundEvents();
       run_inference_engine();
    } // end main
    
