@@ -18,7 +18,6 @@ import org.apache.commons.math3.fitting.PolynomialCurveFitter;
 public class DeltaTracker{
    
    public String var_name = null;
-   
    public double delta = 1.0; //default value of one: only looking at current value
    public double timestep = 1.0; //how many seconds a delta step is worth
    public LinkedList<Double> next_values = new LinkedList<Double>(); //opposite of this -->//goes [future values, ..., current val]

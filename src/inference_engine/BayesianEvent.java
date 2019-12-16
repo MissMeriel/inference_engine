@@ -15,7 +15,6 @@ public class BayesianEvent<T> extends TypedEvent{
    public HashMap<String, HashMap<String, Double>> total_probabilities = null;
    public double p_A;
    public double p_B;
-   //public TreeSet<String> vars_of_interest = new TreeSet<String>();
    public boolean debug = false;
    public static int gt_one_count = 0;
    /**
@@ -24,8 +23,7 @@ public class BayesianEvent<T> extends TypedEvent{
    public BayesianEvent(String var_name, T val, double p_A){
       super(var_name, val);
       this.p_A = p_A;
-      //this.vars_of_interest = vars_of_interest; //consider removing this.var_name
-      initialize_pBAs();
+        initialize_pBAs();
       initialize_total_probabilities();
    }
    

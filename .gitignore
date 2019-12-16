@@ -6,3 +6,8 @@ src/mjparser/parser.java
 src/mjparser/sym.java
 GrammarTest/Test/*
 */.~lock.*
+*/*.jar
+src/commons-*
+src/subjecttraces
+src/results
+

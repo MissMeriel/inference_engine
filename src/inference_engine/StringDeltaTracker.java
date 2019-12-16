@@ -15,15 +15,17 @@ import org.apache.commons.math3.fitting.PolynomialCurveFitter;
 /** Used by TypedBayesianEngine
  * Deltatracker encapsulates methods used to determine rate of change
  **/
-public class StringDeltaTracker extends DeltaTracker{
+public class StringDeltaTracker{
    
    public String var_name = null;
 
-   public LinkedList<String> next_values = new LinkedList<Double>(); //opposite of this -->//goes [future values, ..., current val]
-   public LinkedList<String> last_values = new LinkedList<Double>(); //goes [current val, ..., future values]
+   public LinkedList<String> next_values = new LinkedList<String>(); //opposite of this -->//goes [future values, ..., current val]
+   public LinkedList<String> last_values = new LinkedList<String>(); //goes [current val, ..., future values]
    public boolean derivative = false;
+   public double timestep = 0;
+   public double delta = 0.0;
    
-   public DeltaTracker(String var_name, double delta, double timestep){
+   public StringDeltaTracker(String var_name, double delta, double timestep){
       this.var_name = var_name;
       this.delta = delta;
       if(timestep > 0){
@@ -77,8 +79,8 @@ public class StringDeltaTracker extends DeltaTracker{
       DeltaRecord rec = new DeltaRecord(var_name);
       Set<String> keys = predicate_map.keySet();
       try{
-         double next_delta = compute_next_delta();
-         double last_delta = compute_last_delta();
+         String next_delta = compute_next_delta();
+         String last_delta = compute_last_delta();
       }catch(DeltaException ex){
          out.println(ex.getMessage());
       }
@@ -104,7 +106,7 @@ public class StringDeltaTracker extends DeltaTracker{
       } else {
          throw new DeltaException(String.format("Exception encountered computing %s next delta; delta %s; timestep %s; next_values.size()=%s; next_values:%s%n", var_name, delta, timestep, next_values.size(), next_values));
       }
-      return next_values.getFirst() +"->"+ next_values.getFirst();;
+      //return next_values.getFirst() +"->"+ next_values.getFirst();
    }
    
    /** @return rate of change or Double.MIN_VALUE upon error
@@ -120,17 +122,17 @@ public class StringDeltaTracker extends DeltaTracker{
       } else {
          throw new DeltaException(String.format("Exception encountered computing next delta of delta %s and timestep %s%n", delta, timestep));
       }
-      return next_values.getFirst() +"->"+ next_values.getFirst();;
+      //return next_values.getFirst() +"->"+ next_values.getFirst();
    }
 
    
    @Override
    public String toString(){
       try{
-         return String.format("DeltaTracker %s: delta=%.3f; last_values=%s; next_values=%s; next delta=%s; last delta=%s%n",var_name,delta, last_values,next_values,compute_next_delta(),compute_last_delta());
+         return String.format("DeltaTracker %s: delta=%.3f; last_values=%s; next_values=%s; next delta=%s; last delta=%s%n", var_name, delta, last_values,next_values,compute_next_delta(),compute_last_delta());
       } catch(DeltaException de){
          out.println(de.getMessage());
-         return String.format("DeltaTracker %s: delta=%.3f; last_values=%s; next_values=%s%n",var_name,delta,last_values,next_values);
+         return String.format("DeltaTracker %s: delta=%.3f; last_values=%s; next_values=%s%n", var_name,delta, last_values, next_values);
       }
    }
    
