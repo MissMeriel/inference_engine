@@ -94,6 +94,18 @@ public class BasicEngine{
       return ArrayUtils.indexOf((Object[]) csv_array[0], (Object)var);
    }
 
+   
+   public String get_var(int i){
+      String var_name = (String) Global.vars_of_interest.toArray()[i];
+      return var_name;
+   }
+   
+   public int get_voi_index(String var_name){
+      ArrayList<String> temp = new ArrayList<String>();
+      temp.addAll(Global.vars_of_interest);
+      int i = temp.indexOf(var_name);
+      return i;
+   }
    /*public ArrayList<Given> sort_givens(){
       //Comparator<Given> cmp = 
       return givens;

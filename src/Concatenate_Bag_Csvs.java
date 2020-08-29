@@ -24,7 +24,7 @@ public class Concatenate_Bag_Csvs{
       File rootdir = new File(args[0]);
       matchingFiles = rootdir.listFiles(new FilenameFilter(){
          public boolean accept(File dir, String name) {
-            return name.startsWith("sweep_for_target_2019-04-") && name.endsWith("interpolated.csv");
+            return name.startsWith("sweep_for_target_2019-04-") && name.endsWith("interpolated.csv") && !name.endsWith("not_interpolated.csv");
          }
       });
       String outfile = args[0] +"/all_bags_concat.csv";
@@ -54,9 +54,9 @@ public class Concatenate_Bag_Csvs{
             } catch(Exception e){
                e.printStackTrace();
             }
-            System.out.println("Wrote line # "+ (++total_rows) +" to file");
+            //System.out.println("Wrote line # "+ (++total_rows) +" to file");
          }
-         System.out.println("Wrote file # "+filenumber+" out of "+matchingFiles.length);
+         //System.out.println("Wrote file # "+filenumber+" out of "+matchingFiles.length);
          filenumber++;
       }
       fw.close();

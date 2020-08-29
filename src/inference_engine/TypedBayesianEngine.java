@@ -26,6 +26,7 @@ public class TypedBayesianEngine extends BasicEngine {
    public static boolean debug = false;
    public static boolean filter_by_average = false;
    HashMap<String, DeltaTracker> delta_trackers = null;
+   public Set<CompoundEvent> compound_events = null;
    
    public static final Logger debugBayesianEngine = Logger.getLogger("BayesianEngine");
    public TypedBayesianEngine(Object[][] csv_array){
@@ -97,7 +98,7 @@ public class TypedBayesianEngine extends BasicEngine {
       if(Global.priors.keySet().isEmpty()){
          setup_prior_uniform_dist();
       }
-      generateCompoundEvents();
+      this.compound_events = generateCompoundEvents();
    }
    
    public void prune_vars_of_interest(){
@@ -265,47 +266,11 @@ public class TypedBayesianEngine extends BasicEngine {
                break;}
          }
       }//end voi for
-      out.println("Finished setup_threshold_means(); set up cumulative probabilities:");
-      print_cumulative_probabilities();
+      //out.println("Finished setup_threshold_means(); set up cumulative probabilities:");
+      //print_cumulative_probabilities();
    }
    
    
-   public void setup_compound_events(){
-      // get all possible values for variables
-      // initialize CompoundEvents combinatorically
-      for(String voi_name : Global.vars_of_interest){
-         Double threshold = Global.thresholds.get(voi_name);
-         RawType type = Global.types.get(voi_name);
-         TreeSet<Double> d_set = new TreeSet<Double>();
-         TreeSet<Integer> i_set = new TreeSet<Integer>();
-         TreeSet<String> s_set = new TreeSet<String>();
-         for(int i = 1; i< csv_array.length; i++){
-            String[] row = (String[]) csv_array[i];
-            switch(type){
-               case DOUBLE:
-                  try{
-                     double val = Double.valueOf(row[get_var_index(voi_name)]);
-                     d_set.add(val);
-                  } catch(NumberFormatException ex){
-                     d_set.add(Double.MIN_VALUE);
-                  }
-                  break;
-               case INT:
-                  try{
-                     int val =Integer.valueOf(row[get_var_index(voi_name)]);
-                     i_set.add(val);
-                  } catch(NumberFormatException ex){
-                     i_set.add(Integer.MIN_VALUE);
-                  }
-                  break;
-               case STRING:
-                  s_set.add(row[get_var_index(voi_name)]);
-                  break;
-            }
-         }
-      }
-      
-   }
    public void setup_prior_uniform_dist(){
       //out.println("\nEntered setup_prior_uniform_dist()");
       //print_cumulative_probabilities();
@@ -347,6 +312,7 @@ public class TypedBayesianEngine extends BasicEngine {
          update_delta_trackers((String[]) csv_array[i], i);
          //update events in vars of interest
          Iterator<String> iter = Global.vars_of_interest.iterator();
+         ArrayList<Object> parsed_row = new ArrayList();
          while(iter.hasNext()){
             String voi_name = iter.next();
             RawType type_enum = Global.types.get(voi_name);
@@ -357,6 +323,7 @@ public class TypedBayesianEngine extends BasicEngine {
             switch(type_enum){
                case INT:
                   try{
+                     parsed_row.add(Integer.parseInt(event_val));
                      be_test = new BayesianEvent<Integer>(voi_name, Integer.parseInt(event_val), prior);
                   } catch(NumberFormatException ex){
                      be_test = new BayesianEvent<Integer>(voi_name, Integer.MIN_VALUE, prior);
@@ -364,18 +331,20 @@ public class TypedBayesianEngine extends BasicEngine {
                   break;
                case DOUBLE:
                   try{
+                     parsed_row.add(Double.parseDouble(event_val));
                      be_test = new BayesianEvent<Double>(voi_name, Double.parseDouble(event_val), prior);
                   } catch(NumberFormatException ex){
                      be_test = new BayesianEvent<Double>(voi_name, Double.MIN_VALUE, prior);
                   }
                   break;
                case STRING:
+                  parsed_row.add(event_val);
                   be_test = new BayesianEvent<String>(voi_name, event_val, prior);
                   break;
                case INTEXP:{
                   Predicate<Object> tester = get_tester(voi_name, Double.parseDouble(event_val));
                   String tester_id = get_tester_id(voi_name, Double.parseDouble(event_val));
-                  //if(debug) debugBayesianEngine.info(String.format("Got tester %s%n", tester_id));
+                  parsed_row.add(tester_id);
                   be_test = new BoundedEvent<Integer>(voi_name, tester_id, prior, tester);
                   break;}
                case DOUBLEEXP:{
@@ -389,13 +358,13 @@ public class TypedBayesianEngine extends BasicEngine {
                      System.exit(0);
                   }
                   String tester_id = get_tester_id(voi_name, Double.parseDouble(event_val));
-                  //if(debug) out.format("Got tester %s%n", tester_id);
+                  parsed_row.add(tester_id);
                   be_test = new BoundedEvent<Double>(voi_name, tester_id, prior, tester);
                   break;}
                case STRINGEXP: {
                   Predicate<Object> tester = get_tester(voi_name, event_val);
                   String tester_id = get_tester_id(voi_name, event_val);
-                  //if(debug) out.format("Got tester %s%n", tester_id);
+                  parsed_row.add(tester_id);
                   be_test = new BoundedEvent<String>(voi_name, tester_id, prior, tester);
                   break;}
                case INTDELTA:
@@ -412,6 +381,7 @@ public class TypedBayesianEngine extends BasicEngine {
                   Predicate<Object> tester = get_tester(voi_name, Double.parseDouble(event_val));
                   //out.format("get_tester_id(%s, %s);%n",voi_name,Double.parseDouble(event_val));
                   String tester_id = get_tester_id(voi_name, Double.parseDouble(event_val));
+                  parsed_row.add(tester_id);
                   double delta = Global.deltas.get(voi_name);
                   be_test = new DeltaEvent<Double>(voi_name, tester_id, prior, tester, delta);
                   break;}
@@ -424,10 +394,9 @@ public class TypedBayesianEngine extends BasicEngine {
                      event_val = "0.0";
                   }
                   //make new DeltaEvent
-                  //out.format("voi_name=%s event_val=%s%n",voi_name,event_val);
                   Predicate<Object> tester = get_tester(voi_name, Double.parseDouble(event_val));
-                  //out.format("get_tester_id(%s, %s);%n",voi_name,Double.parseDouble(event_val));
                   String tester_id = get_tester_id(voi_name, Double.parseDouble(event_val));
+                  parsed_row.add(tester_id);
                   double delta = Global.deltas.get(voi_name);
                   be_test = new DeltaEvent<Double>(voi_name, tester_id, prior, tester, delta);
                   break;}
@@ -481,6 +450,8 @@ public class TypedBayesianEngine extends BasicEngine {
             }
             debugBayesianEngine.info(String.format("%nBAYESIAN EVENTS at loop %s%s%n",i,s));
          }
+         //UPDATE COMPOUND EVENTS
+         update_compound_events(parsed_row);
          //UPDATE CONSTRAINT EVENTS
          for(ConstraintEvent ce : Global.constraint_events){
             TreeSet<String> ce_vois = ce.vois;
@@ -512,9 +483,69 @@ public class TypedBayesianEngine extends BasicEngine {
          }
          Driver.print_priors(Global.priors);
       }
+      //System.out.println("\nfinished CompoundEvents:");
+      for (CompoundEvent ce : this.compound_events){
+         ce.event_space = trace_total;
+         //System.out.println("\n"+ce.toString_with_counts());
+         //ce.calculate_bayesian_probabilities_with_computation();
+         ce.calculate_bayesian_probabilities_with_computation_and_samplesize();
+      }
+      
       //debugBayesianEngine.info("\n\nGENERATE BAYESIAN PROBABILITIES:");
-      out.println(generate_bayesian_probabilities());
+      //out.println(generate_bayesian_probabilities());
    } // end loop_through_trace()
+   
+   
+   // Update P(B, C | A) == P(B, C, A) / P(A)
+   // Update P(B, C) == P(B, C) / event_space
+   public void update_compound_events(ArrayList<Object> row){
+      for(CompoundEvent ce : this.compound_events){
+         boolean all_found = true;
+         boolean givens_found = true;
+         boolean givens_not_A_found = true;
+         for(String var_name: ce.given_var_names){
+            int i = get_voi_index(var_name);
+            Object event_val = row.get(i);
+            //System.out.println("ce:"+ce.toString_with_counts()+" var_name:"+var_name+" i:"+i);
+            /*System.out.println("\nrow: "+row);
+            System.out.println("ce: "+ce.toString());
+            System.out.println("ce containsVal "+event_val+"? "+ce.containsVal(event_val));
+            System.out.println(ce.A_val+" equals "+event_val+"? "+ce.A_val.equals(event_val));
+            System.out.println("ce.vals "+ce.vals+" contains "+var_name+"? "+ce.vals.contains(event_val));*/
+            if(ce.vals.contains(event_val)){
+               // 
+            } else {
+               all_found = false;
+               givens_found = false;
+               //break;
+            }
+         }
+         // Check for A variable
+         int i = get_voi_index(ce.A_var_name);
+         Object event_val = row.get(i);
+         if(ce.A_val.equals(event_val)){
+            // Update P(A)
+            ce.update_A_count();
+            givens_not_A_found = false;
+         } else {
+            ce.update_not_A_count();
+            all_found = false;
+            if(givens_found){
+               //givens_not_A_found = true;
+               ce.update_givens_count_not_A();
+            }
+         }
+         // Update P(B, C, A)
+         if(all_found){
+            // update count for ce
+            ce.update_all_count();
+         }
+         // Update P(B, C)
+         if (givens_found){
+            ce.update_givens_count();
+         }
+      }
+   }
    
    
    public Predicate<Object> get_tester(String voi_name, Double dbl){
@@ -1141,6 +1172,8 @@ public class TypedBayesianEngine extends BasicEngine {
       out.println();
    }
    
+   
+   // TODO finish for smaller givens sets
    public Set<CompoundEvent> generateCompoundEvents(){
       Set<CompoundEvent> ces = new HashSet();
       Set set = Sets.newHashSet(Global.vars_of_interest);
@@ -1151,7 +1184,6 @@ public class TypedBayesianEngine extends BasicEngine {
          Set<String> s = iter.next();
          if(s.size() > 2){
             prunedPowerSet.add(s);
-            System.out.println(s);
          }
       }
       for(Set<String> s : prunedPowerSet){
@@ -1172,39 +1204,54 @@ public class TypedBayesianEngine extends BasicEngine {
          }
          System.out.println();
       }
-      System.out.println("\nCompoundEvents:");
+      /*System.out.println("\nCompoundEvents:");
       for(CompoundEvent ce : ces){
          System.out.println(ce.toString());
-      }
-      
+      }*/
+      // correct up to here.
       // initialize with values
-      Set<CompoundEvent> initialized_ces = ces.copy(); //new HashSet<CompoundEvent>();
-      iter = initialized_ces.iterator();
-      //for(CompoundEvent ce : initialized_ces){
-      while(iter.hasNext()){
-         CompoundEvent ce = iter.next();
-         for(String var_name : cumulative_probabilities.keySet()){
-            Set<CompoundEvent> temp = new HashSet<CompoundEvent>();
-            for(String val : cumulative_probabilities.get(var_name).keySet()){
-               if(ce.contains(var_name)){
-                  CompoundEvent clone = ce.clone();
-                  if(clone.givensContains(var_name)){
-                     // initialize givens with value
-                     clone.setGivensVal(var_name, val);
-                  } else {
-                     //set up A_var value
-                  }
-                  System.out.println("var_name:"+var_name+"; ce:"+ce.toString());
-                  temp.add(clone);
+      //System.out.println("\nInitialize CompoundEvents values");
+      Set<CompoundEvent> initialized_ces = new HashSet<CompoundEvent>();
+      initialized_ces.addAll(ces);
+      for(String var_name : cumulative_probabilities.keySet()){
+         Set<CompoundEvent> temp1 = new HashSet<CompoundEvent>();
+         for(String val : cumulative_probabilities.get(var_name).keySet()){
+            Set<CompoundEvent> temp2 = new HashSet<CompoundEvent>();
+            Iterator<CompoundEvent> iter2 = initialized_ces.iterator();
+            while(iter2.hasNext()){
+               CompoundEvent clone = iter2.next().clone();
+               if(clone.givensContain(var_name)){
+                  // initialize givens with value
+                  clone.setGivensVal(var_name, val);
+                  temp2.add(clone);
+                  //System.out.println("var_name:"+var_name+" val:"+val+"; ce:"+clone.toString());
+               } else if (clone.A_var_name.equals(var_name)) {
+                  //set up A_var value
+                  clone.setAVal(val);
+                  clone.A_prior = get_prior(var_name, val);
+                  temp2.add(clone);
+                  //System.out.println("var_name:"+var_name+" val:"+val+"; ce:"+clone.toString());
                }
             }
-            initialized_ces = temp;
+            temp1.addAll(temp2);
+            //printArr("temp1 using "+var_name+"="+val, temp1);
+            //System.exit(0);
          }
+         initialized_ces = temp1;
+         //System.out.println("Finished with vals for "+var_name+"\n");
+         //printArr("temp1 after exhausting values from "+var_name, temp1);
+         //System.exit(0);
       }
-      
-      
-      System.exit(0);
-      return ces;
+      //printArr("initialized_ces", initialized_ces);
+      //System.exit(0);
+      return initialized_ces;
+   }
+   
+   public void printArr(String title, Set arr){
+      System.out.println(title+": ");
+      for (Object o : arr){
+         System.out.println(o.toString());
+      }
    }
    
 }
