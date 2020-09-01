@@ -1,0 +1,10 @@
+CurrentWheel_Machine,CurrentWheel_Machine<20&&CurrentWheel_Machine>-20:=0.424135207709,CurrentWheel_Machine>=20||CurrentWheel_Machine<=-20:=0.575517295845
+CurrentBrake_Machine,CurrentBrake_Machine==0:=0.953435476229,CurrentBrake_Machine>0:=0.0462170273259
+Mode_H2M,autonomous:=0.840277997157,manual:=0.159374506397
+
+
+CurrentThrottle_Machine
+
+Speed_Machine,Speed_Machine==0:=0.403696095403,Speed_Machine>0:=0.179813612383,Speed_Machine<0:=0.416142786289
+Trust_Human,Trust_Human<0:=0.138145629443,Trust_Human==0:=0.716790393302,Trust_Human>0:=0.144716471332
+EventW_Machine,EventW_Machine==false alarm:=0.00745537197915,EventW_Machine==cyclist detected:=0.0155109714106,EventW_Machine==pedestrian detected:=0.0342757794978,EventW_Machine== :=0.916474484284,EventW_Machine==obstacle detected:=0.0173748159848,EventW_Machine==truck detected:=0.00856104248934

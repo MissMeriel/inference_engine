@@ -1,0 +1,5 @@
+GIVENS
+CurrentWheel_Machine,DOUBLEDELTA,delta:=10,CurrentWheel_Machine<20&&CurrentWheel_Machine>-20,CurrentWheel_Machine>=20||CurrentWheel_Machine<=-20
+Trust_Human,INTDELTA,delta:=10,Trust_Human==0,Trust_Human<0,Trust_Human>0
+EVENTS
+CurrentThrottle_Machine,DOUBLEEXP,CurrentThrottle_Machine==0,CurrentThrottle_Machine>0

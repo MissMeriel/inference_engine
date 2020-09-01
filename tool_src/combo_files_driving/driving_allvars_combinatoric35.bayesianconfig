@@ -1,0 +1,6 @@
+GIVENS
+EventW_Machine,STRINGEXP,EventW_Machine==false alarm,EventW_Machine== ,EventW_Machine==pedestrian detected,EventW_Machine==cyclist detected,EventW_Machine==truck detected,EventW_Machine==obstacle detected
+CurrentWheel_Machine,DOUBLEDELTA,delta:=10,CurrentWheel_Machine<20&&CurrentWheel_Machine>-20,CurrentWheel_Machine>=20||CurrentWheel_Machine<=-20
+Speed_Machine,DOUBLEDELTA,delta:=10,Speed_Machine<0,Speed_Machine>0,Speed_Machine==0
+EVENTS
+Mode_H2M,STRING

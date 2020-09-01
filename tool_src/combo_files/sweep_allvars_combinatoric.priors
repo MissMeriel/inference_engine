@@ -1,0 +1,11 @@
+/velocity.linear_y,/velocity.linear_y>=0.01&&/velocity.linear_y<0.25||/velocity.linear_y<=-0.01&&/velocity.linear_y>-0.25:=0.35425,/velocity.linear_y>=0.25||/velocity.linear_y<=-0.25:=0.21940,/velocity.linear_y<0.01&&/velocity.linear_y>-0.01:=0.42635
+/velocity.linear_x,/velocity.linear_x<0.01&&/velocity.linear_x>-0.01:=0.37633,/velocity.linear_x>=0.01||/velocity.linear_x<=-0.01:=0.62367
+/visp_auto_tracker/status.data,1:=0.72398,2:=0.00131,3:=0.27285,4:=0.00185
+/machine_state.data,MachineState.Manual:=0.08240,MachineState.Landing:=0.03726,MachineState.Hovering:=0.03281,MachineState.FinishedBehavior:=0.03845,MissionState.Suspended:=0.01070,MachineState.LosingVicon:=0.02791,MachineState.PossibleTargetDetected:=0.16886,MachineState.Sweeping:=0.42688,MachineState.OutsideSweepArea:=0.17475
+/mission_state.data,MissionState.PossibleTargetDetected:=0.16892,MissionState.Complete:=0.04574,MissionState.OutsideSweepArea:=0.24917,MissionState.Suspended:=0.06824,MissionState.InsideSweepArea:=0.40460,WarningState.AbortingMission:=0.00885,MissionState.InProgress:=0.05447
+/flight_data.battery_low,True:=0.05044,False:=0.94955
+/user_input.data,UserCommand.Land:=0.00121,UserCommand.KeepHovering:=0.00060,UserCommand.RequestAutoControl:=0.00604,UserCommand.ReturnHome:=0.00906,UserCommand.RequestManualControl:=0.00725,UserCommand.Default:=0.95770,UserCommand.KeepSweeping:=0.00181,UserCommand.LookCloser:=0.01631
+/command_state.data,CommandState.Auto:=0.52499,CommandState.Manual:=0.05031,CommandState.Default:=0.42469
+/warning_state.data,WarningState.NoVicon:=0.03823,WarningState.LosingVicon:=0.01853,WarningState.LowBattery:=0.04580,WarningState.Default:=0.89743
+/user_input.reaction_time_secs,/user_input.reaction_time_secs>7:=0.01183,/user_input.reaction_time_secs>=0&&/user_input.reaction_time_secs<=7:=0.02988,/user_input.reaction_time_secs<0:=0.95829
+/visp_auto_tracker/status.data,1:=0.72398,2:=0.00131,3:=0.27285,4:=0.00185

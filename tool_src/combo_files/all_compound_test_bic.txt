@@ -1,0 +1,131 @@
+/user_input.data=UserCommand.Default 
+    P(/user_input.data=UserCommand.Default | /machine_state.data=MachineState.OutsideSweepArea /velocity.linear_x=/velocity.linear_x>=0.01&&/velocity.linear_x<0.25||/velocity.linear_x<=-0.01&&/velocity.linear_x>-0.25 )
+    7.05472204989949 {'avg': 0.999, 'prior': 0.9577, 'ratio': 1.04313, 'bic': 7.05472204989949}
+/user_input.data=UserCommand.KeepHovering 
+    P(/user_input.data=UserCommand.KeepHovering | /machine_state.data=MachineState.Sweeping /velocity.linear_x=/velocity.linear_x>=0.25||/velocity.linear_x<=-0.25 )
+    14.105562102064791 {'avg': 0.02941, 'prior': 0.0006, 'ratio': 49.01961, 'bic': 14.105562102064791}
+/user_input.data=UserCommand.ReturnHome 
+    P(/user_input.data=UserCommand.ReturnHome | /machine_state.data=MachineState.PossibleTargetDetected /velocity.linear_x=/velocity.linear_x>=0.25||/velocity.linear_x<=-0.25 )
+    8.355580223648477 {'avg': 0.5213, 'prior': 0.00906, 'ratio': 57.53832, 'bic': 8.355580223648477}
+/user_input.data=UserCommand.RequestAutoControl 
+    P(/user_input.data=UserCommand.RequestAutoControl | /mission_state.data=MissionState.PossibleTargetDetected /velocity.linear_y=/velocity.linear_y>=0.01&&/velocity.linear_y<0.25||/velocity.linear_y<=-0.01&&/velocity.linear_y>-0.25 /velocity.linear_x=/velocity.linear_x>=0.01&&/velocity.linear_x<0.25||/velocity.linear_x<=-0.01&&/velocity.linear_x>-0.25 )
+    11.90222650316883 {'avg': 0.0885, 'prior': 0.00604, 'ratio': 14.65282, 'bic': 11.90222650316883}
+/user_input.data=UserCommand.RequestManualControl 
+    P(/user_input.data=UserCommand.RequestManualControl | /machine_state.data=MachineState.Manual /velocity.linear_x=/velocity.linear_x<0.01&&/velocity.linear_x>-0.01 )
+    15.871487169400744 {'avg': 0.07092, 'prior': 0.00725, 'ratio': 9.7815, 'bic': 15.871487169400744}
+/user_input.data=UserCommand.KeepSweeping 
+    P(/user_input.data=UserCommand.KeepSweeping | /mission_state.data=MissionState.InsideSweepArea /velocity.linear_y=/velocity.linear_y>=0.01&&/velocity.linear_y<0.25||/velocity.linear_y<=-0.01&&/velocity.linear_y>-0.25 /velocity.linear_x=/velocity.linear_x>=0.25||/velocity.linear_x<=-0.25 )
+    17.415568279385397 {'avg': 0.00562, 'prior': 0.00181, 'ratio': 3.10263, 'bic': 17.415568279385397}
+/user_input.data=UserCommand.Land 
+    P(/user_input.data=UserCommand.Land | /machine_state.data=MachineState.Landing /velocity.linear_x=/velocity.linear_x<0.01&&/velocity.linear_x>-0.01 )
+    17.608261711882975 {'avg': 0.02976, 'prior': 0.00121, 'ratio': 24.59156, 'bic': 17.608261711882975}
+/user_input.data=UserCommand.LookCloser 
+    P(/user_input.data=UserCommand.LookCloser | /machine_state.data=MachineState.PossibleTargetDetected /velocity.linear_x=/velocity.linear_x>=0.01&&/velocity.linear_x<0.25||/velocity.linear_x<=-0.01&&/velocity.linear_x>-0.25 )
+    10.4614273896931 {'avg': 0.18189, 'prior': 0.01631, 'ratio': 11.15206, 'bic': 10.4614273896931}
+
+/user_input.reaction_time_secs<0 
+    P(/user_input.reaction_time_secs=/user_input.reaction_time_secs<0 | /mission_state.data=MissionState.OutsideSweepArea /visp_auto_tracker/status.data=1 /velocity.linear_y=/velocity.linear_y>=0.01&&/velocity.linear_y<0.25||/velocity.linear_y<=-0.01&&/velocity.linear_y>-0.25 )
+    10.594259017145836 {'avg': 0.99244, 'prior': 0.95829, 'ratio': 1.03564, 'bic': 10.594259017145836}
+0<=/user_input.reaction_time_secs<=7 
+    P(/user_input.reaction_time_secs=/user_input.reaction_time_secs>=0&&/user_input.reaction_time_secs<=7 | /mission_state.data=MissionState.PossibleTargetDetected /visp_auto_tracker/status.data=3 /velocity.linear_y=/velocity.linear_y>=0.01&&/velocity.linear_y<0.25||/velocity.linear_y<=-0.01&&/velocity.linear_y>-0.25 )
+    13.077998442822619 {'avg': 0.28666, 'prior': 0.02988, 'ratio': 9.5936, 'bic': 13.077998442822619}
+/user_input.reaction_time_secs>7 
+    P(/user_input.reaction_time_secs=/user_input.reaction_time_secs>7 | /mission_state.data=MissionState.OutsideSweepArea /visp_auto_tracker/status.data=3 /velocity.linear_y=/velocity.linear_y>=0.25||/velocity.linear_y<=-0.25 )
+    13.476442640960457 {'avg': 0.23488, 'prior': 0.01183, 'ratio': 19.85448, 'bic': 13.476442640960457}
+
+/machine_state.data=MachineState.Sweeping 
+    P(/machine_state.data=MachineState.Sweeping | /velocity.linear_x=/velocity.linear_x>=0.01&&/velocity.linear_x<0.25||/velocity.linear_x<=-0.01&&/velocity.linear_x>-0.25 /user_input.data=UserCommand.Default )
+    4.452210012179047 {'avg': 0.62944, 'prior': 0.42688, 'ratio': 1.47452, 'bic': 4.452210012179047}
+/machine_state.data=MachineState.Manual 
+    P(/machine_state.data=MachineState.Manual | /velocity.linear_x=/velocity.linear_x>=0.25||/velocity.linear_x<=-0.25 /user_input.data=UserCommand.Default )
+    8.831496907902572 {'avg': 0.07047, 'prior': 0.0824, 'ratio': 0.85528, 'bic': 8.831496907902572}
+/machine_state.data=MissionState.Suspended 
+    P(/machine_state.data=MissionState.Suspended | /visp_auto_tracker/status.data=1 /velocity.linear_x=/velocity.linear_x<0.01&&/velocity.linear_x>-0.01 /warning_state.data=WarningState.NoVicon )
+    18.83968932672788 {'avg': 0.09375, 'prior': 0.0107, 'ratio': 8.76213, 'bic': 18.83968932672788}
+/machine_state.data=MachineState.OutsideSweepArea 
+    P(/machine_state.data=MachineState.OutsideSweepArea | /velocity.linear_x=/velocity.linear_x>=0.25||/velocity.linear_x<=-0.25 /user_input.data=UserCommand.Default )
+    4.145534340295823 {'avg': 0.73375, 'prior': 0.17475, 'ratio': 4.19885, 'bic': 4.145534340295823}
+/machine_state.data=MachineState.PossibleTargetDetected 
+    P(/machine_state.data=MachineState.PossibleTargetDetected | /velocity.linear_x=/velocity.linear_x>=0.01&&/velocity.linear_x<0.25||/velocity.linear_x<=-0.01&&/velocity.linear_x>-0.25 /user_input.data=UserCommand.LookCloser )
+    4.396993030771522 {'avg': 0.64706, 'prior': 0.16886, 'ratio': 3.83192, 'bic': 4.396993030771522}
+/machine_state.data=MachineState.FinishedBehavior 
+    P(/machine_state.data=MachineState.FinishedBehavior | /velocity.linear_x=/velocity.linear_x>=0.25||/velocity.linear_x<=-0.25 /user_input.data=UserCommand.ReturnHome )
+    4.278512971044914 {'avg': 0.68655, 'prior': 0.03845, 'ratio': 17.85569, 'bic': 4.278512971044914}
+/machine_state.data=MachineState.Landing 
+    P(/machine_state.data=MachineState.Landing | /velocity.linear_x=/velocity.linear_x>=0.01&&/velocity.linear_x<0.25||/velocity.linear_x<=-0.01&&/velocity.linear_x>-0.25 /user_input.data=UserCommand.Land )
+    10.671755924265215 {'avg': 0.02808, 'prior': 0.03726, 'ratio': 0.7535, 'bic': 10.671755924265215}
+/machine_state.data=MachineState.Hovering 
+    P(/machine_state.data=MachineState.Hovering | /velocity.linear_x=/velocity.linear_x>=0.01&&/velocity.linear_x<0.25||/velocity.linear_x<=-0.01&&/velocity.linear_x>-0.25 /user_input.data=UserCommand.ReturnHome )
+    14.071659764215081 {'avg': 0.00513, 'prior': 0.03281, 'ratio': 0.1564, 'bic': 14.071659764215081}
+/machine_state.data=MachineState.LosingVicon 
+    P(/machine_state.data=MachineState.LosingVicon | /visp_auto_tracker/status.data=3 /velocity.linear_x=/velocity.linear_x>=0.01&&/velocity.linear_x<0.25||/velocity.linear_x<=-0.01&&/velocity.linear_x>-0.25 /warning_state.data=WarningState.LosingVicon )
+    11.332803376849855 {'avg': 0.11765, 'prior': 0.02791, 'ratio': 4.21523, 'bic': 11.332803376849855}
+    
+/mission_state.data=MissionState.OutsideSweepArea 
+    P(/mission_state.data=MissionState.OutsideSweepArea | /velocity.linear_y=/velocity.linear_y>=0.01&&/velocity.linear_y<0.25||/velocity.linear_y<=-0.01&&/velocity.linear_y>-0.25 /velocity.linear_x=/velocity.linear_x>=0.25||/velocity.linear_x<=-0.25 /user_input.data=UserCommand.Default )
+    3.538658255789918 {'avg': 0.99387, 'prior': 0.24917, 'ratio': 3.98872, 'bic': 3.538658255789918}
+/mission_state.data=MissionState.InsideSweepArea 
+    P(/mission_state.data=MissionState.InsideSweepArea | /velocity.linear_y=/velocity.linear_y>=0.01&&/velocity.linear_y<0.25||/velocity.linear_y<=-0.01&&/velocity.linear_y>-0.25 /velocity.linear_x=/velocity.linear_x<0.01&&/velocity.linear_x>-0.01 /user_input.data=UserCommand.Default )
+    3.8731872304660557 {'avg': 0.84079, 'prior': 0.4046, 'ratio': 2.07807, 'bic': 3.8731872304660557}
+/mission_state.data=MissionState.InProgress
+    P(/mission_state.data=MissionState.InProgress | /velocity.linear_y=/velocity.linear_y<0.01&&/velocity.linear_y>-0.01 /velocity.linear_x=/velocity.linear_x>=0.25||/velocity.linear_x<=-0.25 /user_input.data=UserCommand.Default )
+    9.144779701752286 {'avg': 0.35133, 'prior': 0.05447, 'ratio': 6.45005, 'bic': 9.144779701752286}
+/mission_state.data=MissionState.PossibleTargetDetected 
+    P(/mission_state.data=MissionState.PossibleTargetDetected | /velocity.linear_y=/velocity.linear_y>=0.01&&/velocity.linear_y<0.25||/velocity.linear_y<=-0.01&&/velocity.linear_y>-0.25 /velocity.linear_x=/velocity.linear_x>=0.01&&/velocity.linear_x<0.25||/velocity.linear_x<=-0.01&&/velocity.linear_x>-0.25 /user_input.data=UserCommand.ReturnHome )
+    7.006706960129405 {'avg': 0.17549, 'prior': 0.16892, 'ratio': 1.03889, 'bic': 7.006706960129405}
+/mission_state.data=MissionState.Suspended
+    P(/mission_state.data=MissionState.Suspended | /velocity.linear_y=/velocity.linear_y<0.01&&/velocity.linear_y>-0.01 /velocity.linear_x=/velocity.linear_x>=0.25||/velocity.linear_x<=-0.25 /user_input.data=UserCommand.Default )
+    10.521929826686314 {'avg': 0.17647, 'prior': 0.06824, 'ratio': 2.58603, 'bic': 10.521929826686314}
+/mission_state.data=MissionState.AbortingMission 
+    P(/mission_state.data=MissionState.AbortingMission | /velocity.linear_y=/velocity.linear_y<0.01&&/velocity.linear_y>-0.01 /velocity.linear_x=/velocity.linear_x>=0.01&&/velocity.linear_x<0.25||/velocity.linear_x<=-0.01&&/velocity.linear_x>-0.25 /user_input.data=UserCommand.Land )
+    14.47988518274094 {'avg': 0.02439, 'prior': 0.00885, 'ratio': 2.75556, 'bic': 14.47988518274094}
+/mission_state.data=MissionState.Complete 
+    P(/mission_state.data=MissionState.Complete | /machine_state.data=MachineState.Landing /user_input.data=UserCommand.Default /warning_state.data=WarningState.Default )
+    14.64195930245223 {'avg': 0.76471, 'prior': 0.04574, 'ratio': 16.71854, 'bic': 14.64195930245223}
+
+
+/warning_state.data=WarningState.Default 
+    P(/warning_state.data=WarningState.Default | /velocity.linear_y=/velocity.linear_y>=0.01&&/velocity.linear_y<0.25||/velocity.linear_y<=-0.01&&/velocity.linear_y>-0.25 /velocity.linear_x=/velocity.linear_x>=0.01&&/velocity.linear_x<0.25||/velocity.linear_x<=-0.01&&/velocity.linear_x>-0.25 )
+    3.539825751143025 {'avg': 0.99329, 'prior': 0.89743, 'ratio': 1.10682, 'bic': 3.539825751143025}
+/warning_state.data=WarningState.LosingVicon 
+    P(/warning_state.data=WarningState.LosingVicon | /visp_auto_tracker/status.data=1 /machine_state.data=MachineState.LosingVicon /velocity.linear_x=/velocity.linear_x<0.01&&/velocity.linear_x>-0.01 )
+    16.021751970410353 {'avg': 0.3836, 'prior': 0.01853, 'ratio': 20.70172, 'bic': 16.021751970410353}
+/warning_state.data=WarningState.NoVicon 
+    P(/warning_state.data=WarningState.NoVicon | /velocity.linear_y=/velocity.linear_y<0.01&&/velocity.linear_y>-0.01 /velocity.linear_x=/velocity.linear_x>=0.25||/velocity.linear_x<=-0.25 )
+    11.708116636850566 {'avg': 0.09752, 'prior': 0.03823, 'ratio': 2.55086, 'bic': 11.708116636850566}
+/warning_state.data=WarningState.LowBattery 
+    P(/warning_state.data=WarningState.LowBattery | /velocity.linear_y=/velocity.linear_y>=0.25||/velocity.linear_y<=-0.25 /velocity.linear_x=/velocity.linear_x>=0.25||/velocity.linear_x<=-0.25 )
+    8.381750332689942 {'avg': 0.08824, 'prior': 0.0458, 'ratio': 1.92653, 'bic': 8.381750332689942}
+
+-0.01</velocity.linear_x<0.01 
+    P(/velocity.linear_x=/velocity.linear_x<0.01&&/velocity.linear_x>-0.01 | /velocity.linear_y=/velocity.linear_y>=0.25||/velocity.linear_y<=-0.25 /warning_state.data=WarningState.Default )
+    8.755207035263332 {'avg': 0.07321, 'prior': 0.37633, 'ratio': 0.19453, 'bic': 8.755207035263332}
+0.01<=/velocity.linear_x<0.25
+    P(/velocity.linear_x=/velocity.linear_x>=0.01&&/velocity.linear_x<0.25||/velocity.linear_x<=-0.01&&/velocity.linear_x>-0.25 | /mission_state.data=MissionState.InsideSweepArea /velocity.linear_y=/velocity.linear_y>=0.01&&/velocity.linear_y<0.25||/velocity.linear_y<=-0.01&&/velocity.linear_y>-0.25 /user_input.data=UserCommand.Default )
+    4.0501292838774425 {'avg': 0.7696, 'prior': 0.37633, 'ratio': 2.04502, 'bic': 4.0501292838774425}
+/velocity.linear_x>=0.25
+    P(/velocity.linear_x=/velocity.linear_x>=0.25||/velocity.linear_x<=-0.25 | /visp_auto_tracker/status.data=1 /machine_state.data=MachineState.OutsideSweepArea /warning_state.data=WarningState.Default )
+    3.9061649596849772 {'avg': 0.82704, 'prior': 0.37633, 'ratio': 2.19765, 'bic': 3.9061649596849772}
+
+-0.01</velocity.linear_y<0.01 
+    P(/velocity.linear_y=/velocity.linear_y<0.01&&/velocity.linear_y>-0.01 | /velocity.linear_x=/velocity.linear_x>=0.01&&/velocity.linear_x<0.25||/velocity.linear_x<=-0.01&&/velocity.linear_x>-0.25 /warning_state.data=WarningState.NoVicon )
+    6.995569302070152 {'avg': 0.17647, 'prior': 0.42635, 'ratio': 0.41391, 'bic': 6.995569302070152}
+0.01<=/velocity.linear_y<0.25
+    P(/velocity.linear_y=/velocity.linear_y>=0.01&&/velocity.linear_y<0.25||/velocity.linear_y<=-0.01&&/velocity.linear_y>-0.25 | /mission_state.data=MissionState.OutsideSweepArea /velocity.linear_x=/velocity.linear_x>=0.01&&/velocity.linear_x<0.25||/velocity.linear_x<=-0.01&&/velocity.linear_x>-0.25 /user_input.data=UserCommand.Default )
+    3.8198369648397703 {'avg': 0.86352, 'prior': 0.35425, 'ratio': 2.4376, 'bic': 3.8198369648397703}
+/velocity.linear_y>=0.25
+    P(/velocity.linear_y=/velocity.linear_y>=0.25||/velocity.linear_y<=-0.25 | /velocity.linear_x=/velocity.linear_x>=0.25||/velocity.linear_x<=-0.25 /warning_state.data=WarningState.Default )
+    5.327342933296665 {'avg': 0.40637, 'prior': 0.2194, 'ratio': 1.85218, 'bic': 5.327342933296665}
+    
+/visp_auto_tracker/status.data=1 
+    P(/visp_auto_tracker/status.data=1 | /machine_state.data=MachineState.OutsideSweepArea /velocity.linear_x=/velocity.linear_x>=0.25||/velocity.linear_x<=-0.25 /warning_state.data=WarningState.Default )
+    7.052721049232323 {'avg': 1.0, 'prior': 0.72398, 'ratio': 1.38125, 'bic': 7.052721049232323}
+/visp_auto_tracker/status.data=2 
+    P(/visp_auto_tracker/status.data=2 | /mission_state.data=MissionState.PossibleTargetDetected /velocity.linear_y=/velocity.linear_y>=0.01&&/velocity.linear_y<0.25||/velocity.linear_y<=-0.01&&/velocity.linear_y>-0.25 /user_input.reaction_time_secs=/user_input.reaction_time_secs<0 )
+    16.699373440814846 {'avg': 0.00804, 'prior': 0.00131, 'ratio': 6.13996, 'bic': 16.699373440814846}
+/visp_auto_tracker/status.data=3 
+    P(/visp_auto_tracker/status.data=3 | /machine_state.data=MachineState.PossibleTargetDetected /velocity.linear_x=/velocity.linear_x>=0.01&&/velocity.linear_x<0.25||/velocity.linear_x<=-0.01&&/velocity.linear_x>-0.25 /warning_state.data=WarningState.Default )
+    7.759367896642759 {'avg': 0.70235, 'prior': 0.27285, 'ratio': 2.57412, 'bic': 7.759367896642759}
+/visp_auto_tracker/status.data=4 
+    P(/visp_auto_tracker/status.data=4 | /machine_state.data=MachineState.PossibleTargetDetected /velocity.linear_y=/velocity.linear_y>=0.01&&/velocity.linear_y<0.25||/velocity.linear_y<=-0.01&&/velocity.linear_y>-0.25 /user_input.data=UserCommand.Default /warning_state.data=WarningState.Default )
+    9.413689385746387 {'avg': 0.30713, 'prior': 0.00185, 'ratio': 166.01574, 'bic': 9.413689385746387}

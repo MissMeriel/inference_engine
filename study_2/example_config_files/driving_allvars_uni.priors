@@ -1,0 +1,7 @@
+EventW_Machine,EventW_Machine==false alarm:=0.16666,EventW_Machine== :=0.16666,EventW_Machine==pedestrian detected:=0.16666,EventW_Machine==cyclist detected:=0.16666,EventW_Machine==truck detected:=0.16666,EventW_Machine==obstacle detected:=0.16666
+CurrentWheel_Machine,CurrentWheel_Machine>=20||CurrentWheel_Machine<=-20:=0.5,CurrentWheel_Machine<20&&CurrentWheel_Machine>-20:=0.5
+Speed_Machine,Speed_Machine<0:=0.33333,Speed_Machine==0:=0.33333,Speed_Machine>0:=0.33333
+Mode_H2M,autonomous:=0.5,manual:=0.5
+Trust_Human,Trust_Human==0:=0.33333,Trust_Human<0:=0.33333,Trust_Human>0:=0.33333
+CurrentThrottle_Machine,CurrentThrottle_Machine>0:=0.5,CurrentThrottle_Machine==0:=0.5
+CurrentBrake_Machine,CurrentBrake_Machine==0:=0.5,CurrentBrake_Machine>0:=0.5

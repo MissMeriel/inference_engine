@@ -1,0 +1,20 @@
+driving_temp_outfile.txt
+P(EventW_Machine=EventW_Machine==cyclist detected | Speed_Machine=Speed_Machine>0 CurrentBrake_Machine=CurrentBrake_Machine>0 Mode_H2M=manual CurrentThrottle_Machine=CurrentThrottle_Machine>0 CurrentWheel_Machine=CurrentWheel_Machine>=20||CurrentWheel_Machine<=-20 Trust_Human=Trust_Human==0 ) = 0.0
+
+
+
+driving_temp_outfile.txt
+P(EventW_Machine=EventW_Machine==cyclist detected | Speed_Machine=Speed_Machine>0 CurrentBrake_Machine=CurrentBrake_Machine>0 Mode_H2M=manual CurrentThrottle_Machine=CurrentThrottle_Machine>0 CurrentWheel_Machine=CurrentWheel_Machine>=20||CurrentWheel_Machine<=-20 Trust_Human=Trust_Human==0 ) = 0.1
+
+driving_temp_outfile.txt
+P(EventW_Machine=EventW_Machine==cyclist detected | Speed_Machine=Speed_Machine>0 CurrentBrake_Machine=CurrentBrake_Machine>0 Mode_H2M=manual CurrentThrottle_Machine=CurrentThrottle_Machine>0 CurrentWheel_Machine=CurrentWheel_Machine>=20||CurrentWheel_Machine<=-20 Trust_Human=Trust_Human==0 ) = 0.1
+
+
+driving_temp_outfile.txt
+P(EventW_Machine=EventW_Machine==cyclist detected | Speed_Machine=Speed_Machine>0 CurrentBrake_Machine=CurrentBrake_Machine>0 Mode_H2M=manual CurrentThrottle_Machine=CurrentThrottle_Machine>0 CurrentWheel_Machine=CurrentWheel_Machine>=20||CurrentWheel_Machine<=-20 Trust_Human=Trust_Human==0 ) = 0.2
+
+
+driving_temp_outfile.txt
+P(EventW_Machine=EventW_Machine==cyclist detected | Speed_Machine=Speed_Machine>0 CurrentBrake_Machine=CurrentBrake_Machine>0 Mode_H2M=manual CurrentThrottle_Machine=CurrentThrottle_Machine>0 CurrentWheel_Machine=CurrentWheel_Machine>=20||CurrentWheel_Machine<=-20 Trust_Human=Trust_Human==0 ) = 0.2
+
+

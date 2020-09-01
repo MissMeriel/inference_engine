@@ -1,0 +1,6 @@
+GIVENS
+CurrentWheel_Machine,DOUBLEDELTA,delta:=10,CurrentWheel_Machine<20&&CurrentWheel_Machine>-20,CurrentWheel_Machine>=20||CurrentWheel_Machine<=-20
+Mode_H2M,STRING
+Trust_Human,INTDELTA,delta:=10,Trust_Human==0,Trust_Human<0,Trust_Human>0
+EVENTS
+CurrentBrake_Machine,DOUBLEEXP,CurrentBrake_Machine==0,CurrentBrake_Machine>0

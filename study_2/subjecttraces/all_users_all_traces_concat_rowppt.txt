@@ -1,0 +1,119 @@
+===========================================================================
+aprogram.point:::row
+TimeSignal_Sec >= 0.0
+Trust_Human one of { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0 }
+	"0.0" probability: 16.56%	count:9051.0 total:54654.0
+	"1.0" probability: 3.39%	count:1852.0 total:54654.0
+	"2.0" probability: 10.66%	count:5826.0 total:54654.0
+	"3.0" probability: 35.81%	count:19573.0 total:54654.0
+	"4.0" probability: 18.72%	count:10229.0 total:54654.0
+	"5.0" probability: 14.86%	count:8123.0 total:54654.0
+Trust_Human >= 0.0
+Alarm_M2H one of { " ", "cyclist alarm", "obstacle alarm", "pedestrian alarm", "truck alarm" }
+	" " probability: 93.59%	count:51151.0 total:54654.0
+	"cyclist alarm" probability: 1.63%	count:891.0 total:54654.0
+	"obstacle alarm" probability: 1.39%	count:762.0 total:54654.0
+	"pedestrian alarm" probability: 2.72%	count:1487.0 total:54654.0
+	"truck alarm" probability: 0.66%	count:363.0 total:54654.0
+Mode_H2M one of { "autonomous", "manual" }
+Mode_H2M one of { "autonomous", "manual" }
+	"autonomous" probability: 83.44%	count:45603.0 total:54654.0
+	"manual" probability: 16.56%	count:9051.0 total:54654.0
+ManualBrake_H2M >= 0.0
+ManualGear_H2M one of { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0 }
+	"0.0" probability: 0.14%	count:111.0 total:78432.0
+	"1.0" probability: 99.34%	count:77914.0 total:78432.0
+	"2.0" probability: 0.31%	count:242.0 total:78432.0
+	"3.0" probability: 0.11%	count:90.0 total:78432.0
+	"4.0" probability: 0.05%	count:43.0 total:78432.0
+	"5.0" probability: 0.04%	count:32.0 total:78432.0
+ManualGear_H2M >= 0.0
+ManualThrottle_H2M >= 0.0
+CurrentGear_Machine one of { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0 }
+	"0.0" probability: 0.14%	count:111.0 total:78432.0
+	"1.0" probability: 99.34%	count:77914.0 total:78432.0
+	"2.0" probability: 0.31%	count:242.0 total:78432.0
+	"3.0" probability: 0.11%	count:90.0 total:78432.0
+	"4.0" probability: 0.05%	count:43.0 total:78432.0
+	"5.0" probability: 0.04%	count:32.0 total:78432.0
+CurrentGear_Machine >= 0.0
+CurrentBrake_Machine >= 0.0
+CurrentThrottle_Machine >= 0.0
+AutoBrake_Machine >= 0.0
+AutoThrottle_Machine one of { 0.0, 15.0, 20.0 }
+AutoThrottle_Machine one of { 0.0, 15.0, 20.0 }
+	"0.0" probability: 3.43%	count:1878.0 total:54809.0
+	"15.0" probability: 36.16%	count:19818.0 total:54809.0
+	"20.0" probability: 60.42%	count:33113.0 total:54809.0
+AutoGear_Machine == 1.0
+AutoGear_Machine == 1.0
+AutoGear_Machine != 0
+Speed_Machine >= 0.0
+PupilLeft_Human != 0
+PupilRight_Human != 0
+PupilRight_Human >= 1.8
+GSR_Human != 0
+EventN_Machine one of { " ", "cyclist detected", "obstacle detected", "pedestrian detected", "truck detected" }
+	" " probability: 98.66%	count:53923.0 total:54654.0
+	"cyclist detected" probability: 0.35%	count:190.0 total:54654.0
+	"obstacle detected" probability: 0.46%	count:251.0 total:54654.0
+	"pedestrian detected" probability: 0.43%	count:233.0 total:54654.0
+	"truck detected" probability: 0.10%	count:57.0 total:54654.0
+RangeN_Machine >= 0.0
+EventW_Machine one of { " ", "cyclist detected", "false alarm", "obstacle detected", "pedestrian detected", "truck detected" }
+	" " probability: 91.82%	count:50186.0 total:54654.0
+	"cyclist detected" probability: 1.53%	count:837.0 total:54654.0
+	"false alarm" probability: 0.72%	count:393.0 total:54654.0
+	"obstacle detected" probability: 1.73%	count:944.0 total:54654.0
+	"pedestrian detected" probability: 3.35%	count:1831.0 total:54654.0
+	"truck detected" probability: 0.85%	count:463.0 total:54654.0
+RangeW_Machine >= 0.0
+Reliability_Machine one of { 0.0, 0.8, 1.0 }
+Reliability_Machine one of { 0.0, 0.8, 1.0 }
+	"0.0" probability: 24.95%	count:13636.0 total:54654.0
+	"0.8" probability: 50.02%	count:27338.0 total:54654.0
+	"1.0" probability: 25.03%	count:13680.0 total:54654.0
+AverageTrust_Human != 0
+AverageTrust_Human >= 1.4
+TrustChange_Human one of { -5.0, -4.0, -3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0, 4.0 }
+	"-5.0" probability: 0.06%	count:32.0 total:54654.0
+	"-4.0" probability: 0.06%	count:32.0 total:54654.0
+	"-3.0" probability: 0.20%	count:110.0 total:54654.0
+	"-2.0" probability: 0.16%	count:85.0 total:54654.0
+	"-1.0" probability: 1.16%	count:633.0 total:54654.0
+	"0.0" probability: 96.54%	count:52764.0 total:54654.0
+	"1.0" probability: 1.41%	count:773.0 total:54654.0
+	"2.0" probability: 0.14%	count:75.0 total:54654.0
+	"3.0" probability: 0.27%	count:148.0 total:54654.0
+	"4.0" probability: 0.00%	count:2.0 total:54654.0
+TrustDelta one of { -5.0, -4.0, -3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0, 4.0, 5.0 }
+	"-5.0" probability: 0.47%	count:256.0 total:54654.0
+	"-4.0" probability: 0.62%	count:340.0 total:54654.0
+	"-3.0" probability: 1.61%	count:879.0 total:54654.0
+	"-2.0" probability: 2.45%	count:1340.0 total:54654.0
+	"-1.0" probability: 6.31%	count:3446.0 total:54654.0
+	"0.0" probability: 76.45%	count:41785.0 total:54654.0
+	"1.0" probability: 7.10%	count:3880.0 total:54654.0
+	"2.0" probability: 2.09%	count:1145.0 total:54654.0
+	"3.0" probability: 2.31%	count:1264.0 total:54654.0
+	"4.0" probability: 0.33%	count:181.0 total:54654.0
+	"5.0" probability: 0.25%	count:138.0 total:54654.0
+CurrentGear_MachineDelta one of { -4.0, -2.0, -1.0, 0.0, 1.0, 2.0 }
+	"-4.0" probability: 0.02%	count:9.0 total:54654.0
+	"-2.0" probability: 0.01%	count:7.0 total:54654.0
+	"-1.0" probability: 0.08%	count:45.0 total:54654.0
+	"0.0" probability: 99.74%	count:54511.0 total:54654.0
+	"1.0" probability: 0.14%	count:78.0 total:54654.0
+	"2.0" probability: 0.01%	count:4.0 total:54654.0
+CurrentGear_MachineDelta <= 2.0
+ModeDelta one of { -12.0, 0.0, 12.0 }
+ModeDelta one of { -12.0, 0.0, 12.0 }
+	"-12.0" probability: 2.65%	count:1451.0 total:54654.0
+	"0.0" probability: 94.67%	count:51743.0 total:54654.0
+	"12.0" probability: 2.67%	count:1460.0 total:54654.0
+Trust_Human >= TrustChange_Human
+AutoWheel_Machine != CurrentWheel_MachineDelta
+PupilLeft_Human > PupilChange_Human
+PupilRight_Human > PupilChange_Human
+GSR_Human != GSR_HumanDelta
+

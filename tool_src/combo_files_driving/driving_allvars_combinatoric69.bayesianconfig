@@ -1,0 +1,6 @@
+GIVENS
+Mode_H2M,STRING
+Trust_Human,INTDELTA,delta:=10,Trust_Human==0,Trust_Human<0,Trust_Human>0
+CurrentThrottle_Machine,DOUBLEEXP,CurrentThrottle_Machine==0,CurrentThrottle_Machine>0
+EVENTS
+CurrentBrake_Machine,DOUBLEEXP,CurrentBrake_Machine==0,CurrentBrake_Machine>0

@@ -1,0 +1,10 @@
+GIVENS
+/velocity.linear_y,DOUBLEEXP,/velocity.linear_y>=0.01&&/velocity.linear_y<0.25||/velocity.linear_y<=-0.01&&/velocity.linear_y>-0.25,/velocity.linear_y>=0.25||/velocity.linear_y<=-0.25,/velocity.linear_y<0.01&&/velocity.linear_y>-0.01
+/velocity.linear_x,DOUBLEEXP,/velocity.linear_x<0.01&&/velocity.linear_x>-0.01,/velocity.linear_x>=0.01&&/velocity.linear_x<0.25||/velocity.linear_x<=-0.01&&/velocity.linear_x>-0.25,/velocity.linear_x>=0.25||/velocity.linear_x<=-0.25
+/machine_state.data,STRING
+/mission_state.data,STRING
+/user_input.data,STRING
+/warning_state.data,STRING
+EVENTS
+/user_input.reaction_time_secs,DOUBLEEXP,/user_input.reaction_time_secs>7,/user_input.reaction_time_secs>=0&&/user_input.reaction_time_secs<=7,/user_input.reaction_time_secs<0
+/visp_auto_tracker/status.data,STRING

@@ -1,0 +1,5 @@
+GIVENS
+Mode_H2M,STRING
+CurrentThrottle_Machine,DOUBLEEXP,CurrentThrottle_Machine==0,CurrentThrottle_Machine>0
+EVENTS
+CurrentBrake_Machine,DOUBLEEXP,CurrentBrake_Machine==0,CurrentBrake_Machine>0

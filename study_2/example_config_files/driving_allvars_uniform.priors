@@ -1,0 +1,12 @@
+EventW_Machine,EventW_Machine==false alarm:=0.16666,EventW_Machine== :=0.16666,EventW_Machine==pedestrian detected:=0.16666,EventW_Machine==cyclist detected:=0.16666,EventW_Machine==truck detected:=0.16666,EventW_Machine==obstacle detected:=0.16666
+Alarm_M2H, :=0.2,pedestrian alarm:=0.2,cyclist alarm:=0.2,obstacle alarm:=0.2,truck alarm:=0.2
+EventAlert_Machine,:=0.16666,pedestrian detected:=0.16666,cyclist detected:=0.16666,truck detected:=0.16666,obstacle detected:=0.16666,false alarm:=0.16666
+PupilChange_Human,PupilChange_Human==0:=0.208,PupilChange_Human>0:=0.408,PupilChange_Human<0:=0.384
+CurrentWheel_Machine,CurrentWheel_Machine>=20||CurrentWheel_Machine<=-20:=0.5,CurrentWheel_Machine<20&&CurrentWheel_Machine>-20:=0.5
+Speed_Machine,Speed_Machine<0:=0.33333,Speed_Machine==0:=0.33333,Speed_Machine>0:=0.33333
+Mode_H2M,autonomous:=0.5,manual:=0.5
+TimeSignal_Sec,TimeSignal_Sec>=120&&TimeSignal_Sec<180:=0.33252,TimeSignal_Sec>=60&&TimeSignal_Sec<120:=0.33373,TimeSignal_Sec<60:=0.33373
+Trust_Human,Trust_Human==0:=0.33333,Trust_Human<0:=0.33333,Trust_Human>0:=0.33333
+CurrentGear_Machine,0:=0.16666,1:=0.16666,2:=0.16666,3:=0.16666,4:=0.16666,5:=0.16666
+CurrentThrottle_Machine,CurrentThrottle_Machine>0:=0.5,CurrentThrottle_Machine==0:=0.5
+CurrentBrake_Machine,CurrentBrake_Machine==0:=0.5,CurrentBrake_Machine>0:=0.5
