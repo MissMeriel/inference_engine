@@ -7,12 +7,14 @@
 - java-cup-11a.jar
 - org.apache.commons.lang3
 
+## 1.5 Unzip trace archives.
 
 ## 2. Compile everything:
-To compile parser: 
+Use the makefile in tool_src/ dir.
 ```
-
+make all
 ```
+OR....
 
 To compile engine on its own:
 ```
