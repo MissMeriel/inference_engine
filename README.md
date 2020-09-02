@@ -23,14 +23,14 @@ javac -classpath .:./commons-lang3-3.9/*:./com.google.guava_1.6.0.jar:commons-ma
 To compile assistant scripts:
 
 ```
-javac 
 javac Probability_To_Csv.java
 ```
 
 ## 3. Run scripts
 ```
-cd src/
+cd study_1/
 ./generate_bag_probabilities.sh      # drone invariants
+cd study_2/
 ./generate_driving_probabilities.sh  # driving invariants
 ```
 
