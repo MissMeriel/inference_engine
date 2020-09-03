@@ -1,7 +1,7 @@
 #!/bin/bash
 
 export rootdir=$(pwd)
-export tracedir=$(cd ./drone_traces/; pwd)
+export tracedir=$(cd ./drone_traces/split/exp_traces/; pwd)
 export tooldir=$(cd ../tool_src; pwd)
 outfile=$rootdir/drone_traces_outfile.txt
 config_file=$rootdir/example_config_files/sweep_allvars_compound_minimalex.bayesianconfig
