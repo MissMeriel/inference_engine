@@ -1,6 +1,0 @@
-GIVENS
-/velocity.linear_x,DOUBLEEXP,/velocity.linear_x<0.01&&/velocity.linear_x>-0.01,/velocity.linear_x>=0.01||/velocity.linear_x<=-0.01
-/mission_state.data,STRING
-/machine_state.data,STRING
-EVENTS
-/warning_state.data,STRING
