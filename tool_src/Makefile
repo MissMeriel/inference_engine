@@ -1,6 +1,5 @@
 #########################################################################
 # Makefile for inference engine and config file language parser
-# Meriel Stein
 
 all: mjparser/parser.java mjparser/Yylex.java parser engine
 

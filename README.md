@@ -13,10 +13,11 @@
 
 ### 1.5 Unzip trace archives.
 ```
-
+mkdir study_1/drone_traces/; unzip study_1/drone_traces.zip -d study_1/drone_traces/
+mkdir study_2/subjecttraces/; unzip study_2/subjecttraces.zip -d study_2/subjecttraces/
 ```
 
-## 2. Compile everything:
+### 2. Compile everything:
 Use the makefile in ./tool_src/ dir.
 ```
 make all

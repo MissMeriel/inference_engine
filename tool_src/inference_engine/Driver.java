@@ -389,7 +389,7 @@ public class Driver {
       System.out.println("Provide args: "
                          +"\n\t.csv file of trace"
                          +"\n\t.config file with no empty lines containing GIVENS and EVENTS");
-      System.out.println("\nDon't forget to include commons.lang3 .jar (in ./commons-lang3-3.9/* on Meriel's computer).");
+      System.out.println("\nDon't forget to include commons.lang3 .jar (in ./commons-lang3-3.9/* ).");
    }
    
 } // end Driver
