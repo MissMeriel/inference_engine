@@ -8,18 +8,18 @@ This repo contains the inference engine, datasets and priors and configuration f
 
 ## Steps to run
 
-### 0. Clone the repo.
+### 1. Clone the repo.
 
 To clone the anonymized repo: 
 ```
 pip install beautifulsoup4
 pip install lxml
-git clone https://github.com/ShoufaChen/clone-anonymous4open
+git clone https://github.com/MissMeriel/clone-anonymous4open.git
 cd clone-anonymous4open
 python clone.py --clone-dir /path/to/save  --target https://anonymous.4open.science/r/838f6ec4-c4c4-4ce7-a7c4-8910c3a73e66/
 ```
 
-### 1. Download dependencies to ./tool_src/:
+### 2. Download dependencies to ./tool_src/:
 The following dependencies are provided and already reside in tool_src/:
 - commons-lang3-3.9/
 - com.google.guava_1.6.0.jar
@@ -37,13 +37,13 @@ Note that some python scripts are written in Python2. If your system uses python
 cd tool_src/; ./py3.sh
 ```
 
-### 1.5 Unzip trace archives.
+### 3. Unzip trace archives.
 ```
 mkdir study_1/drone_traces/; unzip study_1/drone_traces.zip -d study_1/drone_traces/
 mkdir study_2/subjecttraces/; unzip study_2/subjecttraces.zip -d study_2/subjecttraces/
 ```
 
-### 2. Compile everything:
+### 4. Compile everything:
 Use the makefile in ./tool_src/ dir.
 ```
 make all
@@ -60,7 +60,7 @@ To compile assistant scripts:
 javac Probability_To_Csv.java
 ```
 
-### 3. Run scripts
+### 5. Run scripts
 ```
 cd study_1/
 ./generate_bag_probabilities.sh      # drone invariants
