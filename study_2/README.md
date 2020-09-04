@@ -10,4 +10,4 @@ This script invokes the prior updates between runs and graphs variance of the su
 
 ## Output:
 
-Invariant output is organized in driving_outfilehoriz.csv
+Invariant output is organized in driving_outfilehoriz.csv and Surprise_To_Graph.py produces a graph of surprise variance over time for model-selected invariants with high surprise variance.
