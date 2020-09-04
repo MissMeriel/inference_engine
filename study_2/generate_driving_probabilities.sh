@@ -6,7 +6,7 @@ module load java
 export rootdir=$(pwd)
 export tracedir=$(cd ./subjecttraces/; pwd)
 export tooldir=$(cd ../tool_src; pwd)
-outfile=$rootdir/driving_priors_update.txt
+outfile=$rootdir/driving_outfile.txt
 temp_outfile=$rootdir/driving_temp_outfile.txt
 surprise_file=$rootdir/driving_surprise_outfile.txt
 config_file=$rootdir/example_config_files/driving_allvars_mini.bayesianconfig
