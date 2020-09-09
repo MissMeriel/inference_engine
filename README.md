@@ -10,7 +10,12 @@ This repo contains the inference engine, datasets and priors and configuration f
 
 ### 1. Clone the repo.
 
-To clone the anonymized repo: 
+To clone from an anonymized git:
+```
+git clone https://github.com/Anon06160006/inference-engine
+```
+
+Or, to clone from anonymous.4open.science: 
 ```
 pip install beautifulsoup4
 pip install lxml
