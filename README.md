@@ -15,14 +15,15 @@ To clone from an anonymized GitHub:
 git clone https://github.com/Anon06160006/inference-engine
 ```
 
-Or, to clone from anonymous.4open.science: 
+Or, to clone from anonymous.4open.science, install Python 3, update SSL certificates, and run: 
 ```
 pip install beautifulsoup4
 pip install lxml
 git clone https://github.com/MissMeriel/clone-anonymous4open.git
 cd clone-anonymous4open
-python clone.py --clone-dir /path/to/save  --target https://anonymous.4open.science/r/838f6ec4-c4c4-4ce7-a7c4-8910c3a73e66/
+python3 clone.py --clone-dir /path/to/save  --target https://anonymous.4open.science/r/838f6ec4-c4c4-4ce7-a7c4-8910c3a73e66/
 ```
+Note that this may take 15+ minutes and that binaries and pdfs will not be fetched.
 
 ### 2. Download dependencies to ./tool_src/:
 The following dependencies are provided and already reside in tool_src/:
