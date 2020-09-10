@@ -10,4 +10,4 @@ The output will be a .csv file which the developer can view invariant probabilit
 
 ## Output:
 
-Invariant output is organized for improved readability in drone_outfilehoriz.csv as described in the toplevel [README](../README.md).
+Invariant output is organized for improved readability in ./drone_outfilehoriz.csv. Layout is as described in the toplevel [README](../README.md).
