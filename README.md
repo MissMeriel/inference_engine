@@ -37,7 +37,7 @@ Install python dependencies:
 pip install matplotlib numpy
 ```
 
-Note that some python scripts are written in Python2. If your system uses python3, run
+Note that python scripts are written in Python2. If your system uses python3, run
 ```
 cd tool_src/; ./py3.sh
 ```
