@@ -45,8 +45,8 @@ cd tool_src/; ./py3.sh
 
 ### 3. Unzip trace archives.
 ```
-mkdir study_1/drone_traces/; unzip study_1/drone_traces.zip -d study_1/drone_traces/
-mkdir study_2/subjecttraces/; unzip study_2/subjecttraces.zip -d study_2/subjecttraces/
+unzip study_1/drone_traces/drone_traces.zip -d study_1/drone_traces/
+unzip study_2/subjecttraces/subjecttraces.zip -d study_2/subjecttraces/
 ```
 
 ### 4. Compile everything:
