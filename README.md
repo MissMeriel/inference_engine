@@ -4,7 +4,7 @@
 
 ## In this Repo
 
-This repo contains the inference engine, datasets and priors and configuration files to produce invariants for two different case studies as elucidated in [a relative link](paper.pdf).
+This repo contains the inference engine, datasets and priors and configuration files to produce invariants for two different case studies as elucidated in [this paper under submission](paper.pdf).
 
 ## Steps to run
 
