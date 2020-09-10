@@ -82,9 +82,10 @@ Study 1 (drone study) outputs one artifact:  drone_outfilehoriz.csv. The .csv co
 - **Ratio**: surprise ratio of posterior over prior
 - **Avg Observations**: number of observations of Outcome && Givens averaged over all traces
 These columns are then followed by trace1,trace2,... which contain the probability of that invariant for each trace.
-Output will appear in a csv file: ![GitHub Logo](sample_drone_csv_output.png)
+Output will appear in a csv file: ![sample csv output](sample_drone_csv_output.png)
 
-Study 2 (driving study) outputs two artifacts: driving_outfilehoriz.csv and a graph. The .csv follows the same format as that for the drone study. The graph shows the variance of surprise between prior and posterior from run to run of several invariants whose surprise shows a high variance from run to run. A sample of the 
+Study 2 (driving study) outputs two artifacts: driving_outfilehoriz.csv and a graph. The .csv follows the same format as that for the drone study. The graph shows the variance of surprise between prior and posterior from run to run of several invariants whose surprise shows a high variance from run to run.
+A sample of the graph output is shown below: ![sampel graph output](sample_driving_graph_output.png)
 
 ### FAQ
 To run engine on a particular trace:
