@@ -85,7 +85,7 @@ These columns are then followed by trace1,trace2,... which contain the probabili
 Output will appear in a csv file: ![sample csv output](sample_drone_csv_output.png)
 
 Study 2 (driving study) outputs two artifacts: driving_outfilehoriz.csv and a graph. The .csv follows the same format as that for the drone study. The graph shows the variance of surprise between prior and posterior from run to run of several invariants whose surprise shows a high variance from run to run.
-A sample of the graph output is shown below: ![sampel graph output](sample_driving_graph_output.png)
+A sample of the graph output is shown below plotting variance of surprise ratio as more traces are consumed with each iteration: ![sample graph output](sample_driving_graph_output.png)
 
 ### FAQ
 To run engine on a particular trace:
