@@ -8,7 +8,7 @@ This repo contains the inference engine, datasets and priors and configuration f
 
 ## Steps to run
 
-### 1. Clone the repo.
+### 1. Clone the repo and follow instructions on the anonymized GitHub repo.
 
 Clone from an anonymized GitHub and follow instructions there:
 ```
