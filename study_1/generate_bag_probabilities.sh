@@ -19,5 +19,5 @@ for D in `find ${tracedir} -mindepth 1 -maxdepth 1`; do
 		java -classpath .:./*:commons-lang3-3.9/*:./mjparser/*:./commons-math3-3.6.1/*:./com.google.guava_1.6.0.jar:./java-cup-11a-runtime.jar inference_engine.Driver $D $config_file $priors_file >> $outfile
 	fi
 done
-java -classpath commons-lang3-3.9/:. Probability_To_Csv $outfile bag horiz
+java Probability_To_Csv $outfile bag horiz
 cd $rootdir

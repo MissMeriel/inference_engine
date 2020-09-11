@@ -31,7 +31,7 @@ def get_givens(inv):
 def parse_line(line):
    global surprises, varnames
    line = line.split(' = ')
-   print line
+   #print line
    surprise = float(line[1].replace('\n', ''))
    invariant = line[0]
    try:

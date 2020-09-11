@@ -6,6 +6,7 @@ module load java
 export rootdir=$(pwd)
 export tracedir=$(cd ./subjecttraces/; pwd)
 export tooldir=$(cd ../tool_src; pwd)
+echo $tooldir
 outfile=$rootdir/driving_outfile.txt
 temp_outfile=$rootdir/driving_temp_outfile.txt
 surprise_file=$rootdir/driving_surprise_outfile.txt
@@ -23,6 +24,7 @@ echo "" > $surprise_file
 cd $tooldir
 
 for D in `find ${tracedir} -mindepth 1 -maxdepth 1`; do
+   
 	if [ -d ${D} ]; then
       echo
 		basename ${D} >> $outfile

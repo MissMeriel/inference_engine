@@ -23,11 +23,7 @@ class Probability_To_Csv{
    static HashMap<String, Integer> observations_map = new HashMap<String, Integer>();
    static HashMap<String, Integer> A_count_map = new HashMap<String, Integer>();
    static Pattern subject_pattern = Pattern.compile("[S][0-9]+[\\s]*");
-   //static Pattern bag_pattern = Pattern.compile("[.]*[sweep_for_target_interpolated.csv][\\s]*");
-   //static Pattern bag_pattern = Pattern.compile("./sweep_newinterp/sweep_for_target_2019-\\d*[-][0-9]*[-][0-9]*[-][0-9]*[-][0-9]*[interpolated.csv][\\s]*");
-   //static Pattern bag_pattern = Pattern.compile("./sweep_newinterp/sweep_for_target_2019-\\d*[-][0-9]*[-][0-9]*[-][0-9]*[-][0-9]*[interpolated.csv][\\s]*");
-   static String bag_pattern_string = "./sweep_newinterp/split/exp_traces/sweep_for_target_[0-9-]*interpolatedtest.csv[\\s]*";
-   //static String bag_pattern_string = "./sweep/sweep_for_target_[0-9-]*interpolated.csv[\\s]*";
+   static String bag_pattern_string = "[.]*/sweep_for_target_[0-9-]*interpolatedtest.csv[\\s]*";
    static Pattern nonwhitespace_pattern = Pattern.compile("^\\S+");
    static Pattern double_pattern = Pattern.compile("[0-9]+.[0-9]+");
    //static Pattern whitespace_pattern = Pattern.compile("\p{IsWhite_Space}+");
@@ -39,7 +35,7 @@ class Probability_To_Csv{
    public static void main(String[] args) throws IOException{
       String filename = args[0];
       try{
-         if(args[1].equals("bag")){
+         if(args[1].equals("bag")  || args[2].equals("bag")){
             is_bag = true;
          }
       } catch(Exception e){}
@@ -51,7 +47,6 @@ class Probability_To_Csv{
       if(horiz_output){
          if(is_bag){
             subject_pattern = Pattern.compile(bag_pattern_string);
-            out.format("bag_pattern_string=%s\n", bag_pattern_string);
          }
          ArrayList<String> trace_names = get_trace_names(filename, subject_pattern);
          TreeSet<String> inv_names = get_inv_names(filename, subject_pattern, nonwhitespace_pattern);
@@ -71,7 +66,6 @@ class Probability_To_Csv{
          }
          String csv_string = map_to_csv();
          String csv_filename = filename.replace("txt","csv");
-         //out.println(csv_filename);
          write_csv_to_file(csv_filename, csv_string);
       }
    }
@@ -137,12 +131,11 @@ class Probability_To_Csv{
          Matcher subject_matcher = subject_pattern.matcher(thisLine);
          Matcher whitespace_matcher = nonwhitespace_pattern.matcher(thisLine);
          if(subject_matcher.find()){
-            if(debug) out.println("Subject: "+thisLine);
+            //out.println("Subject: "+thisLine);
             current_subject = thisLine;
-            //continue;
          } else if(whitespace_matcher.find()){
-            if(debug) out.format("Parsing %s line %s%n", current_subject, thisLine);
-            parse_line2(current_subject, thisLine);
+            //out.format("Parsing %s line %s%n", current_subject, thisLine);
+            parse_line(current_subject, thisLine);
          }
          row_count++;
       }
@@ -152,54 +145,6 @@ class Probability_To_Csv{
    }
    
    public static void parse_line(String subject, String line) {
-      String[] cols = line.split("\\) = "); //length==2
-      HashMap<String,String> subject_map = new HashMap<String,String>();
-      try{
-         HashMap<String,String> temp = header_map.get(subject);
-         subject_map = temp;
-         if(temp == null){
-            subject_map = new HashMap<String,String>();
-            header_map.put(subject, subject_map);
-         }
-      } catch(NullPointerException ex) {
-         ex.printStackTrace();
-         subject_map = new HashMap<String,String>();
-         header_map.put(subject, subject_map);
-      }
-      String header = String.format("%s)",cols[0]);
-      String probability = "";
-      String prior = "";
-      int prior_index = 1;
-      try{
-         String[] temp = cols[1].split(" = ");
-         probability = temp[temp.length-1];
-         if(probability.equals("NaN")){
-            probability = "0.0";
-         }
-         prior = temp[prior_index];
-         temp = cols[1].split(" * ");
-         out.format("temp=%s%n",Arrays.toString(temp));
-         prior = temp[0];
-      } catch(ArrayIndexOutOfBoundsException ex){
-         /*ex.printStackTrace();
-         out.println("subject:"+subject+", line:"+line);
-         System.exit(0);*/
-      }
-      String[] temp = cols[1].split("\\(");
-      out.println(Arrays.toString(temp));
-      String samplesize = temp[temp.length-1].replaceAll("\\)", "");
-      out.format("samplesize=%s\n", samplesize);
-      if(!headers.contains(header)){
-         headers.add(header);
-      }
-      subject_map.put(header, probability);
-      prior_map.put(header, prior);
-      out.format("%s%n",line);
-      out.format("prior_map.put(%s,%s)%n",header,prior);
-      header_map.put(subject, subject_map);
-   }
-   
-   public static void parse_line2(String subject, String line) {
       String[] cols = line.split("\\) = "); //length==2
       HashMap<String,String> subject_map = new HashMap<String,String>();
       try{
@@ -259,12 +204,12 @@ class Probability_To_Csv{
       probability = probability.split("\\(")[0];
       subject_map.put(header, probability); ///need to further split
       prior_map.put(header, prior);
-      //out.format("%s%n",line);
-      //out.format("prior_map.put(%s,%s)%n",header,prior);
+      /*out.format("%s%n",line);
+      out.format("prior_map.put(%s,%s)%n",header,prior);*/
       header_map.put(subject, subject_map);
-      //out.format("subject=%s\n", subject);
-      //out.format("subject_map[probability]=%s\n", subject_map.get(header));
-      //out.format("header=%s\n", header);
+      /*out.format("subject=%s\n", subject);
+      out.format("subject_map[probability]=%s\n", subject_map.get(header));
+      out.format("header=%s\n\n\n", header);*/
    }
    
    public static void print_header_map(){
