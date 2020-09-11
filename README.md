@@ -15,8 +15,8 @@ Clone from an anonymized GitHub and follow instructions there:
 git clone https://github.com/Anon06160006/inference_engine
 ```
 
-[//]: # (Or, to clone from anonymous.4open.science, install Python 3, update SSL certificates, and run: )
-[//]: # (
+<!--- Or, to clone from anonymous.4open.science, install Python 3, update SSL certificates, and run: --->
+<!---
 ```
 pip install beautifulsoup4
 pip install lxml
@@ -99,4 +99,4 @@ For help:
 ```
 java -classpath .:./commons-lang3-3.9/* Driver -h
 ```
-)
+--->
